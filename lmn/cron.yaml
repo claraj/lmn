@@ -1,0 +1,4 @@
+cron:
+- descrition: "get music data"
+  url: /ticketMaster
+  schedule: every monday 09:00
