@@ -402,7 +402,12 @@ class TestDeleteNote(TestCase):
         note_2 = Note.objects.get(pk=2)
         self.assertIsNotNone(note_2) #note is still in dbase
 
-    #def test_delete_note_database_updated_correctly(self):
+    def test_delete_note_database_updated_correctly(self):
+        initial_note_count = Note.objects.count() 
+        #delete one note
+        response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
+        self.assertEqual(Note.objects.count(), initial_note_count -1)
+
 
 
 
