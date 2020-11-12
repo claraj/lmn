@@ -25,7 +25,7 @@
 
     <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
 
-    <form action="{% url 'delete_note' note.pk %}}" method="POST">
+    <form action="{% url 'delete_note' note.pk %}" method="POST">
       {% csrf_token %}
       <button type=submit class="btn btn-danger">Delete Note</button>
     </form>

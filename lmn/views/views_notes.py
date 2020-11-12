@@ -51,8 +51,8 @@ def delete_note(request, note_pk):
     if note.user == request.user:
         note.delete()
         #show latest notes after deleting the note
-        #not sure about this - what to return to after deletion
+        notes = Note.objects.all().order_by('-posted_date')
         return render(request, 'lmn/notes/note_list.html', { 'notes': notes })
-
+        
     else:
         return HttpResponseForbidden()
