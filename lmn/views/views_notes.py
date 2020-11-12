@@ -6,7 +6,7 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-
+from django.http import HttpResponseForbidden
 
 
 @login_required
@@ -44,3 +44,13 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+
+
+@login_required
+def edit_note(request, note_pk):
+    note = get_object_or_404(Note, pk=note_pk)
+    if note.user != request.user:
+        return HttpResponseForbidden()
+    #show current note and let retype or clear 
+    #PATCH
+
