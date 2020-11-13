@@ -78,26 +78,18 @@ DATABASES = {
 
     # Uncomment this when you are ready to use Postgres.
 
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': '',
-    #     'USER' : '',
-    #     'PASSWORD' : os.environ[''],
-    #     'HOST' : '',
-    #     'PORT' : '5432',
-    # },
-
-    # And when you use Postgres, comment out or remove this DB config. 
-    # Using environment variables to detect where this app is running, and automatically use 
-    # an appropriate DB configuration, is a good idea.
-    
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'events',
+        'USER': 'event-goer',
+        'PASSWORD': os.getenv('EVENT_PW'),
+        'HOST': '/cloudsql/lmnop-project5:us-central1:event-db',
+        'PORT': '5432',
     }
 }
 
-
+if not os.getenv('GAE_INSTANCE'):
+    DATABASES['default']['HOST'] = '127.0.0.1'
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
