@@ -1,0 +1,16 @@
+  runtime: python37
+  entrypoint: gunicorn -b :$PORT lmnop_project.wsgi
+
+  handlers:
+  - url: /static
+    static_dir: www/static/
+
+  - url: /.*
+    script: auto
+
+  env_variables:
+    EVENT_PW: Strangerdanger
+
+  beta_settings:
+    cloud_sql_instances: lmnop-project5:us-central1:event-db
+
