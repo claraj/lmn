@@ -53,7 +53,6 @@ def delete_note(request, note_pk):
         note.delete()
         #show latest notes after deleting the note
         notes = Note.objects.all().order_by('-posted_date')
-        return render(request, 'lmn/notes/note_list.html', { 'notes': notes })
-        
+        return redirect('my_user_profile')
     else:
         return HttpResponseForbidden()

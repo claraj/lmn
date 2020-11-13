@@ -24,6 +24,10 @@ user is a variable provided to the template and is the current logged-in user
   <p class="note_info">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</p>
   <p class="note_text">{{ note.text|truncatechars:300 }}</p>
   <p class="note_posted_at">{{ note.posted_date }}</p>
+  <form action="{% url 'delete_note' note.pk %}" method="POST">
+    {% csrf_token %}
+    <button type=submit class="btn btn-danger">Delete Note</button>
+  </form>
 </div>
 
 {% empty %}
