@@ -1,23 +1,19 @@
-//find all delete buttons; add click event listener; if clicked, show confirm dialog
-
-
+//find all delete buttons;
 var deleteButtons = document.querySelectorAll('.delete');
 
 deleteButtons.forEach(function(button){
-
+  //add click event listener
   button.addEventListener('click', function(ev){
 
-    // Show a confirm dialog
+    // if clicked, show confirm dialog message
     var okToDelete = confirm("Delete note - are you sure?");
 
-    // If user presses no, prevent the form submit
+    // If user presses no, don't delete
     if (!okToDelete) {
-      ev.preventDefault();  // Prevent the click event propagating
+      ev.preventDefault();  // no action - not deletion
     }
 
-    // Otherwise, the web page will continue processing the event, 
-    // and send the delete request to the server.
-
+    // Otherwise, web page will send delete request to server 
 
   })
 });
