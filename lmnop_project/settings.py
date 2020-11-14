@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+import random
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,10 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'o+do-*x%zn!43h+unn!46(xp$e6&)=y63v#lj3ywjuy8cihz9f'
+SECRET_KEY = ''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.getenv('GAE_INSTANCE'):
+    DEBUG = False
+else:
+    DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -131,17 +134,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-GS_STATIC_FILE_BUCKET = 'lmnop-project5.appspot.com'
+if os.getenv('GAE_INSTANCE'):
 
-STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+    GS_STATIC_FILE_BUCKET = 'lmnop-project5.appspot.com'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = 'user-event-images'
-MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
+    STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
 
-from google.oauth2 import service_account
-GS_CREDENTIALS = service_account.Credentials.from_service_account_file('lmnop_credentials.json')
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = 'user-event-images'
+    MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
 
+    from google.oauth2 import service_account
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file('lmnop_credentials.json')
+
+else:
+    STATIC_URL = '/static/'
+    MEDIA_URL = '/media/'
 # Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'
 LOGOUT_REDIRECT_URL = 'homepage'
