@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-# run this command in terminal from root to run google cloud proxy
+''' run this command in terminal from root to run google cloud proxy'''
 # ./cloud_sql_proxy -instances=lmnop-project5:us-central1:event-db=tcp:5432
 
 import os
