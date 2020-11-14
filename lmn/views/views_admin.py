@@ -17,17 +17,23 @@ def get_music_data(request):
         response = requests.get(url, params=query)
         response.raise_for_status()  #will raise an exception for 400(client) or 500(server) errors
         data = response.json() 
-        print(data)
+        #print(data)
         events = data['_embedded']['events']
+        
         for event in events: 
             pattern = '[A-Za-z\s]{1,30}' #do I need r?
             performerLong = event['name']
             performerObj = re.search(pattern, performerLong)
             performer = performerObj.group()
+            print(performer)
             venueName = event['_embedded']['venues'][0]['name']
+            print(venueName)
             venueCity = event['_embedded']['venues'][0]['city']['name']
+            print(venueCity)
             venueState = event['_embedded']['venues'][0]['state']['stateCode']
+            print(venueState)
             show_date = event['dates']['start']['localDate']
+            print(show_date)
             #perhaps problem here; my constraint is on Show
             Artist(name=performer).save() #linking info to models and saving it
             Venue(name=venueName, city=venueCity, state=venueState).save()
