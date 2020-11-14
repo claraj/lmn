@@ -3,6 +3,7 @@ import requests
 import re
 from ..models import Artist, Venue, Show
 from django.http import HttpResponse
+from django.http import Http404
 
 #getting data from  ticketmaster api
 key = os.environ.get('TICKETMASTER_KEY')
@@ -17,7 +18,6 @@ def get_music_data(request):
         response = requests.get(url, params=query)
         response.raise_for_status()  #will raise an exception for 400(client) or 500(server) errors
         data = response.json() 
-        #print(data)
         events = data['_embedded']['events']
         
         for event in events: 
@@ -27,17 +27,24 @@ def get_music_data(request):
             performer = performerObj.group()
             print(performer)
             venueName = event['_embedded']['venues'][0]['name']
-            print(venueName)
             venueCity = event['_embedded']['venues'][0]['city']['name']
-            print(venueCity)
             venueState = event['_embedded']['venues'][0]['state']['stateCode']
-            print(venueState)
             show_date = event['dates']['start']['localDate']
             print(show_date)
-            #perhaps problem here; my constraint is on Show
-            Artist(name=performer).save() #linking info to models and saving it
-            Venue(name=venueName, city=venueCity, state=venueState).save()
-            Show(data=show_date).save()
+            
+           # Artist(name=performer).save() #linking info to models and saving its
+            new_artist = Artist(name=performer)
+            new_artist.save()
+            new_artist.id
+            print('artistID',new_artist.id)
+            
+            new_venue = Venue(name=venueName, city=venueCity, state=venueState)
+            new_venue.save()
+            new_venue.id
+            print('venueID', new_venue.id)
+
+            new_show=Show(show_date=show_date, artist_id = new_artist.id, venue_id = new_venue.id)
+            new_show.save()
             return HttpResponse('ok')
         
     except Exception as ex:

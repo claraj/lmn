@@ -28,7 +28,7 @@ class Artist(models.Model):
 
 """ A venue, that hosts shows. """
 class Venue(models.Model):
-    name = models.CharField(max_length=200, blank=False)#,unique=True)
+    name = models.CharField(max_length=200, blank=False)
     city = models.CharField(max_length=200, blank=False)
     state = models.CharField(max_length=2, blank=False) 
 
@@ -41,8 +41,8 @@ class Show(models.Model):
     show_date = models.DateTimeField(blank=False)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
-    unique_together = [['show_date', 'artist', 'venue']]
-    #unique_together = [['show_date', 'Artist.name', 'Venue.name']]
+    #unique_together = [['show_date', 'artist', 'venue']]
+    unique_together = [['show_date', 'artist.id', 'venue.id']]
     def __str__(self):
         return f'Artist: {self.artist} At: {self.venue} On: {self.show_date}'
 
@@ -53,7 +53,7 @@ class Note(models.Model):
     user = models.ForeignKey('auth.User', blank=False, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, blank=False)
     text = models.TextField(max_length=1000, blank=False)
-    posted_date = models.DateTimeField(auto_now_add=True, blank=False)
+    posted_date = models.DateTimeField(auto_now_add=False, blank=False)
 
     def __str__(self):
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
