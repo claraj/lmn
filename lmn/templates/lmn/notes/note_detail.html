@@ -9,4 +9,14 @@
 <p id="note-title"><b>{{ note.title}}</b></p>
 <p id="note-text">{{ note.text }}</b>
 
+
+    <form method="POST" action="{% url 'edit_note' note_pk=note.pk %}">
+  
+        <div>
+          {% csrf_token %}
+          {{ form.as_p }}
+        </div>
+        <button type='submit' value='Edit Note'>
+      </form>
+
 {% endblock %}

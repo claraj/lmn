@@ -43,14 +43,30 @@ def notes_for_show(request, show_pk):
 
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
-    return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+    
+    form = NewNoteForm(instance=note)  # Pre-populate with data from this NOte instance
+    return render(request, 'lmn/notes/note_detail.html', {'note': note, 'form': form} )
+
 
 
 @login_required
 def edit_note(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
+    show = get_object_or_404(Show, pk= note.show_id)
     if note.user != request.user:
         return HttpResponseForbidden()
+       
+    if request.method == 'POST' :
+        form = NewNoteForm(request.POST)
+
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.user = request.user
+            note.show = show
+            note.save()
+           
+            return redirect('note_detail', note_pk=note.pk)
+
     #show current note and let retype or clear 
     #PATCH
 
