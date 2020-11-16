@@ -495,3 +495,40 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+
+class TestNoteDetail(TestCase):
+    #load data into database
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
+ 
+    def setUp(self):
+        user = User.objects.first() #retrieve user1 and log them in
+        self.client.force_login(user)
+
+    #def test_modify_someone_elses_note_detail_not_authorized(self):#note pk_3 belongs to user 2, not user 1
+     #   response = self.client.post(reverse('note_detail', kwargs={'note_pk': 3}), {'notes':'melodic'}, follow=True)
+      #  self.assertEqual(403, response.status_code)  #403 means forbidden - this is not owner of this note
+#problem here due to needing show pk?
+
+#NOT WORKING YET
+    def test_modify_note(self): #note w pk of 1 currently has text = kinda ok
+        #response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
+        response = self.client.post(reverse('edit_note', kwargs={'note_pk':1}), {'text':'melodic'}, follow=True)
+        #retrieve that updated note
+        #updated_note_1 = Note.objects.get(pk=1)
+
+        # was the db updated?
+        #self.assertEqual('melodic', updated_note_1.text)
+        #self.assertEqual('melodic', response.text)
+        #self.assertEqual(response.context['note'], updated_note_1) #??
+        # Check correct template was used
+        self.assertTemplateUsed(response, 'lmn/notes/note_detail.html')
+
+        # and correct data shown on page?
+        #self.assertNotContains(response, 'kinda ok')  # old text is gone 
+        #self.assertContains(response, 'melodic')  # new text shown
+       
+       #stuff to review
+        #new_note_url = reverse('new_note', kwargs={'show_pk':1})
+
+    
