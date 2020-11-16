@@ -4,6 +4,7 @@ import re
 from ..models import Artist, Venue, Show
 from django.http import HttpResponse
 from django.http import Http404
+from django.utils import timezone #maybe not needed
 
 #getting data from  ticketmaster api
 key = os.environ.get('TICKETMASTER_KEY')
@@ -29,10 +30,10 @@ def get_music_data(request):
             venueName = event['_embedded']['venues'][0]['name']
             venueCity = event['_embedded']['venues'][0]['city']['name']
             venueState = event['_embedded']['venues'][0]['state']['stateCode']
-            show_date = event['dates']['start']['localDate']
+            show_date = event['dates']['start']['localDate']   
             print(show_date)
-            
-           # Artist(name=performer).save() #linking info to models and saving its
+         
+           ##linking info to models and saving it
             new_artist = Artist(name=performer)
             new_artist.save()
             new_artist.id
