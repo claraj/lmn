@@ -38,8 +38,7 @@ class Venue(models.Model):
 
 """ A show - one artist playing at one venue at a particular date. """
 class Show(models.Model):
-    #show_date = models.DateTimeField(blank=False)
-    show_date = models.DateField(blank=False)   
+    show_date = models.DateTimeField(blank=False)  
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     unique_together = [['show_date', 'artist.id', 'venue.id']]
