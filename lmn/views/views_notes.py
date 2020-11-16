@@ -21,6 +21,7 @@ def new_note(request, show_pk):
             note.user = request.user
             note.show = show
             note.save()
+            #form=NewNoteForm()  #show empty form
             return redirect('note_detail', note_pk=note.pk)
 
     else :
@@ -52,18 +53,20 @@ def note_detail(request, note_pk):
 @login_required
 def edit_note(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
+    #need to get the show Id as the saving the note requires that
     show = get_object_or_404(Show, pk= note.show_id)
     if note.user != request.user:
         return HttpResponseForbidden()
        
     if request.method == 'POST' :
-        form = NewNoteForm(request.POST)
+        form = NewNoteForm(request.POST, request.FILES, instance=note)
 
         if form.is_valid():
             note = form.save(commit=False)
             note.user = request.user
             note.show = show
             note.save()
+            #form = NewNoteForm() #clear form doesn't work
            
             return redirect('note_detail', note_pk=note.pk)
 
