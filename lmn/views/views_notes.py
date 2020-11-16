@@ -6,6 +6,7 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseForbidden
 
 
 
@@ -44,3 +45,14 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+
+@login_required #can only delete own notes
+def delete_note(request, note_pk):
+    note = get_object_or_404(Note, pk=note_pk)
+    if note.user == request.user:
+        note.delete()
+        #show latest notes after deleting the note
+        notes = Note.objects.all().order_by('-posted_date')
+        return redirect('my_user_profile')
+    else:
+        return HttpResponseForbidden()

@@ -381,6 +381,35 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
 
         self.assertRedirects(response, reverse('note_detail', kwargs={'note_pk': new_note.pk }))
 
+class TestDeleteNote(TestCase):
+    #populate test db with info 
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
+    
+    def setUp(self): #this method needed because before delete, user must be owner of note is tested
+            user = User.objects.first()
+            self.client.force_login(user)
+
+    def test_delete_own_note(self):
+        #delete note with note_pk of 1 (user1)
+        response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
+        note_1 = Note.objects.filter(pk=1).first()
+        self.assertIsNone(note_1) #after deletion, there will be no note with pk of 1
+
+    def test_delete_someone_else_note_not_auth(self):
+        #user 1 trying to delete note of user 2
+        response = self.client.post(reverse('delete_note', args=(2,)), follow=True)
+        self.assertEqual(403, response.status_code) #403 is forbidden
+        note_2 = Note.objects.get(pk=2)
+        self.assertIsNotNone(note_2) #note is still in dbase
+
+    def test_delete_note_database_updated_correctly(self):
+        initial_note_count = Note.objects.count() 
+        #delete one note
+        response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
+        self.assertEqual(Note.objects.count(), initial_note_count -1)
+
+
+
 
 class TestUserProfile(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
@@ -467,7 +496,6 @@ class TestNotes(TestCase):
         self.client.force_login(User.objects.first())
         response = self.client.get(reverse('new_note', kwargs={'show_pk':1}))
         self.assertTemplateUsed(response, 'lmn/notes/new_note.html')
-
 
 
 class TestUserAuthentication(TestCase):
