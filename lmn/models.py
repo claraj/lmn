@@ -33,7 +33,7 @@ class Venue(models.Model):
     state = models.CharField(max_length=2, blank=False) 
 
     def __str__(self):
-        return f'Name: {self.name} Location: {self.city}, {self.state}'
+        return f'Name: {self.name} in {self.city}, {self.state}'
 
 
 """ A show - one artist playing at one venue at a particular date. """
@@ -43,7 +43,7 @@ class Show(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     unique_together = [['show_date', 'artist.id', 'venue.id']]
     def __str__(self):
-        return f'Artist: {self.artist} At: {self.venue} On: {self.show_date}'
+        return f'Artist: {self.artist} at: {self.venue} on: {self.show_date}'
 
 
 """ One user's opinion of one show. """
