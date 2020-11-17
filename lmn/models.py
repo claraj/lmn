@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 
+from django.core.files.storage import default_storage
+
 # Every model gets a primary key field by default.
 
 # Users, venues, shows, artists, notes
@@ -53,7 +55,28 @@ class Note(models.Model):
     title = models.CharField(max_length=200, blank=False)
     text = models.TextField(max_length=1000, blank=False)
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
+    photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
+
+
+    def save(self, *args, **kwargs):
+        #get reference to previous versionof this note
+        old_note = Note.objects.filter(pk=self.pk).first()
+        if old_note and old_note.photo: #check if an old note exists and has a photo
+            if old_note.photo != self.photo: # check if the photo has been changed
+                self.delete_photo(old_note.photo) #delete the old photo
+        super().save(*args, **kwargs) 
+
+    def delete_photo(self, photo):
+        if default_storage.exists(photo.name):
+            default_storage.delete(photo.name)
+
+    #when a Note is deleted, delete the photo file too
+    def delete(self, *args, **kwargs):
+        if self.photo:
+            self.delete_photo(self.photo)
+
+        super().delete(*args, **kwargs)
+
 
     def __str__(self):
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
-
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date} Photo: {self.photo}'
