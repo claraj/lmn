@@ -526,8 +526,10 @@ class TestNoteDetail(TestCase):
         self.assertNotEqual('ok', updated_note_1.title)
         
 
-    #def test_modify_someone_elses_note_detail_not_authorized(self):#note pk_3 belongs to user 2, not user 1
-        #   response = self.client.post(reverse('note_detail', kwargs={'note_pk': 3}), {'notes':'melodic'}, follow=True)
-        #  self.assertEqual(403, response.status_code)  #403 means forbidden - this is not owner of this note
-    #problem here due to needing show pk?
+    def test_modify_someone_elses_note_detail_not_authorized(self):#note pk_3 belongs to user 2, not user 1
+        #note w/pk=2 belongs to user2; setup logs in user 1
+        response = self.client.post('/notes/2/edit', {'title': 'okok', 'text': 'melodic'})
+        
+        self.assertEqual(403, response.status_code)  #403 means forbidden - this is not owner of this note
+   
 
