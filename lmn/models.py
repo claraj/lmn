@@ -42,7 +42,7 @@ class Show(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     class Meta:
-        unique_together = [['show_date', 'artist.id', 'venue.id']]
+        unique_together = [['show_date', 'artist', 'venue']]
     def __str__(self):
         return f'Artist: {self.artist} at: {self.venue} on: {self.show_date}'
 
