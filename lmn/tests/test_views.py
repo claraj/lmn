@@ -521,15 +521,17 @@ class TestNoteDetail(TestCase):
         self.assertEqual(Note.objects.count(), initial_note_count )
         # was the db updated?
         self.assertEqual('melodic', updated_note_1.text)
-        self.assertNotEqual('kindaok', updated_note_1.text)
         self.assertEqual('okok', updated_note_1.title)
-        self.assertNotEqual('ok', updated_note_1.title)
         
 
     def test_modify_someone_elses_note_detail_not_authorized(self):#note pk_3 belongs to user 2, not user 1
         #note w/pk=2 belongs to user2; setup logs in user 1
         response = self.client.post('/notes/2/edit', {'title': 'okok', 'text': 'melodic'})
-        
-        self.assertEqual(403, response.status_code)  #403 means forbidden - this is not owner of this note
-   
+        note_2 = Note.objects.get(pk=2)
 
+        self.assertEqual(403, response.status_code)  #403 = forbidden - this is not owner of this note
+        #make sure note 2 not changed
+        self.assertEqual('yay!' , note_2.text)
+
+
+    
