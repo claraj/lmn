@@ -21,7 +21,7 @@ def new_note(request, show_pk):
             note.user = request.user
             note.show = show
             note.save()
-            #form=NewNoteForm()  #show empty form
+            
             return redirect('note_detail', note_pk=note.pk)
 
     else :

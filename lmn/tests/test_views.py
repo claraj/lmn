@@ -505,30 +505,29 @@ class TestNoteDetail(TestCase):
         user = User.objects.first() #retrieve user1 and log them in
         self.client.force_login(user)
 
-    #def test_modify_someone_elses_note_detail_not_authorized(self):#note pk_3 belongs to user 2, not user 1
-     #   response = self.client.post(reverse('note_detail', kwargs={'note_pk': 3}), {'notes':'melodic'}, follow=True)
-      #  self.assertEqual(403, response.status_code)  #403 means forbidden - this is not owner of this note
-#problem here due to needing show pk?
 
-#NOT WORKING YET
-    def test_modify_note(self): #note w pk of 1 currently has text = kinda ok
-        #response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
-        response = self.client.post(reverse('edit_note', kwargs={'note_pk':1}), {'text':'melodic'}, follow=True)
+    def test_modify_note_database_updated_correctly(self):
+        #note w pk of 1 currently has title= ok and text = kinda ok  
+        #get initial count of notes to make sure note was edited and overwritten, not new one created
+        initial_note_count = Note.objects.count()
+        
+        #update note w/ pk=1
+        response = self.client.post('/notes/1/edit', {'title': 'okok', 'text': 'melodic'})
+
         #retrieve that updated note
-        #updated_note_1 = Note.objects.get(pk=1)
+        updated_note_1 = Note.objects.get(pk=1)
 
+       #  no more notes in DB than before
+        self.assertEqual(Note.objects.count(), initial_note_count )
         # was the db updated?
-        #self.assertEqual('melodic', updated_note_1.text)
-        #self.assertEqual('melodic', response.text)
-        #self.assertEqual(response.context['note'], updated_note_1) #??
-        # Check correct template was used
-        self.assertTemplateUsed(response, 'lmn/notes/note_detail.html')
+        self.assertEqual('melodic', updated_note_1.text)
+        self.assertNotEqual('kindaok', updated_note_1.text)
+        self.assertEqual('okok', updated_note_1.title)
+        self.assertNotEqual('ok', updated_note_1.title)
+        
 
-        # and correct data shown on page?
-        #self.assertNotContains(response, 'kinda ok')  # old text is gone 
-        #self.assertContains(response, 'melodic')  # new text shown
-       
-       #stuff to review
-        #new_note_url = reverse('new_note', kwargs={'show_pk':1})
+    #def test_modify_someone_elses_note_detail_not_authorized(self):#note pk_3 belongs to user 2, not user 1
+        #   response = self.client.post(reverse('note_detail', kwargs={'note_pk': 3}), {'notes':'melodic'}, follow=True)
+        #  self.assertEqual(403, response.status_code)  #403 means forbidden - this is not owner of this note
+    #problem here due to needing show pk?
 
-    
