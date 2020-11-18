@@ -41,7 +41,8 @@ class Show(models.Model):
     show_date = models.DateTimeField(blank=False)  
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
-    unique_together = [['show_date', 'artist.id', 'venue.id']]
+    class Meta:
+        unique_together = [['show_date', 'artist.id', 'venue.id']]
     def __str__(self):
         return f'Artist: {self.artist} at: {self.venue} on: {self.show_date}'
 
