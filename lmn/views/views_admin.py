@@ -4,7 +4,7 @@ import re
 from ..models import Artist, Venue, Show
 from django.http import HttpResponse
 from django.http import Http404
-from django.utils import timezone #maybe not needed
+#from django.utils import timezone #maybe not needed
 
 #getting data from  ticketmaster api
 key = os.environ.get('TICKETMASTER_KEY')
@@ -36,19 +36,27 @@ def get_music_data(request):
             venueName = event['_embedded']['venues'][0]['name']
             venueCity = event['_embedded']['venues'][0]['city']['name']
             venueState = event['_embedded']['venues'][0]['state']['stateCode']
+            
             show_date_time = event['dates']['start']['dateTime']   
             
             ##linking info to models and saving it
-            new_artist = Artist(name=performer)
-            new_artist.save() #must save the new artist, then get id
-            new_artist.id
-            
-            new_venue = Venue(name=venueName, city=venueCity, state=venueState)
-            new_venue.save()
-            new_venue.id
-
-            new_show=Show(show_date=show_date_time, artist_id = new_artist.id, venue_id = new_venue.id)
-            new_show.save()
+            try: #if this artist already in database, don't add it again
+                artist = Artist.objects.get(name=performer)
+            except:# otherwise add a new artist 
+                artist = Artist(name=performer)
+                artist.save() #must save the new artist, then get id
+                artist.id
+            try:
+                venue=Venue.objects.get(name=venueName)
+            except:
+                venue = Venue(name=venueName, city=venueCity, state=venueState)
+                venue.save()
+                venue.id
+            try: #if this show already in dbase, don't add it again
+                show = Show.objects.get(show_date=show_date_time, artist_id = artist.id, venue_id = venue.id)
+            except: #otherwise, make a new Show object and save it
+                show=Show(show_date=show_date_time, artist_id = artist.id, venue_id = venue.id)
+                show.save()
         return HttpResponse('ok')
             
     except Exception as ex:

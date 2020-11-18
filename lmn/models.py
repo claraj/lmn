@@ -20,7 +20,7 @@ User._meta.get_field('first_name')._blank = False
 
 """ A music artist """
 class Artist(models.Model):
-    name = models.CharField(max_length=200, blank=False)
+    name = models.CharField(max_length=200, blank=False, unique=True)
 
     def __str__(self):
         return f'Name: {self.name}'
@@ -31,7 +31,8 @@ class Venue(models.Model):
     name = models.CharField(max_length=200, blank=False)
     city = models.CharField(max_length=200, blank=False)
     state = models.CharField(max_length=2, blank=False) 
-
+    class Meta:
+        unique_together = [[ 'name', 'city', 'state']]
     def __str__(self):
         return f'Name: {self.name} in {self.city}, {self.state}'
 
