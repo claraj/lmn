@@ -4,7 +4,6 @@ import re
 from ..models import Artist, Venue, Show
 from django.http import HttpResponse
 from django.http import Http404
-#from django.utils import timezone #maybe not needed
 
 #getting data from  ticketmaster api
 key = os.environ.get('TICKETMASTER_KEY')
@@ -24,7 +23,6 @@ def get_music_data(request):
         data = response.json() 
         #return data
     
-        
 #def extract_music_details(data):
         events = data['_embedded']['events']
         
