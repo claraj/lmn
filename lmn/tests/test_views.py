@@ -523,3 +523,43 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+
+class TestNoteDetail(TestCase):
+    #load data into database
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
+ 
+    def setUp(self):
+        user = User.objects.first() #retrieve user1 and log them in
+        self.client.force_login(user)
+
+
+    def test_modify_note_database_updated_correctly(self):
+        #note w pk of 1 currently has title= ok and text = kinda ok  
+        #get initial count of notes to make sure note was edited and overwritten, not new one created
+        initial_note_count = Note.objects.count()
+        
+        #update note w/ pk=1
+        response = self.client.post('/notes/1/edit', {'title': 'okok', 'text': 'melodic'})
+
+        #retrieve that updated note
+        updated_note_1 = Note.objects.get(pk=1)
+
+       #  no more notes in DB than before
+        self.assertEqual(Note.objects.count(), initial_note_count )
+        # was the db updated?
+        self.assertEqual('melodic', updated_note_1.text)
+        self.assertEqual('okok', updated_note_1.title)
+        
+
+    def test_modify_someone_elses_note_detail_not_authorized(self):#note pk_3 belongs to user 2, not user 1
+        #note w/pk=2 belongs to user2; setup logs in user 1
+        response = self.client.post('/notes/2/edit', {'title': 'okok', 'text': 'melodic'})
+        note_2 = Note.objects.get(pk=2)
+
+        self.assertEqual(403, response.status_code)  #403 = forbidden - this is not owner of this note
+        #make sure note 2 not changed
+        self.assertEqual('yay!' , note_2.text)
+
+
+    
