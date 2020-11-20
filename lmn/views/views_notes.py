@@ -44,10 +44,8 @@ def notes_for_show(request, show_pk):
 
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
-    
     form = NewNoteForm(instance=note)  # Pre-populate with data from this NOte instance
     return render(request, 'lmn/notes/note_detail.html', {'note': note, 'form': form} )
-
 
 
 @login_required
@@ -70,4 +68,13 @@ def edit_note(request, note_pk):
             return redirect('note_detail', note_pk=note.pk)
 
     
-
+@login_required #can only delete own notes
+def delete_note(request, note_pk):
+    note = get_object_or_404(Note, pk=note_pk)
+    if note.user == request.user:
+        note.delete()
+        #show latest notes after deleting the note
+        notes = Note.objects.all().order_by('-posted_date')
+        return redirect('my_user_profile')
+    else:
+        return HttpResponseForbidden()
