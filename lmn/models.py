@@ -18,6 +18,17 @@ User._meta.get_field('last_name')._blank = False
 User._meta.get_field('first_name')._blank = False
 
 
+
+"""  Profile for User """
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, blank=False, on_delete=models.CASCADE)
+    fav_artist = models.CharField(max_length=200, blank=True)
+    fav_venue = models.CharField(max_length=200, blank=True)
+    fav_show = models.CharField(max_length=200, blank=True)
+
+    def __str__(self):
+        return f'{self.fav_artist} {self.fav_venue} {self.fav_show}'
+
 """ A music artist """
 class Artist(models.Model):
     name = models.CharField(max_length=200, blank=False)

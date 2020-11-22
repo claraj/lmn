@@ -1,9 +1,14 @@
 from django import forms
-from .models import Note
+from .models import Note, UserProfile
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ValidationError
+
+class UserProfileForm(forms.Form):
+    class Meta:
+        model = UserProfile
+        fields = ('fav_artist', 'fav_venue', 'fav_show')
 
 
 class VenueSearchForm(forms.Form):
