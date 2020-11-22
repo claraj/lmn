@@ -8,17 +8,18 @@ from ..models import Artist, Venue, Show
 from lmn.views.views_admin import get_music_data
 
 
-class TestTickemasterAPI(TestCase):
-#like slide 37 ontest_exchange_rates.py-Testing22 powerpoint
-    @patch('get_music_data')
-    def test_get_data_from_ticketmaster(self, mock_venue_name)
-        mock_venue_name = 'U.S. Bank Stadium'
-        example_api_response= {
-          "_embedded": {"events": [{"name": "George Strait", "dates": { "start": {"dateTime": "2021-07-31T22:00:00Z"}, },
-         "_embedded": {"venues": [{"name": "U.S. Bank Stadium","city": { "name": "Minneapolis"},"state": {"stateCode": "MN", } }]}}]}}
-        mock_venue_name.side_effect = [ example_api_response]
-        #this method only used if get_music_data is split into 2 fxs
-        ?= extract_music_details(example_api_response)
+# class TestTickemasterAPI(TestCase):
+# #like slide 37 ontest_exchange_rates.py-Testing22 powerpoint
+#     @patch('get_music_data')
+#     def test_get_data_from_ticketmaster(self)
+#         #mock_venue_name = 'U.S. Bank Stadium'
+#         example_api_response= {
+#           "_embedded": {"events": [{"name": "George Strait", "dates": { "start": {"dateTime": "2021-07-31T22:00:00Z"}, },
+#          "_embedded": {"venues": [{"name": "U.S. Bank Stadium","city": { "name": "Minneapolis"},"state": {"stateCode": "MN", } }]}}]}}
+#         mock_venue_name.side_effect = [ example_api_response]
+#         #this method only used if get_music_data is split into 2 fxs
+#         get_music_data(params)
+#         ?= extract_music_details(example_api_response)
 
 #below based on my natlparks api tests
     # def test_retrieve_ticketMaster_info(self):
@@ -34,35 +35,35 @@ class TestTickemasterAPI(TestCase):
 
 
 #below based on Hugh's api testing in wishful...
-# def mock_requests_get(url, params):
-#     class MockAPI:
-#         def __init__(self, json_data):
-#             self.json_data = json_data
+def mock_requests_get(url, params):
+    class MockAPI:
+        def __init__(self, json_data):
+            self.json_data = json_data
 
-#         def json(self):
-#             return self.json_data
+        def json(self):
+            return self.json_data
 
-#     if params['classificationName'] == 'music' and params['city'] == 'Minneapolis':
-#         return MockAPI({
-#         "_embedded": {"events": [{"name": "George Strait", "dates": { "start": {"dateTime": "2021-07-31T22:00:00Z"}, },
-#         "_embedded": {"venues": [{"name": "U.S. Bank Stadium","city": { "name": "Minneapolis"},"state": {"stateCode": "MN", } }]}}]}})
+    if params['classificationName'] == 'music' and params['city'] == 'Minneapolis':
+        return MockAPI({
+        "_embedded": {"events": [{"name": "George Strait", "dates": { "start": {"dateTime": "2021-07-31T22:00:00Z"}, },
+        "_embedded": {"venues": [{"name": "U.S. Bank Stadium","city": { "name": "Minneapolis"},"state": {"stateCode": "MN", } }]}}]}})
         
-#     return MockAPI
+    return MockAPI
 
-# class TestTickemasterAPI(TestCase):
-#         #when patching, return side_effect instead of real request.get from API
-#     @mock.patch('requests.get', side_effect=mock_requests_get)
-#     def test_fetch(self, mock_get):
-#             #assert requests.get call returns this response
-#         mock_response = {
-#     "_embedded": {"events": [{"name": "George Strait", "dates": { "start": {"dateTime": "2021-07-31T22:00:00Z"}, },
-#     "_embedded": {"venues": [{"name": "U.S. Bank Stadium","city": { "name": "Minneapolis"},"state": {"stateCode": "MN", } }] }} ]}}
-#        # params = ('music', 'minneapolis')
-#        # views_admin.get_music_data(example_api_response)
-#         mock_response =get_music_data(mock_requests_get) #call method in views_admin.py
-#         #self.assertEqual(mock_response, data)
-#         self.assertEqual(mock_response.performer, 'George Strait')
-#         self.assertEqual(mock_response.venueName, 'U.S. Bank Stadium')
+class TestTickemasterAPI(TestCase):
+        #when patching, return side_effect instead of real request.get from API
+    @mock.patch('requests.get', side_effect=mock_requests_get)
+    def test_fetch(self, mock_get):
+            #assert requests.get call returns this response
+        mock_response = {
+    "_embedded": {"events": [{"name": "George Strait", "dates": { "start": {"dateTime": "2021-07-31T22:00:00Z"}, },
+    "_embedded": {"venues": [{"name": "U.S. Bank Stadium","city": { "name": "Minneapolis"},"state": {"stateCode": "MN", } }] }} ]}}
+        params = ('music', 'minneapolis')
+        get_music_data(params)
+        mock_response =get_music_data(mock_requests_get, params) #call method in views_admin.py
+        #self.assertEqual(mock_response, data)
+        self.assertEqual(mock_response.performer, 'George Strait')
+        self.assertEqual(mock_response.venueName, 'U.S. Bank Stadium')
         
 
 # #was data extracted correctly from response
