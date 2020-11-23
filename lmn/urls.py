@@ -38,5 +38,5 @@ urlpatterns = [
 
 
     #for getting data to database
-    path('ticketMaster', views_admin.get_music_data, name='admin_get_music_data'),
+    path('ticket_master', views_admin.get_music_data, name='admin_get_music_data'),
 ]

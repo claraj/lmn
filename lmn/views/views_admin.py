@@ -35,9 +35,9 @@ def extract_music_details(data):
     
     for event in events: 
         performer = event['name']
-        venueName = event['_embedded']['venues'][0]['name']
-        venueCity = event['_embedded']['venues'][0]['city']['name']
-        venueState = event['_embedded']['venues'][0]['state']['stateCode']
+        venue_name = event['_embedded']['venues'][0]['name']
+        venue_city = event['_embedded']['venues'][0]['city']['name']
+        venue_state = event['_embedded']['venues'][0]['state']['stateCode']
         show_date_time = event['dates']['start']['dateTime']   
         
         ##linking info to models and saving it 
@@ -49,9 +49,9 @@ def extract_music_details(data):
             artist.id
 
         try:#if this venue already in the database, don't add it again
-            venue=Venue.objects.get(name=venueName)
+            venue=Venue.objects.get(name=venue_name)
         except: #if not already in dbase, create new Venue object and save it
-            venue = Venue(name=venueName, city=venueCity, state=venueState)
+            venue = Venue(name=venue_name, city=venue_city, state=venue_state)
             venue.save()
             venue.id
 

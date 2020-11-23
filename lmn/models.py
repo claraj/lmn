@@ -32,6 +32,7 @@ class Venue(models.Model):
     city = models.CharField(max_length=200, blank=False)
     state = models.CharField(max_length=2, blank=False) 
     class Meta:
+        #to avoid adding the same venue twice, a Venue's name, city and state together are a unique entity
         unique_together = [[ 'name', 'city', 'state']]
     def __str__(self):
         return f'Name: {self.name} in {self.city}, {self.state}'
@@ -43,6 +44,8 @@ class Show(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     class Meta:
+        #to avoid adding a duplicate show, these 3 elements considered together must be unique
+        #if a show with the same 3 elements is found, it will not be added to the database
         unique_together = [['show_date', 'artist', 'venue']]
     def __str__(self):
         return f'Artist: {self.artist} at: {self.venue} on: {self.show_date}'
