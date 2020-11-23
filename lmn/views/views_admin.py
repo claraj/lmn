@@ -20,32 +20,24 @@ def get_music_data(request):
     return HttpResponse('ok')
 
 def get_ticketMaster():
-
     try:
         query= {'classificationName': classificationName, 'city' : city, 'apikey': key}
         response = requests.get(url, params=query)
         data = response.json()
-        
         return data
-
     except Exception as e:
         print(e)
         
     
-
 def extract_music_details(data):
     # extract relevant data from the response 
     events = data['_embedded']['events']
     
     for event in events: 
-        pattern = '[A-Za-z\s]{1,30}' 
-        performerLong = event['name']
-        performerObj = re.search(pattern, performerLong)
-        performer = performerObj.group()
+        performer = event['name']
         venueName = event['_embedded']['venues'][0]['name']
         venueCity = event['_embedded']['venues'][0]['city']['name']
         venueState = event['_embedded']['venues'][0]['state']['stateCode']
-        
         show_date_time = event['dates']['start']['dateTime']   
         
         ##linking info to models and saving it 
