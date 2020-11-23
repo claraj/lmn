@@ -381,6 +381,35 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
 
         self.assertRedirects(response, reverse('note_detail', kwargs={'note_pk': new_note.pk }))
 
+class TestDeleteNote(TestCase):
+    #populate test db with info 
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
+    
+    def setUp(self): #this method needed because before delete, user must be owner of note is tested
+            user = User.objects.first()
+            self.client.force_login(user)
+
+    def test_delete_own_note(self):
+        #delete note with note_pk of 1 (user1)
+        response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
+        note_1 = Note.objects.filter(pk=1).first()
+        self.assertIsNone(note_1) #after deletion, there will be no note with pk of 1
+
+    def test_delete_someone_else_note_not_auth(self):
+        #user 1 trying to delete note of user 2
+        response = self.client.post(reverse('delete_note', args=(2,)), follow=True)
+        self.assertEqual(403, response.status_code) #403 is forbidden
+        note_2 = Note.objects.get(pk=2)
+        self.assertIsNotNone(note_2) #note is still in dbase
+
+    def test_delete_note_database_updated_correctly(self):
+        initial_note_count = Note.objects.count() 
+        #delete one note
+        response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
+        self.assertEqual(Note.objects.count(), initial_note_count -1)
+
+
+
 
 class TestUserProfile(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
@@ -469,7 +498,6 @@ class TestNotes(TestCase):
         self.assertTemplateUsed(response, 'lmn/notes/new_note.html')
 
 
-
 class TestUserAuthentication(TestCase):
 
     ''' Some aspects of registration (e.g. missing data, duplicate username) covered in test_forms '''
@@ -495,3 +523,43 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+
+class TestNoteDetail(TestCase):
+    #load data into database
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
+ 
+    def setUp(self):
+        user = User.objects.first() #retrieve user1 and log them in
+        self.client.force_login(user)
+
+
+    def test_modify_note_database_updated_correctly(self):
+        #note w pk of 1 currently has title= ok and text = kinda ok  
+        #get initial count of notes to make sure note was edited and overwritten, not new one created
+        initial_note_count = Note.objects.count()
+        
+        #update note w/ pk=1
+        response = self.client.post('/notes/1/edit', {'title': 'okok', 'text': 'melodic'})
+
+        #retrieve that updated note
+        updated_note_1 = Note.objects.get(pk=1)
+
+       #  no more notes in DB than before
+        self.assertEqual(Note.objects.count(), initial_note_count )
+        # was the db updated?
+        self.assertEqual('melodic', updated_note_1.text)
+        self.assertEqual('okok', updated_note_1.title)
+        
+
+    def test_modify_someone_elses_note_detail_not_authorized(self):#note pk_3 belongs to user 2, not user 1
+        #note w/pk=2 belongs to user2; setup logs in user 1
+        response = self.client.post('/notes/2/edit', {'title': 'okok', 'text': 'melodic'})
+        note_2 = Note.objects.get(pk=2)
+
+        self.assertEqual(403, response.status_code)  #403 = forbidden - this is not owner of this note
+        #make sure note 2 not changed
+        self.assertEqual('yay!' , note_2.text)
+
+
+    
