@@ -6,15 +6,14 @@ from django.http import HttpResponse
 from django.http import Http404
 from django.db import IntegrityError
 
-#getting data from  ticketmaster api
+'''getting data from  ticketmaster api and saving to the database'''
+
 key = os.environ.get('TICKETMASTER_KEY')
 url = 'https://app.ticketmaster.com/discovery/v2/events'
 classificationName = 'music'
 city = 'Minneapolis'
 
 
-# #below is breaking into two functions - but causes error
-#AttributeError at /ticketMaster - 'dict' object has no attribute 'status_code'
 def get_music_data(request):
     data = get_ticketMaster()
     extract_music_details(data)
@@ -25,18 +24,17 @@ def get_ticketMaster():
     try:
         query= {'classificationName': classificationName, 'city' : city, 'apikey': key}
         response = requests.get(url, params=query)
-        #response.raise_for_status()
         data = response.json()
         
         return data
 
     except Exception as e:
         print(e)
-        # logging.exception(ex)
+        
     
 
 def extract_music_details(data):
-    #now need to extract relevant data from the resonse 
+    # extract relevant data from the response 
     events = data['_embedded']['events']
     
     for event in events: 
@@ -50,10 +48,7 @@ def extract_music_details(data):
         
         show_date_time = event['dates']['start']['dateTime']   
         
-        ##linking info to models and saving it
-            #if this artist already in database, don't add it again
-        
- #original edition  
+        ##linking info to models and saving it 
         try:
             artist =  Artist.objects.get(name=performer)
         except :# otherwise add a new artist 
