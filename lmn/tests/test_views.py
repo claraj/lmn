@@ -502,9 +502,6 @@ class TestUserAuthentication(TestCase):
         self.assertContains(response, 'sam12345')  # page has user's name on it
 
 class TestImageUpload(TestCase):
-
-    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
-
     def setUp(self):
         user = User.objects.get(pk=1)
         self.client.force_login(user)
