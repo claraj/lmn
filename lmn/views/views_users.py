@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
-from ..models import Venue, Artist, Note, Show
+from ..models import Venue, Artist, Note, Show, Profile
 from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, UserProfileForm
 
 from django.contrib.auth.decorators import login_required
@@ -29,9 +29,10 @@ def my_user_profile(request):
             messages.error(request, form.errors)
         return redirect('my_user_profile')
     else:
-        user_form = UserProfileForm(instance=request.user)
+        user_form = UserProfileForm(instance=request.user.profile)
     context = {
-        'user_form' : user_form
+        'user_form' : user_form,
+        'user_profile': request.user
     }
     
     # return redirect('user_profile', user_pk=request.user.pk)
