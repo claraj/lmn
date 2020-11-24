@@ -10,9 +10,9 @@
       </div>
     </div>
 
-    
-    
-
+{% for message in messages %}
+    <li>{{ message }}</li>
+{% endfor %}
     <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
@@ -20,6 +20,7 @@
                 {{ user_form|crispy }}
             </fieldset>
             <div class="form-group">
+                <br>
                 <button class="btn btn-outline-info" type="submit">Submit</button>
             </div>
         </form>

@@ -20,7 +20,8 @@ def user_profile(request, user_pk):
 def my_user_profile(request):
     # TODO - editable version for logged-in user to edit their own profile
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=request.user) 
+        profile = Profile.objects.get(user=request.user)
+        form = UserProfileForm(request.POST, instance=profile) 
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated!')
@@ -29,7 +30,9 @@ def my_user_profile(request):
             messages.error(request, form.errors)
         return redirect('my_user_profile')
     else:
-        user_form = UserProfileForm(instance=request.user.profile)
+        profile = Profile.objects.get(user=request.user)
+        # TODO: handle profile that does not exist yet
+        user_form = UserProfileForm(instance=profile)
     context = {
         'user_form' : user_form,
         'user_profile': request.user
