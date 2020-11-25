@@ -8,7 +8,7 @@ from django.forms import ValidationError
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('favoriteArtist', 'favoriteVenue', 'favoriteShow')
+        fields = ('favorite_Artist', 'favorite_Venue', 'favorite_Show')
 
 
 class VenueSearchForm(forms.Form):

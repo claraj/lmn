@@ -13,6 +13,7 @@
 {% for message in messages %}
     <li>{{ message }}</li>
 {% endfor %}
+
     <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
