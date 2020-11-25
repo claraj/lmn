@@ -2,29 +2,25 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<div class="content-section">
-    <div class="media">
-      <div class="media-body">
-        <h2 class="account-heading">Username: {{ user_profile.username }}</h2>
-        <p class="text-secondary">Email: {{ user_profile.email }}</p>
-        {% if user_profile.profile.favorite_Artist %}
-            <p class="text-secondary">Favorite Artist: {{ user_profile.profile.favorite_Artist }}</p>
-        {% endif %}
+<h2>Your Profile</h2>
 
-        {% if user_profile.profile.favorite_Venue %}
-            <p class="text-secondary">Favorite Venue: {{ user_profile.profile.favorite_Venue }}</p>
-        {% endif %}
-        {% if user_profile.profile.favorite_Show %}
-            <p class="text-secondary">Favorite Show: {{ user_profile.profile.favorite_Show }}</p>
-        {% endif %}
+<p class="account-heading">Username: {{ user_profile.username }}</p>
+<p class="text-secondary">Email: {{ user_profile.email }}</p>
+{% if user_profile.profile.favorite_Artist %}
+    <p class="text-secondary">Favorite Artist: {{ user_profile.profile.favorite_Artist }}</p>
+{% endif %}
 
-      </div>
-    </div>
+{% if user_profile.profile.favorite_Venue %}
+    <p class="text-secondary">Favorite Venue: {{ user_profile.profile.favorite_Venue }}</p>
+{% endif %}
+{% if user_profile.profile.favorite_Show %}
+    <p class="text-secondary">Favorite Show: {{ user_profile.profile.favorite_Show }}</p>
+{% endif %}
+
 
 <hr>
 
-</div>
-  <form method="POST" action="{% url 'my_user_profile' %}" >
+<form method="POST" action="{% url 'my_user_profile' %}" >
     {% csrf_token %}
     <fieldset class="form-group">
         <legend class="border-bottom mb-4">Update Profile</legend>
@@ -36,27 +32,6 @@
     </div>
 </form>
 
-
-
-<h2 id='username_notes'>{{ user_profile.username }}'s notes</h2>
-
-{% for note in notes %}
-
-<div class='note' id="note_{{ note.pk }}">
-  <h3 class="note_title">
-    <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
-  </h3>
-
-  <p class="note_info">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</p>
-  <p class="note_text">{{ note.text|truncatechars:300 }}</p>
-  <p class="note_posted_at">{{ note.posted_date }}</p>
-</div>
-
-{% empty %}
-
-    <p id='no_records'>No notes.</p>
-
-{% endfor %}
 
 
 {% endblock %}
