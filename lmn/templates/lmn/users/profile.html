@@ -5,28 +5,36 @@
 <div class="content-section">
     <div class="media">
       <div class="media-body">
-        <h2 class="account-heading">{{ user_profile.username }}</h2>
-        <p class="text-secondary">{{ user_profile.email }}</p>
+        <h2 class="account-heading">Username: {{ user_profile.username }}</h2>
+        <p class="text-secondary">Email: {{ user_profile.email }}</p>
+        {% if user_profile.profile.favorite_Artist %}
+            <p class="text-secondary">Favorite Artist: {{ user_profile.profile.favorite_Artist }}</p>
+        {% endif %}
+
+        {% if user_profile.profile.favorite_Venue %}
+            <p class="text-secondary">Favorite Venue: {{ user_profile.profile.favorite_Venue }}</p>
+        {% endif %}
+        {% if user_profile.profile.favorite_Show %}
+            <p class="text-secondary">Favorite Show: {{ user_profile.profile.favorite_Show }}</p>
+        {% endif %}
+
       </div>
     </div>
 
-{% for message in messages %}
-    <li>{{ message }}</li>
-{% endfor %}
+<hr>
 
-    <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Update Profile</legend>
-                {{ user_form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <br>
-                <button class="btn btn-outline-info" type="submit">Submit</button>
-            </div>
-        </form>
-  </div>
-
+</div>
+  <form method="POST" action="{% url 'my_user_profile' %}" >
+    {% csrf_token %}
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Update Profile</legend>
+        {{ user_form|crispy }}
+    </fieldset>
+    <div class="form-group">
+        <br>
+        <button class="btn btn-outline-info" type="submit">Submit</button>
+    </div>
+</form>
 
 
 

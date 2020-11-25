@@ -21,3 +21,15 @@ a {
   margin: 2px;
   /* font-weight: bold; */
 }
+
+.message-success {
+  background: lightseagreen;
+  font-weight: bold;
+  color: black
+}
+
+.message-error {
+  background: lightpink;
+  font-weight: bold;
+  color: black
+}

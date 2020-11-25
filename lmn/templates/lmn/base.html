@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>LMNOP</title>
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="{% static 'css/base_style.css' %}" type="text/css"></link>
 </head>
 
@@ -24,7 +25,14 @@
 {% endif %}
 
 <hr>
-
+{% if messages %}
+  {% for message in messages %}
+    <div class="message-{{ message.tags }}">
+      <b>{{ message }}</b>
+    </div>
+  {% endfor %}
+{% endif %}
+      
 {% block content %}
 {% endblock %}
 
