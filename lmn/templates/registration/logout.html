@@ -3,16 +3,12 @@
 
 {% block content %}
 
-{% if messages %}
-    {% for message in messages %}
-        <script>
-            M.toast({ html: 'You have logged out. Goodbye!', classes: 'green rounded', dsiplayLength: 2000 });
-            location.href = "{% url 'homepage' %}" 
-        </script>
+<script>
+    M.toast({ html: 'You have logged out successfully. Goodbye!', classes: 'green rounded', dsiplayLength: 2000 });
+    location.href = "{% url 'homepage' %}" 
+</script>
 
-    {% endfor %}
-{% endif %}
- 
+
 
 
 {% endblock %}
