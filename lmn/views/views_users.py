@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.dispatch import receiver
+
 
 from ..models import Venue, Artist, Note, Show
 from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
@@ -7,6 +9,8 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.signals import user_logged_out, user_logged_in
+
 
 
 def user_profile(request, user_pk):
@@ -42,8 +46,12 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form} )
 
 
-def logout_view(request):
-    username = request.user.username
-    logout(request)
+@receiver(user_logged_out)
+def logout_message(sender, user, request, **kwargs):
+    messages.info(request, 'You have been logged out.')
 
-    return render(request, 'registration/logout.html', {'username': username})
+@receiver(user_logged_in)
+def login_message(sender, user, request, **kwargs):
+    # Question about this how to put templating so can have username being shown?
+    messages.info(request, 'You have logged in')
+

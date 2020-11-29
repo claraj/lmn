@@ -4,6 +4,7 @@
 
 <h2>Register</h2>
 
+<!-- 
 <div class="message">  
   {% if message %}
     <p>{{ message }}</p>
@@ -16,7 +17,7 @@
     <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
 </ul>
-{% endif %}
+{% endif %} -->
 
 <form method="POST" action="">
   {% csrf_token %}
