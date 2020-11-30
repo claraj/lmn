@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
+from ..twitter import tweet_note
 from ..models import Venue, Artist, Note, Show
 from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
 
@@ -11,17 +12,18 @@ from django.http import HttpResponseForbidden
 
 @login_required
 def new_note(request, show_pk):
-
     show = get_object_or_404(Show, pk=show_pk)
 
-    if request.method == 'POST' :
+    if request.method == 'POST':
         form = NewNoteForm(request.POST)
         if form.is_valid():
             note = form.save(commit=False)
             note.user = request.user
             note.show = show
             note.save()
-            
+            if request.POST.get('post_type') == 'Tweet and Add Note':
+                tweet_note(request, note)
+
             return redirect('note_detail', note_pk=note.pk)
 
     else :

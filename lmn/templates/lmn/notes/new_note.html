@@ -1,7 +1,8 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
 
-<h2>New note for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date}}</h2>
+<h2 id='show_info'>New note for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date}}</h2>
 
 <form method="POST" action="{% url 'new_note' show_pk=show.pk %}">
   
@@ -9,7 +10,14 @@
     {% csrf_token %}
     {{ form.as_p }}
   </div>
-  <input type='submit' value='Add Note'>
+  <input type='submit' name='post_type' value='Add Note'>
+  <input type='submit' id='tweet' name='post_type' value='Tweet and Add Note'>
 </form>
+<p>Tweet character limit: 
+  <span id='counter'>240/240</span>
+  <br>More than 240 (including the show info) means it can't be tweeted!
+</p>
+
+<script src="{% static 'js/character_count.js' %}"></script>
 
 {% endblock %}
