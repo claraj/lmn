@@ -3,7 +3,6 @@ import tweepy
 import os
 import requests
 import logging
-from pprint import pprint
 
 consumer_key = os.getenv('T_API_KEY')
 consumer_secret = os.getenv('T_API_KEY_SEC')
@@ -13,12 +12,10 @@ access_secret = os.getenv('T_ACCESS_TOK_SEC')
 
 def tweet_note(request, note):
     api = authorize()
-    # pprint(vars(api))
     if api == 'error':
         messages.error(request, 'The site was unable to authorize to the Twitter account!')
     else:
         response = post_tweet(api, note)
-        print(f'\n{response}\n')
         if response == 'error':
             messages.error(request, 'The site was unable to tweet the note!')
         elif response == 'length error':
@@ -30,7 +27,6 @@ def tweet_note(request, note):
 def authorize():
     try:
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        pprint(vars(auth.oauth))
         auth.set_access_token(access_token, access_secret)
         api = tweepy.API(auth)
         return api
