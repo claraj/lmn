@@ -2,7 +2,6 @@ import requests
 import os
 from lmn.models import Artist,Venue,Show
 from pprint import pprint
-from django.db import IntegrityError
 from django.http import HttpResponse
 
 #running the api request and saving the data and returning an ok response

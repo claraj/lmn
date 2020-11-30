@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.db import IntegrityError
 
 from django.urls import reverse
 from unittest.mock import patch
@@ -26,5 +27,47 @@ class TestAPIDATA(TestCase):
         artist = Artist.objects.get(pk=1)
         self.assertEqual(artist.name, 'Hamilton')
 
+    def test_save_venue_to_database(self):
+
+        views_admin.get_all_events(mock_api_response)
+
+        venue = Venue.objects.get(pk=1)
+        self.assertEqual(venue.name, 'Orpheum Theatre - Minneapolis')
+        self.assertEqual(venue.state, 'MN')
+        self.assertEqual(venue.city, 'Minneapolis')
+
+    def test_save_show_to_database(self):
+        
+        views_admin.get_all_events(mock_api_response)
+
+        show = Show.objects.get(pk=1)
+
+        self.assertEqual(show.venue.name, 'Orpheum Theatre - Minneapolis')
+        self.assertEqual(show.artist.name, 'Hamilton')
+
+
+    def test_add_duplicate_artist(self):
+        Artist(name='bob').save()
+
+        with self.assertRaises(IntegrityError):
+            Artist(name='bob').save()
 
     
+    def test_add_duplicate_venue(self):
+        Venue(name='Big stadium').save()
+
+        with self.assertRaises(IntegrityError):
+            Venue(name='Big stadium').save()
+
+    def test_add_duplicate_show(self):
+        venue = Venue(name='cool_stadium',city='Minneapolis', state='MN')
+        venue.save()
+        artist= Artist(name='bobby')
+        artist.save()
+
+        Show(show_date='2021-07-28 11:00:00',artist=artist,venue=venue).save()
+
+        with self.assertRaises(IntegrityError):
+            Show(show_date='2021-07-28 11:00:00',artist=artist,venue=venue).save()
+
+
