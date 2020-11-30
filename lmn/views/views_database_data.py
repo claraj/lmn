@@ -1,6 +1,6 @@
 import requests
 import os
-from .models import Artist,Show,Venue
+from ..models import Artist,Show,Venue
 from pprint import pprint
 
 
