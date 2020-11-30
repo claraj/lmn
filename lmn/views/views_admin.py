@@ -53,21 +53,29 @@ def get_and_save_event_information(data):
             venue_state = event['_embedded']['venues'][0]['state']['stateCode'] #state
 
             #checking if event artist or venue already exists in the datbase before addding it 
-            if not Artist.objects.filter(name=artist_name).exists():
-                artist = Artist(name=artist_name)
-                artist.save()
+            try :
+                if not Artist.objects.filter(name=artist_name).exists():
+                    artist = Artist(name=artist_name)
+                    artist.save()
 
-                artist_id = artist.id #getting the id to be used in the show 
+                    artist_id = artist.id #getting the id to be used in the show 
+            except IntegrityError as e:
+                print(e)
 
-            if not Venue.objects.filter(name=venue_name):
-                venue = Venue(name=venue_name,city=venue_city, state=venue_state)
-                venue.save()
-                
-                venue_id = venue.id
+            try:
+                if not Venue.objects.filter(name=venue_name):
+                    venue = Venue(name=venue_name,city=venue_city, state=venue_state)
+                    venue.save()
+                    
+                    venue_id = venue.id
+            except IntegrityError as e:
+                print(e)
 
-            if not Show.objects.filter(show_date=date,artist=artist_id,venue=venue_id):
-                show = Show(show_date= date, artist= artist_id, venue= venue_id)
-                show.save()
-
+            try:
+                if not Show.objects.filter(show_date=date,artist=artist_id,venue=venue_id):
+                    show = Show(show_date= date, artist= Artist.objects.get(pk = artist_id), venue= Venue.objects.get(pk = venue_id))
+                    show.save()
+            except IntegrityError as e:
+                print(e)
 
 
