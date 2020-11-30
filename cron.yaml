@@ -1,3 +1,4 @@
+# making sure that the show in the database update every day
 cron:
 -description: "daily shows update"
   url: /shows
