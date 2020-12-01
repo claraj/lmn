@@ -10,6 +10,11 @@ from django.contrib.auth.models import User
 import re, datetime
 from datetime import timezone
 
+import tempfile
+import filecmp
+import os
+from PIL import Image 
+
 # TODO verify correct templates are rendered.
 
 class TestEmptyViews(TestCase):
@@ -495,3 +500,37 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+class TestImageUpload(TestCase):
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+        self.MEDIA_ROOT = tempfile.mkdtemp()
+        
+
+    def create_temp_image_file(self):
+        handle, tmp_img_file = tempfile.mkstemp(suffix='.jpg')
+        img = Image.new('RGB', (10, 10) )
+        img.save(tmp_img_file, format='JPEG')
+        return tmp_img_file
+
+
+    def test_upload_new_image_for_user_notes(self):
+        
+        img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(img_file_path, 'rb') as img_file:
+                resp = self.client.post(reverse('new_note', kwargs={'show_pk': 1} ), {'photo': img_file }, follow=True)
+                
+                self.assertEqual(200, resp.status_code)
+
+                note_1 = Note.objects.get(pk=1)
+                img_file_name = os.path.basename(img_file_path)
+                expected_uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
+                print(expected_uploaded_file_path)
+                self.assertTrue(os.path.exists(expected_uploaded_file_path))
+                self.assertIsNotNone(note_1.photo)
+                self.assertTrue(filecmp.cmp( img_file_path,  expected_uploaded_file_path ))
+
