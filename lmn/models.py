@@ -1,8 +1,10 @@
 from django.db import models
-
+from django.db.models.signals import post_save
 from django.db import models
 from django.contrib.auth.models import User
 import datetime
+from django.dispatch import receiver
+
 
 from django.core.files.storage import default_storage
 
@@ -19,6 +21,18 @@ User._meta.get_field('email')._blank = False
 User._meta.get_field('last_name')._blank = False
 User._meta.get_field('first_name')._blank = False
 
+
+
+"""  Profile for User """
+class Profile(models.Model):
+    user = models.OneToOneField(User, blank=False, on_delete=models.CASCADE)
+    favorite_Artist = models.CharField(max_length=200, blank=True)
+    favorite_Venue = models.CharField(max_length=200, blank=True)
+    favorite_Show = models.CharField(max_length=200, blank=True)
+
+
+    def __str__(self):
+        return f'{self.favorite_Artist} {self.favorite_Venue} {self.favorite_Show}'
 
 """ A music artist """
 class Artist(models.Model):
@@ -80,3 +94,13 @@ class Note(models.Model):
 
     def __str__(self):
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date} Photo: {self.photo}'
+
+      
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()

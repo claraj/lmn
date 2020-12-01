@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>LMNOP</title>
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="{% static 'css/base_style.css' %}" type="text/css"></link>
 </head>
 
@@ -14,7 +15,9 @@
 <a href="{% url 'latest_notes' %}">Notes</a>
 
 {% if user.is_authenticated %}
-  <span id='welcome-user-msg'>You are logged in, <a href="{% url 'user_profile' user_pk=user.pk %}">{{ user.username }}</a>.  <a href="{% url 'logout' %}">Logout</a></span>
+  <a href="{% url 'user_profile' user_pk=user.pk %}">Your Notes</a>
+  
+  <span id='welcome-user-msg'>You are logged in, <a href="{% url 'my_user_profile' %}">{{ user.username }}</a>.  <a href="{% url 'logout' %}">Logout</a></span>
 
 {% else %}
 
@@ -23,7 +26,14 @@
 {% endif %}
 
 <hr>
-
+{% if messages %}
+  {% for message in messages %}
+    <div class="message-{{ message.tags }}">
+      <b>{{ message }}</b>
+    </div>
+  {% endfor %}
+{% endif %}
+      
 {% block content %}
 {% endblock %}
 
