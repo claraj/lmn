@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.dispatch import receiver
 
 
-from ..models import Venue, Artist, Note, Show
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
+from ..models import Venue, Artist, Note, Show, Profile
+from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, UserProfileForm
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -22,8 +22,32 @@ def user_profile(request, user_pk):
 
 @login_required
 def my_user_profile(request):
-    # TODO - editable version for logged-in user to edit their own profile
-    return redirect('user_profile', user_pk=request.user.pk)
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        form = UserProfileForm(request.POST, instance=profile) 
+
+        context = {
+        'user_form' : form,
+        'user_profile': request.user
+        }
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile has been updated!')
+            new_user_form = UserProfileForm(instance=request.user.profile)
+            return redirect('my_user_profile')
+        else:
+            messages.error(request, form.errors)
+            return render(request, 'lmn/users/profile.html')
+            
+        return redirect('my_user_profile')
+    else:
+        user_form = UserProfileForm()
+    context = {
+        'user_form' : user_form,
+        'user_profile': request.user
+    }
+    
+    return render(request, 'lmn/users/profile.html', context)
 
 
 def register(request):

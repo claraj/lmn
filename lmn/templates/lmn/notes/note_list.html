@@ -23,6 +23,10 @@
     </p>
 
     <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+
+    {% if note.photo %} <!--show if there is a photo-->
+      <p id="note-photo"><img src="{{ note.photo.url }}"></p>
+    {% endif %}
   </div>  
 
   <hr>
