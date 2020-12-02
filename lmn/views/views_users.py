@@ -48,10 +48,10 @@ def register(request):
 
 @receiver(user_logged_out)
 def logout_message(sender, user, request, **kwargs):
-    messages.info(request, 'You have been logged out.')
+    messages.info(request, 'You have been logged out.',   fail_silently=True)
 
 @receiver(user_logged_in)
 def login_message(sender, user, request, **kwargs):
-    # Question about this how to put templating so can have username being shown?
-    messages.info(request, 'You have logged in')
+    username = user.username
+    messages.info(request, 'You have logged in as ' + username.title(),  fail_silently=True)
 

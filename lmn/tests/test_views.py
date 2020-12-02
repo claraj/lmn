@@ -411,33 +411,37 @@ class TestUserProfile(TestCase):
     def test_username_shown_on_profile_page(self):
         # A string "username's notes" is visible
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
-        self.assertContains(response, 'alice\'s notes')
+        self.assertContains(response, 'Alice\'s notes')
         
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'bob\'s notes')
+        self.assertContains(response, 'Bob\'s notes')
 
 
     def test_correct_user_name_shown_different_profiles(self):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">Bob</a>.')
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">Bob</a>.')
         
     def test_logout(self):
         user = User.objects.get(pk=1)
         self.client.force_login(user)
         response = self.client.get(reverse('logout'))
+        self.assertEqual(response.status_code, 302)
 
-        # logout message
-        self.assertContains(response, 'You have been logged out.')
+        # when user log out they will be redirected to the homepage
+        response_redirect = self.client.get(reverse('homepage'))
+
+        # logout message 
+        self.assertContains(response_redirect, 'You have been logged out.')
         
-        # link to log in displayed
-        self.assertContains(response, 'Login or sign up')
+        # message to ask user to login or sign up
+        self.assertContains(response_redirect, 'Login or sign up')
         
 
 class TestNotes(TestCase):
