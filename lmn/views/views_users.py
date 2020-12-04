@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.dispatch import receiver
+
 
 from ..models import Venue, Artist, Note, Show, Profile
 from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, UserProfileForm
@@ -7,6 +9,8 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.signals import user_logged_out, user_logged_in
+
 
 
 def user_profile(request, user_pk):
@@ -64,3 +68,14 @@ def register(request):
 
     form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form} )
+
+
+@receiver(user_logged_out)
+def logout_message(sender, user, request, **kwargs):
+    messages.info(request, 'You have been logged out.',   fail_silently=True)
+
+@receiver(user_logged_in)
+def login_message(sender, user, request, **kwargs):
+    username = user.username
+    messages.info(request, 'You have logged in as ' + username.title(),  fail_silently=True)
+
