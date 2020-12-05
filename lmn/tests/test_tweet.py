@@ -16,7 +16,7 @@ from tweepy.error import TweepError
 # These are gonna be hard to explain.
     # They did not end up being that hard to explain
 
-class TestTweepyOne(TestCase):
+class TestAuthAndNote(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]
 
     def setUp(self):
@@ -60,7 +60,7 @@ class TestTweepyOne(TestCase):
 
 # Here's where stuff gets weird. 
 
-class TestTweepyTwo(TestCase):
+class TestTweetFailure(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]       
 
     def setUp(self):
@@ -91,7 +91,7 @@ class TestTweepyTwo(TestCase):
 
 # MagicMock wouldn't reset between functions? so new testcase!
 
-class TestTweepyThree(TestCase):
+class TestTweetSuccess(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]       
 
     def setUp(self):
