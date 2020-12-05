@@ -10,61 +10,62 @@ consumer_secret = os.getenv('T_API_KEY_SEC')
 access_token = os.getenv('T_ACCESS_TOK')
 access_secret = os.getenv('T_ACCESS_TOK_SEC')
 
-# function takes the request to direct the messages, and note for tweeting
+
+
 def tweet_note(request, note):
-    # initially requires authorization!
+    # the note used for the tweet needs to be in a different format
+    # so it's adapted into a more usable string, this can also truncate it
+    # if the string text is too long (taking into account all show info, 
+    # title, and text)
+    adapted_note = make_tweet_text(note)
+
+    # from here, the authorization has to be run, this doesn't yet contact 
+    # the API! Explained further in that function.
     api = authorize()
-    # if that authorization fails (various tweepy error possible, which are logged)
-    # then the message is sent and the new_note function continues uninterrupted
-    if api == 'error':
-        messages.error(request, 'The site was unable to authorize to the Twitter account!')
-    # if it didn't return error, then it should have the ok from tweepy
+
+    # After the note is ready, the api object has the keys set in, it can go to the
+    # API itself and post the tweet! The response from that can be an error
+    # if a tweepy error is raised
+    response = post_tweet(api, adapted_note)
+    if response == 'error':
+        messages.error(request, 'We weren\'t able to tweet your note this time! Please try again later.')
     else:
-        # then it will attempt to tweet the note, which requires the auth and note
-        response = post_tweet(api, note)
-        # that returns a response based on any tweepy errors raised or if there were none
-        # these messages are then sent to the note_detail page to display at the top
-        if response == 'error':
-            messages.error(request, 'The site was unable to tweet the note!')
-        elif response == 'length error':
-            messages.error(request, 'The note was posted, but was too long to tweet')
-        else:
-            messages.success(request, 'Successfully Tweeted your note to our site account!')
+        messages.success(request, 'Successfully Tweeted your note to our site account!')
+
+
+def make_tweet_text(note):
+    # Simple function, this takes the note object and splits it into a more tweet-able format
+    # since we sort of only care a bit about the show, then just text and title from the user
+    # If that note is over 280, it's truncated so it still fits in the 280 character limit!
+    adapted_note = f'{note.show.artist.name} at {note.show.venue.name}.\n{note.title}: {note.text} -{note.user}'
+
+    if len(adapted_note) > 280:
+        sliced_note = adapted_note[0:277]
+        truncated = sliced_note + '...'
+        return truncated
+
+    return adapted_note
 
 
 def authorize():
-    try:
-        # to authorize, it uses tweepy's OAuthHandler, which returns an auth object created using the key and secret
-        auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-        # within that object, the access token and secret are set using the env variable keys
-        auth.set_access_token(access_token, access_secret)
-        # then that's passed through tweepy to the API to get a return from twitter.
-        api = tweepy.API(auth)
-        return api
-    # tweepy errors that are raised and logged and error is returned to the main
-    # which results in a more user friendly response
-    except tweepy.TweepError as err:
-        err_message = err.args[0][0]['message']
-        err_code = err.args[0][0]['code']
-        logging.error(f'tweet failed due to error code {err_code}: {err_message}')
-        return 'error'
+    # Mentioned earlier, this function does not actually contact the API,
+    # these tweepy functions create the necessary *object* that will be passed
+    # to the API later. This means it will eventually contain the
+    # keys, tokens, and note before tweepy sends it to the Twitter API
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_token, access_secret)
+    api = tweepy.API(auth)
+    return api
 
 
 def post_tweet(api, note):
-    # the note is adapted to a twitter-friendly version
-    adapted_note = f'{note.show.artist.name} at {note.show.venue.name}.\n{note.title}: {note.text} -{note.user}'
-    # then before attempting to use the API, the length is checked
-    if len(adapted_note) <= 240:
-        try:
-            # this runs the update status function of the API bit returned by tweepy earlier, passing the adapted note to it
-            response = api.update_status(adapted_note)
-            # might not be necessary? so long as it doesn't return error, it's ok and the tweet is posted
-            return response
-        # if tweepy raises an error, that's logged and the user sees a more friendly error
-        except tweepy.TweepError as err:
-            err_message = err.args[0][0]['message']
-            err_code = err.args[0][0]['code']
-            logging.error(f'tweet failed due to error code {err_code}: {err_message}')
-            return 'error'
-    else:
-        return 'length error'
+    # This is where the API is actually contacted. Using the update_status function
+    # the note is sent through tweepy to the Twitter API and the tweet is posted.
+    # Or if it breaks and raises a tweepy error (like if you're offline, )
+    try:
+        response = api.update_status(note)
+        return response
+    except tweepy.TweepError as err:
+        logging.error(f'tweet failed due to error code {err}')
+        return 'error'
+

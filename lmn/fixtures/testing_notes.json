@@ -24,6 +24,15 @@
         "text" : "woo hoo!",
         "posted_date" : "2017-02-14"
       }
+    },
+
+    {"model" : "lmn.note", "pk" : 4, "fields" :
+      { "show" : "1",
+        "user" : "1",
+        "title" : "title",
+        "text" : "text",
+        "posted_date" : "2017-01-01"
+      }
     }
 
 ]
