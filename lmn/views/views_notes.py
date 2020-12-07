@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from lmn.views.views_paginate import paginate_data
 
 
 @login_required
@@ -31,7 +33,17 @@ def new_note(request, show_pk):
 
 def latest_notes(request):
     notes = Note.objects.all().order_by('-posted_date')
-    return render(request, 'lmn/notes/note_list.html', { 'notes': notes })
+    #get page number 
+    page_number = request.GET.get('page')
+    # call paginate data function to implement the pagination
+    page_obj = paginate_data(page_number, notes, 4)
+
+    context = {
+        'notes': notes,
+        'page_obj': page_obj
+    }
+
+    return render(request, 'lmn/notes/note_list.html', context)
 
 
 def notes_for_show(request, show_pk): 
@@ -44,3 +56,4 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+
