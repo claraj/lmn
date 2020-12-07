@@ -2,6 +2,7 @@ from django.db import models
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 import datetime
 
 # Every model gets a primary key field by default.
@@ -53,7 +54,8 @@ class Note(models.Model):
     title = models.CharField(max_length=200, blank=False)
     text = models.TextField(max_length=1000, blank=False)
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
+    rating = models.IntegerField( default=0, validators = [MaxValueValidator(5), MinValueValidator(1)] )
 
     def __str__(self):
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date} Rating: {self.rating}'
 

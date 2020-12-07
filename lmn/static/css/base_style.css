@@ -18,3 +18,16 @@ a {
   color: #e60c42;
   font-weight: bold;
 }
+
+.checked {
+  color: orange;
+}
+
+.unchecked {
+  color: antiquewhite;
+}
+
+.my_btn {
+  background-color: inherit !important;
+  border: 0 !important;
+}
