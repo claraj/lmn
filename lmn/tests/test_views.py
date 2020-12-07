@@ -10,6 +10,11 @@ from django.contrib.auth.models import User
 import re, datetime
 from datetime import timezone
 
+import tempfile
+import filecmp
+import os
+from PIL import Image 
+
 # TODO verify correct templates are rendered.
 
 class TestEmptyViews(TestCase):
@@ -411,22 +416,37 @@ class TestUserProfile(TestCase):
     def test_username_shown_on_profile_page(self):
         # A string "username's notes" is visible
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
-        self.assertContains(response, 'alice\'s notes')
+        self.assertContains(response, 'Alice\'s notes')
         
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'bob\'s notes')
+        self.assertContains(response, 'Bob\'s notes')
 
 
     def test_correct_user_name_shown_different_profiles(self):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">Bob</a>.')
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">Bob</a>.')
+        
+    def test_logout(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+        response = self.client.get(reverse('logout'))
+        self.assertEqual(response.status_code, 302)
+
+        # when user log out they will be redirected to the homepage
+        response_redirect = self.client.get(reverse('homepage'))
+
+        # logout message 
+        self.assertContains(response_redirect, 'You have been logged out.')
+        
+        # message to ask user to login or sign up
+        self.assertContains(response_redirect, 'Login or sign up')
         
 
 class TestNotes(TestCase):
@@ -495,3 +515,37 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+class TestImageUpload(TestCase):
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+        self.MEDIA_ROOT = tempfile.mkdtemp()
+        
+
+    def create_temp_image_file(self):
+        handle, tmp_img_file = tempfile.mkstemp(suffix='.jpg')
+        img = Image.new('RGB', (10, 10) )
+        img.save(tmp_img_file, format='JPEG')
+        return tmp_img_file
+
+
+    def test_upload_new_image_for_user_notes(self):
+        
+        img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(img_file_path, 'rb') as img_file:
+                resp = self.client.post(reverse('new_note', kwargs={'show_pk': 1} ), {'photo': img_file }, follow=True)
+                
+                self.assertEqual(200, resp.status_code)
+
+                note_1 = Note.objects.get(pk=1)
+                img_file_name = os.path.basename(img_file_path)
+                expected_uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
+                print(expected_uploaded_file_path)
+                self.assertTrue(os.path.exists(expected_uploaded_file_path))
+                self.assertIsNotNone(note_1.photo)
+                self.assertTrue(filecmp.cmp( img_file_path,  expected_uploaded_file_path ))
+
