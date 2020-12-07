@@ -27,6 +27,47 @@
     {% if note.photo %} <!--show if there is a photo-->
       <p id="note-photo"><img src="{{ note.photo.url }}"></p>
     {% endif %}
+
+    {% if note.rating == 1 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star" id="second"></span>
+        <span class="fa fa-star" id="third"></span>
+        <span class="fa fa-star" id="fourth"></span>
+        <span class="fa fa-star" id="fifth"></span>
+        {% endif %}
+
+        {% if note.rating == 2 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star checked" id="second"></span>
+        <span class="fa fa-star" id="third"></span>
+        <span class="fa fa-star" id="fourth"></span>
+        <span class="fa fa-star" id="fifth"></span>
+        {% endif %}
+
+        {% if note.rating == 3 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star checked" id="second"></span>
+        <span class="fa fa-star checked" id="third"></span>
+        <span class="fa fa-star" id="fourth"></span>
+        <span class="fa fa-star" id="fifth"></span>
+        {% endif %}
+
+        {% if note.rating == 4 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star checked" id="second"></span>
+        <span class="fa fa-star checked" id="third"></span>
+        <span class="fa fa-star checked" id="fourth"></span>
+        <span class="fa fa-star" id="fifth"></span>
+        {% endif %}
+
+        {% if note.rating == 5 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star checked" id="second"></span>
+        <span class="fa fa-star checked" id="third"></span>
+        <span class="fa fa-star checked" id="fourth"></span>
+        <span class="fa fa-star checked" id="fifth"></span>
+        {% endif %}
+
   </div>  
 
   <hr>

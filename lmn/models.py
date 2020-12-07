@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 from django.dispatch import receiver
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 from django.core.files.storage import default_storage
@@ -70,6 +71,7 @@ class Note(models.Model):
     text = models.TextField(max_length=1000, blank=False)
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
     photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
+    rating = models.IntegerField( default=0, validators = [MaxValueValidator(5), MinValueValidator(1)] )
 
 
     def save(self, *args, **kwargs):
@@ -93,7 +95,7 @@ class Note(models.Model):
 
 
     def __str__(self):
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date} Photo: {self.photo}'
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date} Photo: {self.photo} Rating: {self.rating}'
 
       
 @receiver(post_save, sender=User)

@@ -7,9 +7,57 @@
   
   <div>
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <br>
+      <h>Title:</h>
+    </br>
+
+    <br>
+      {{ form.title }}
+    </br>
+    
+    <br>
+      <h>Text:</h>
+    </br>
+
+    <br>
+      {{ form.text }}
+    </br>
+
+    <br>
+      <h>Photo:</h>
+    </br>
+
+    <br>
+      {{ form.photo }}
+    </br>
+
+    <br>
+      <h>Rating:
+        <br>
+          <br>
+          1 - Very Dissatisfied
+          </br>
+          <br>
+          2 - Dissatisfied
+          </br>
+          <br>
+          3 - Neutral
+          </br>
+          <br>
+          4 - Satisfied
+          </br>
+          <br>
+          5 - Very Satisfied
+          </br>
+        </br>
+      {{ form.rating }}
+      </h>
+    </br>
   </div>
+  </br>
   <input type='submit' value='Add Note'>
+  </br>
 </form>
 
 {% endblock %}
