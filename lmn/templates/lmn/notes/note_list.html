@@ -21,7 +21,6 @@
 
 
 {% if '/notes/for_show/' in request.path %}
-<p>URL of this page: {% url 'notes_for_show' show.id %}</p>
 <P>Notes Search</p>
   <form action="{% url 'notes_for_show' show.id %}">
     {{ form }}
