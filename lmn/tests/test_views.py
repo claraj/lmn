@@ -426,12 +426,13 @@ class TestUserProfile(TestCase):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">Bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="user/profile/">Bob</a>.')
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">Bob</a>.')
+        self.assertContains(response, 'You are logged in,  <a href="user/profile/">Bob</a>.')
+        
         
     def test_logout(self):
         user = User.objects.get(pk=1)
@@ -513,8 +514,18 @@ class TestUserAuthentication(TestCase):
         # be redirected to the last page they were at, not the homepage.
         response = self.client.post(reverse('register'), {'username':'sam12345', 'email':'sam@sam.com', 'password1':'feRpj4w4pso3az@1!2', 'password2':'feRpj4w4pso3az@1!2', 'first_name':'sam', 'last_name' : 'sam'}, follow=True)
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
-        self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
+        self.assertRedirects(response, reverse('my_user_profile'))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+class TestUserProfilePage(TestCase):
+    
+    fixtures = ['testing_users', 'testing_user_profile']
+
+    def test_user_not_logged_in_should_get_sent_to_login_page(self):
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertRedirects(response, '/accounts/login/?next=/user/profile/')
+
+
 
 class TestImageUpload(TestCase):
     def setUp(self):
