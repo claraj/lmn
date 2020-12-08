@@ -44,3 +44,7 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+
+def top_shows(request):
+    notes = Note.objects.all().order_by('-rating')
+    return render(request, 'lmn/top_shows.html', { 'notes': notes })

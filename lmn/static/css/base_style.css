@@ -2,6 +2,7 @@ body {
   font-family: monospace;
   background: #444d4d;
   color: antiquewhite;
+  margin: 25px 50px;
 }
 
 a {
@@ -46,3 +47,15 @@ a {
   background-color: inherit !important;
   border: 0 !important;
 } 
+
+nav.clean {
+  background: none;
+  box-shadow: none;
+  
+}
+nav.clean .breadcrumb {
+  color: antiquewhite;
+}
+nav.clean .breadcrumb:before {
+  color: rgba(0, 0, 0, 0.7);
+}
