@@ -1,9 +1,14 @@
 from django.test import TestCase
 from django.db import IntegrityError
 from lmn.models import Venue, Artist, Show
+from django.db import transaction
+import logging
 
 
 from lmn.views import views_admin
+
+
+MODELS = [Venue,Artist,Show]
 
 #api data for one show
 
@@ -11,19 +16,24 @@ mock_api_response = {"_embedded":{"events":[{"name":"Hamilton","type":"event","i
 
 class TestAPIDATA(TestCase):
 
+
+    # def SetUp(self):
+    #     Venue.
+
     #testing if function saves artist show and venue data to database when called
     def test_save_artist_to_database(self):
 
         views_admin.get_all_events(mock_api_response)
-
+    
         artist = Artist.objects.get(pk=1)
         self.assertEqual(artist.name, 'Hamilton')
 
     def test_save_venue_to_database(self):
+        with transaction.atomic():
 
-        views_admin.get_all_events(mock_api_response)
-
-        venue = Venue.objects.get(pk=1)
+            views_admin.get_all_events(mock_api_response)
+            venue = Venue.objects.get(pk=1)
+            
         self.assertEqual(venue.name, 'Orpheum Theatre - Minneapolis')
         self.assertEqual(venue.state, 'MN')
         self.assertEqual(venue.city, 'Minneapolis')

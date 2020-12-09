@@ -4,7 +4,10 @@ from lmn.models import Artist,Venue,Show
 from pprint import pprint
 from django.http import HttpResponse
 from django.db import IntegrityError
+import logging
 
+
+logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 #running the api request and saving the data and returning an ok response
 def get_all_events(request):
@@ -30,8 +33,8 @@ def get_event_data():
         return data
 
     except Exception as e:
-        print(e) #log
-        return None
+        logging.error(e) #log
+        return HttpResponse('could not make request')
     
 
 
@@ -39,10 +42,11 @@ def get_event_data():
 def get_and_save_event_information(data):
 
 
-
     if data != None:
         events = data['_embedded']['events']
 
+        artist_id = None
+        venue_id = None
 
         for event in events:
 
@@ -59,20 +63,28 @@ def get_and_save_event_information(data):
                     artist.save()
 
                     artist_id = artist.id #getting the id to be used in the show 
+            except IntegrityError as e:
+                artist = Artist.objects.get(name=artist_name)
+                artist_id = artist.id
+                logging.error(e)
 
-                # if not Venue.objects.filter(name=venue_name):
+            try:
+                if not Venue.objects.filter(name=venue_name):
                     venue = Venue(name=venue_name,city=venue_city, state=venue_state)
                     venue.save()
                     
                     venue_id = venue.id
+            except IntegrityError as e:
+                venue = Venue.objects.get(name=venue_name)
+                venue_id = artist.id
+                logging.error(e)
 
-                # if not Show.objects.filter(show_date=date,artist=artist_id,venue=venue_id):
+            try:
+
+                if artist_id != None and venue_id != None:
                     show = Show(show_date= date, artist= Artist.objects.get(pk = artist_id), venue= Venue.objects.get(pk = venue_id))
                     show.save()
-
             except IntegrityError as e:
-                print(e)
-
- 
+                logging.error(e)
 
 
