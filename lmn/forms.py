@@ -21,7 +21,8 @@ class ArtistSearchForm(forms.Form):
 class NewNoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ('title', 'text', 'posted_date', 'photo')
+        # reminder: removed 'posted_date' from fields, likely needs additional revision
+        fields = ('title', 'text', 'photo')
         widgets = {
             'posted_date' : DateInput()
         }

@@ -1,4 +1,5 @@
 db.sqlite3
+lmnop_credentials.json
 
 # python-related
 __pycache__
