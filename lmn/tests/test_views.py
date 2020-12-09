@@ -525,7 +525,49 @@ class TestUserProfilePage(TestCase):
         response = self.client.get(reverse('my_user_profile'))
         self.assertRedirects(response, '/accounts/login/?next=/user/profile/')
 
+    def test_user_profile_page(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertTemplateUsed(response, 'lmn/users/profile.html')
+        self.assertContains(response, 'Username: alice')
+        # should have a Form to update profile
+        self.assertContains(response, 'Update Profile')
 
+    def test_new_user_with_no_data_added(self):
+        user = User.objects.get(pk=3)
+        self.client.force_login(user)
+        response = self.client.get(reverse('my_user_profile'))
+        # User should have their profile model being set up but no data being added on their profile yet
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Artist')
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Venue')
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Show')
+        
+        self.assertContains(response, 'Update Profile')
+
+
+    def test_user_profile_with_populated_data(self):
+        user = User.objects.get(pk=2)
+        self.client.force_login(user)
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertContains(response, 'Favorite Show: Show No2')
+        # Check if only data that is not being added show up on the page
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Artist')
+
+    def test_user_info_on_public_profile_page(self):
+        response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
+        self.assertContains(response, 'Alibaba')
+        self.assertTemplateUsed(response, 'lmn/users/user_profile.html')
+
+    def test_user_non_existing_info_on_public_profile_page(self):
+        response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
+        # This is not being added to the user profile
+        self.assertNotContains(response, 'Favorite Artist')
+
+    def test_user_profile_page_redirect_after_submit(self):
+        self.client.force_login(User.objects.get(pk=2))
+        response = self.client.get(reverse('my_user_profile'))
+        # Redirect the user back to the same page
+        self.assertContains(response, 'action="/user/profile/')
 
 class TestImageUpload(TestCase):
     def setUp(self):
