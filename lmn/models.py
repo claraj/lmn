@@ -7,6 +7,7 @@ from django.dispatch import receiver
 
 
 from django.core.files.storage import default_storage
+from django.db.models import Count
 
 # Every model gets a primary key field by default.
 
@@ -29,10 +30,10 @@ class Profile(models.Model):
     favorite_Artist = models.CharField(max_length=200, blank=True)
     favorite_Venue = models.CharField(max_length=200, blank=True)
     favorite_Show = models.CharField(max_length=200, blank=True)
-
+    note_count = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return f'{self.favorite_Artist} {self.favorite_Venue} {self.favorite_Show}'
+        return f'{self.favorite_Artist} {self.favorite_Venue} {self.favorite_Show} {self.note_count}'
 
 """ A music artist """
 class Artist(models.Model):
@@ -71,8 +72,16 @@ class Note(models.Model):
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
     photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
 
+    
+        
 
     def save(self, *args, **kwargs):
+        #count the total number of notes for the current user
+        num_notes = Note.objects.filter(user=self.user).count()
+        #get current user
+        obj = Profile.objects.filter(user=self.user)
+        #update the note_count field in the profile model with the user's total number of notes
+        obj.update(note_count=num_notes)
         #get reference to previous versionof this note
         old_note = Note.objects.filter(pk=self.pk).first()
         if old_note and old_note.photo: #check if an old note exists and has a photo
