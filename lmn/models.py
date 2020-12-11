@@ -36,7 +36,7 @@ class Profile(models.Model):
 
 """ A music artist """
 class Artist(models.Model):
-    name = models.CharField(max_length=200, blank=False)
+    name = models.CharField(max_length=200, blank=False, unique=True)
 
     def __str__(self):
         return f'Name: {self.name}'
@@ -57,6 +57,10 @@ class Show(models.Model):
     show_date = models.DateTimeField(blank=False)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
+
+    # making a constrain for a unnique set source:https://stackoverflow.com/questions/2201598/how-to-define-two-fields-unique-as-couple
+    class Meta:
+        unique_together = ('show_date','artist','venue')
 
     def __str__(self):
         return f'Artist: {self.artist} At: {self.venue} On: {self.show_date}'
