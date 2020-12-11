@@ -9,6 +9,10 @@ a {
   color: rgb(70, 193, 197);
 }
 
+h1{
+  text-align: center;
+}
+
 #welcome-user-msg, #login-or-sign-up {
   position: absolute;
   right: 0px;
@@ -58,4 +62,21 @@ nav.clean .breadcrumb {
 }
 nav.clean .breadcrumb:before {
   color: rgba(0, 0, 0, 0.7);
+}
+.header-link{
+  text-align: center !important;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+}
+
+.venue-item{
+  padding-block: 20px;
+  font-size: 16px;
+}
+
+.venue-link{
+  font-weight: bold;
+  font-size: 18px;
 }
