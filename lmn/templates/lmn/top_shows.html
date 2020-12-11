@@ -2,9 +2,13 @@
 
 {% block content %}
 
+{% if show %}
+    <div class="card-panel teal lighten-2" style="text-align:center;"><h2 >Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2></div>
+{% else %}
+    <div class="card-panel teal lighten-2" style="text-align:center;"><h2 >Top Rated Shows</h2></div>
+{% endif %}
 
 
-<div class="card-panel teal lighten-2" style="text-align:center;"><h2 >Top Rated Shows</h2></div>
 
 {% for note in notes %}
 
@@ -17,12 +21,12 @@
         </p>
 
         <p class="note-info">Posted on {{ note.posted_date }} by 
-        <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username|title }}</a>
+        <a class="user" href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username|title }}</a>
         </p>
 
-        <p class='note-text'>Comment: {{ note.text|truncatechars:100 }}</p>
+        <p class="note-text">Comment: {{ note.text|truncatechars:100 }}</p>
 
-        <p class='note-rating'>Rating: {{ note.rating }}</p>
+        <p class="note-rating">Rating: {{ note.rating }}</p>
 
         
         {% if note.photo %}
@@ -37,8 +41,6 @@
 </div> 
  
 
-
-  
 {% empty %}
 
   <p>No notes.</p>
