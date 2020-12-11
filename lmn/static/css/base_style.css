@@ -41,8 +41,3 @@ a {
 .unchecked {
   color: antiquewhite;
 }
-
-.my_btn {
-  background-color: inherit !important;
-  border: 0 !important;
-} 
