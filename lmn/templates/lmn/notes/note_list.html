@@ -67,6 +67,9 @@
       <p id="note-photo"><img src="{{ note.photo.url }}"></p>
     {% endif %}
 
+
+    <div>
+
     {% if note.user.username == user.get_username %}
     <form action="{% url 'update_note' note.pk %}" method="POST">
       {% csrf_token %}
@@ -80,10 +83,11 @@
     {% endif %}
 
     <p>
-        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
         <a href="https://twitter.com/intent/tweet?text={{ note.text | truncatechars:20 }} %23{{ note.show.artist.name }} %23{{ note.show.venue.name }}%20More detail:%20&url=
-        http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F" target="_blank" class="twitter-share-button" data-show-count="false">Tweet</a>
-    </p>
+        http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F" target="_blank" class="twitter-share-button" data-size="small" data-show-count="false">Tweet</a>
+     </p>
+    </div>
 
   </div>  
 
