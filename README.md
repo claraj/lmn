@@ -80,3 +80,18 @@ coverage report
 ### PostgreSQL
 
 Recommend using PaaS Postgres such as Elephant, instead of installing local Postgres. 
+
+
+## What's New
+- Get up-to-date show details from TicketMaster
+- Share notes on Facebook and Twitter
+- Ability to upload photos in your note
+- Update/modify your user profile with your favorite artist, venue, and shows
+- View other's public user profile 
+- Login and Logout message 
+- View top shows based on notes rating
+- Features to add ratings on your note
+- Badges for user that posted the most reviews
+- Search bar on the note list
+- Update/delete your own notes
+
