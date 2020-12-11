@@ -1,6 +1,8 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
-
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0" nonce="7hiivJAz"></script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <h2 id="note-page-title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by 
     <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ user.username }}</a>
@@ -51,5 +53,13 @@
         <span class="fa fa-star checked" id="fourth"></span>
         <span class="fa fa-star checked" id="fifth"></span>
         {% endif %}
+
+<div>
+    <p>
+        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Fdetail%2F{{ note.pk }}%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+        <a href="https://twitter.com/intent/tweet?text={{ note.text | truncatechars:20 }}%20More detail:%20&url=
+        http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Fdetail%2F{{ note.pk }}%2F" target="_blank" class="twitter-share-button" data-show-count="false">Tweet</a>
+    </p>
+</div>
 
 {% endblock %}
