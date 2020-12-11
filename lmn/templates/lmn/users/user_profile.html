@@ -12,7 +12,7 @@ user is a variable provided to the template and is the current logged-in user
 
 -->
 
-<h2 id='username_notes'>{{ user_profile.username }}'s notes</h2>
+<h2 id='username_notes'>{{ user_profile.username|title }}'s notes</h2>
 
 {% for note in notes %}
 
