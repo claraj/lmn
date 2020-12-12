@@ -3,10 +3,12 @@ body {
   background: #444d4d;
   color: antiquewhite;
   margin: 25px 50px;
+  background: #aa3939e3;
+  color: rgb(214, 146, 50);
 }
 
 a {
-  color: rgb(70, 193, 197);
+  color: rgb(98, 47, 128);
 }
 
 h1{
@@ -64,11 +66,10 @@ nav.clean .breadcrumb:before {
   color: rgba(0, 0, 0, 0.7);
 }
 .header-link{
-  text-align: center !important;
   font-size: 20px;
   padding-left: 10px;
   padding-right: 10px;
-  position: relative;
+
 }
 
 .list-item{
