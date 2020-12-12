@@ -14,6 +14,7 @@ import tempfile
 import filecmp
 import os
 from PIL import Image 
+import shutil
 
 # TODO verify correct templates are rendered.
 
@@ -426,12 +427,12 @@ class TestUserProfile(TestCase):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a href="user/profile/">Bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/">Bob</a>.')
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in,  <a href="user/profile/">Bob</a>.')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/">Bob</a>.')
         
         
     def test_logout(self):
@@ -514,8 +515,8 @@ class TestUserAuthentication(TestCase):
         # be redirected to the last page they were at, not the homepage.
         response = self.client.post(reverse('register'), {'username':'sam12345', 'email':'sam@sam.com', 'password1':'feRpj4w4pso3az@1!2', 'password2':'feRpj4w4pso3az@1!2', 'first_name':'sam', 'last_name' : 'sam'}, follow=True)
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
-        self.assertRedirects(response, reverse('my_user_profile'))   
-        self.assertContains(response, 'sam12345')  # page has user's name on it
+        self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))
+        self.assertContains(response, 'Sam12345')  # page has user's name on it
 
 class TestUserProfilePage(TestCase):
     
@@ -570,11 +571,16 @@ class TestUserProfilePage(TestCase):
         self.assertContains(response, 'action="/user/profile/')
 
 class TestImageUpload(TestCase):
+
+    fixtures = ['testing_users', 'testing_venues', 'testing_artists', 'testing_shows']
+
     def setUp(self):
         user = User.objects.get(pk=1)
         self.client.force_login(user)
         self.MEDIA_ROOT = tempfile.mkdtemp()
-        
+    
+    def tearDown(self):
+        shutil.rmtree(self.MEDIA_ROOT)
 
     def create_temp_image_file(self):
         handle, tmp_img_file = tempfile.mkstemp(suffix='.jpg')
@@ -590,15 +596,19 @@ class TestImageUpload(TestCase):
         with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
         
             with open(img_file_path, 'rb') as img_file:
-                resp = self.client.post(reverse('new_note', kwargs={'show_pk': 1} ), {'photo': img_file }, follow=True)
+                new_notes = {
+                    'title': 'Title Test 1234',
+                    'text': 'This is a note section',
+                    'posted_date': '11/12/2020',
+                    'photo': img_file
+                }
+                resp = self.client.post(reverse('new_note', kwargs={'show_pk': 1} ), new_notes, follow=True)
                 
                 self.assertEqual(200, resp.status_code)
 
                 note_1 = Note.objects.get(pk=1)
                 img_file_name = os.path.basename(img_file_path)
                 expected_uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
-                print(expected_uploaded_file_path)
                 self.assertTrue(os.path.exists(expected_uploaded_file_path))
                 self.assertIsNotNone(note_1.photo)
                 self.assertTrue(filecmp.cmp( img_file_path,  expected_uploaded_file_path ))
-
