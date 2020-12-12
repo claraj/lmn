@@ -1,8 +1,45 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0" nonce="ROgfOkjU"></script>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+{% if request.path  == '/notes/latest/' %}
+<P>Notes Search</p>
+  <form action="{% url 'latest_notes' %}">
+    {{ form }}
+    <input type='submit' value='Search All Notes'>
+  </form>
+
+
+{% if search_term %}
+<h2 id='note-list-title'>Notes matching '{{ search_term }}' 
+  <a href="{% url 'latest_notes' %}" id='clear_search'>(clear)</a>
+</h2>
+{% else %}
+  <h2 id='note-list-title'>All notes</h2>
+{% endif %}
+{% endif %}
+
+
+{% if '/notes/for_show/' in request.path %}
+<P>Notes Search</p>
+  <form action="{% url 'notes_for_show' show.id %}">
+    {{ form }}
+    <input type='submit' value='Search Notes For {{ show.venue.name }}'>
+  </form>
+
+
+{% if search_term %}
+<h2 id='note-list-title'>Notes matching '{{ search_term }}' 
+  <a href="{% url 'notes_for_show' show.id %}" id='clear_search'>(clear)</a>
+</h2>
+{% else %}
+  <h2 id='note-list-title'>All notes for {{ show.venue.name }}</h2>
+{% endif %}
+{% endif %}
 
 
 {% if show %}
@@ -30,11 +67,27 @@
       <p id="note-photo"><img src="{{ note.photo.url }}"></p>
     {% endif %}
 
+
+    <div>
+
+    {% if note.user.username == user.get_username %}
+    <form action="{% url 'update_note' note.pk %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" class="update">Update</button>
+    </form>
+
+    <form action="{% url 'delete_note' note.pk %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" class="delete">Delete</button>
+    </form>
+    {% endif %}
+
     <p>
-        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
         <a href="https://twitter.com/intent/tweet?text={{ note.text | truncatechars:20 }} %23{{ note.show.artist.name }} %23{{ note.show.venue.name }}%20More detail:%20&url=
-        http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F" target="_blank" class="twitter-share-button" data-show-count="false">Tweet</a>
-    </p>
+        http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F" target="_blank" class="twitter-share-button" data-size="small" data-show-count="false">Tweet</a>
+     </p>
+    </div>
 
   </div>  
 
@@ -54,5 +107,7 @@ display link to add new note for that show. -->
   <a href="{% url 'new_note' show_pk=show.pk %}">Add your own notes</a>
 
 {% endif %}
+
+<script src="{% static 'js/confirm_delete.js' %}"></script>
 
 {% endblock %}
