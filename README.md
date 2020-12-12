@@ -2,10 +2,25 @@
 
 ## Live Music Notes, Opinions, Photographs
 
+### Set Up 
+Before getting started you will need to get the API key from [TicketMaster](https://developer.ticketmaster.com/products-and-docs/apis/getting-started/). Once you have obtain your API Key, you can set up your environment variable by following the steps below:
+- For Mac User:
+    - Open Terminal
+    - Run `touch ~/.bash_profile; open ~/.bash_profile`
+    - In TextEdit, add ` export TICKETMASTER_KEY=<your-api-key-here> `
+    - Save the `.bash_profile` file and Quit (Command + Q) Text Edit.
+
+    - Run `source ~/.bash_profile` on terminal to execute
+    - Check wheter `TICKETMASTER_KEY` has been added to your `bash_profile` by running `echo $TICKETMASTER_KEY`
+- For Windows User:
+    - [Here](https://www.architectryan.com/2018/08/31/how-to-change-environment-variables-on-windows-10/) is a tutorial on how to set up your environment variable. Set up `TICKETMASTER_KEY` with the API key that you have created.
 
 ### To install
 
 1. Create and activate a virtual environment. Use Python3 as the interpreter. Suggest locating the venv/ directory outside of the code directory.
+
+
+2. Once activated the virtual environment, you will need to run the following command to install the required packages. Once you have installed the required packages, you will need to make migration before running the Django server.
 
 ```
 pip install -r requirements.txt
@@ -14,9 +29,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-Site at
-
-http://127.0.0.1:8000
+3. Once you started the server, you can visit the site via http://127.0.0.1:8000 
 
 
 ### Create superuser
