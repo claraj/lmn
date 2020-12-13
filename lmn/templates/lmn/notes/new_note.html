@@ -9,6 +9,13 @@
     {% csrf_token %}
 
     <br>
+    <div class="message-error">
+      <b>{{ form.rating.errors }}</b>
+    </div>
+      
+    </br>
+
+    <br>
       <h>Title:</h>
     </br>
 
@@ -50,6 +57,7 @@
           <br>
           5 - Very Satisfied
           </br>
+
         </br>
       {{ form.rating }}
       </h>
