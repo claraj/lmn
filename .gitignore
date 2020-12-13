@@ -17,6 +17,8 @@ env
 .gcloudignore
 app.yaml
 
-
+lmnop2-credentials.json
+lmnop-credentials.json
 debug.log
+cloud_sql_proxy.exe
 
