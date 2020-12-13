@@ -10,8 +10,40 @@ a {
   color: rgba(83, 178, 255, 0.877);
 }
 
+p{
+  color: lightgoldenrodyellow;
+}
+
+label{
+  color: lightgoldenrodyellow;
+}
+
 h1{
   text-align: center;
+}
+
+h2{
+  text-align: center;
+}
+
+#show-date{
+  font-style: italic;
+  color: antiquewhite;
+}
+
+#city-state{
+  font-style: italic;
+  color: antiquewhite;
+}
+
+#venue-name{
+  font-weight: bold;
+}
+
+#user-link{
+  color:rgb(16, 138, 219);
+  font-weight: bold;
+  font-size: large;
 }
 
 #welcome-user-msg, #login-or-sign-up {
@@ -30,14 +62,19 @@ h1{
 
 .message-success {
   background: lightseagreen;
-  font-weight: bold;
-  color: black
+  font-style: italic;
+  color: black;
 }
 
 .message-error {
   background: lightpink;
-  font-weight: bold;
-  color: black
+  font-style: italic;
+  color: black;
+}
+
+.message-info{
+  color: black;
+  font-style: italic;
 }
 
 .checked {
@@ -68,7 +105,6 @@ nav.clean .breadcrumb:before {
   font-size: 20px;
   padding-left: 10px;
   padding-right: 10px;
-
 }
 
 .list-item{
@@ -78,7 +114,6 @@ nav.clean .breadcrumb:before {
 
 .venue-link{
   font-weight: bold;
-
 }
 
 .header-styles{

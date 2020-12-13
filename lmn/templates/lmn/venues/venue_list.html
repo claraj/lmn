@@ -18,7 +18,7 @@
         <a href="{% url 'venue_list' %}" id='clear_search'>clear</a>
       </h3>
     {% else %}
-      <h3 id="venue_list_title" class="header-styles">All venues</h3>
+      <h3 id="venue_list_title" class="header-styles">All Venues</h3>
     {% endif %}
   </div>
 
@@ -27,7 +27,8 @@
     {% for venue in venues %}
     
       <div id="venue-{{ venue.pk }}" class="list-item"> 
-        <p><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a> {{ venue.city }}, {{ venue.state }}</p>
+        <p id="venue-name"><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a></p><p id="city-state" >{{ venue.city }}, {{ venue.state }}</p>
+        
         <p>See artists, notes, and add your own <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} notes</a></p>
       </div>
       <div class="divider"></div>

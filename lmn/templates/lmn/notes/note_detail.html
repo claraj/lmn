@@ -6,54 +6,58 @@
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <h2 id="note-page-title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by 
-    <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ user.username }}</a>
+    <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ user.username|title }}</a>
 </h2>
 
 <p id="note-title"><b>{{ note.title}}</b></p>
-<p id="note-text">{{ note.text }}</b></p>
+<p id="note-text">Comments: {{ note.text }}</b></p>
 {% if note.photo %} <!--show if there is a photo-->
-      <p id="note-photo"><img src="{{ note.photo.url }}"></p>
+    <p id="note-photo">Photos: <br><img src="{{ note.photo.url }}" style="width:300px;height:350px;"></p>
+{% else %}
+    <P>No Photo Available</P>
 {% endif %}
 
+<p class="note-rating">Rating: </p>
 {% if note.rating == 1 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star" id="second"></span>
-        <span class="fa fa-star" id="third"></span>
-        <span class="fa fa-star" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star" id="second"></span>
+    <span class="fa fa-star" id="third"></span>
+    <span class="fa fa-star" id="fourth"></span>
+    <span class="fa fa-star" id="fifth"></span>
+        
 
-        {% if note.rating == 2 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star" id="third"></span>
-        <span class="fa fa-star" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
+    {% elif note.rating == 2 %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star checked" id="second"></span>
+    <span class="fa fa-star" id="third"></span>
+    <span class="fa fa-star" id="fourth"></span>
+    <span class="fa fa-star" id="fifth"></span>
 
-        {% if note.rating == 3 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star checked" id="third"></span>
-        <span class="fa fa-star" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
 
-        {% if note.rating == 4 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star checked" id="third"></span>
-        <span class="fa fa-star checked" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
+    {% elif note.rating == 3 %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star checked" id="second"></span>
+    <span class="fa fa-star checked" id="third"></span>
+    <span class="fa fa-star" id="fourth"></span>
+    <span class="fa fa-star" id="fifth"></span>
 
-        {% if note.rating == 5 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star checked" id="third"></span>
-        <span class="fa fa-star checked" id="fourth"></span>
-        <span class="fa fa-star checked" id="fifth"></span>
-        {% endif %}
+
+    {% elif note.rating == 4 %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star checked" id="second"></span>
+    <span class="fa fa-star checked" id="third"></span>
+    <span class="fa fa-star checked" id="fourth"></span>
+    <span class="fa fa-star" id="fifth"></span>
+
+
+    {% elif note.rating == 5 %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star checked" id="second"></span>
+    <span class="fa fa-star checked" id="third"></span>
+    <span class="fa fa-star checked" id="fourth"></span>
+    <span class="fa fa-star checked" id="fifth"></span>
+
+{% endif %}
 
 
 <div>

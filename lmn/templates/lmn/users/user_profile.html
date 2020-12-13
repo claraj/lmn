@@ -45,48 +45,55 @@ user is a variable provided to the template and is the current logged-in user
   </h3>
 
   <p class="note_info">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</p>
-  <p class="note_text">{{ note.text|truncatechars:300 }}</p>
+  <p class="note_text">Comments: {{ note.text|truncatechars:300 }}</p>
   <p class="note_posted_at">{{ note.posted_date }}</p>
+  {% if note.photo %} <!--show if there is a photo-->
+    <p id="note-photo">Photos: <br><img src="{{ note.photo.url }}" style="width:300px;height:350px;"></p>
+  {% else %}
+    <P>No Photo Available</P>
+  {% endif %}
 
+  <p class="note-rating">Rating: </p>
   {% if note.rating == 1 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star" id="second"></span>
-        <span class="fa fa-star" id="third"></span>
-        <span class="fa fa-star" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star" id="second"></span>
+    <span class="fa fa-star" id="third"></span>
+    <span class="fa fa-star" id="fourth"></span>
+    <span class="fa fa-star" id="fifth"></span>
+      
 
-        {% if note.rating == 2 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star" id="third"></span>
-        <span class="fa fa-star" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
+  {% elif note.rating == 2 %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star checked" id="second"></span>
+    <span class="fa fa-star" id="third"></span>
+    <span class="fa fa-star" id="fourth"></span>
+    <span class="fa fa-star" id="fifth"></span>
+  
 
-        {% if note.rating == 3 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star checked" id="third"></span>
-        <span class="fa fa-star" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
+  {% elif note.rating == 3 %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star checked" id="second"></span>
+    <span class="fa fa-star checked" id="third"></span>
+    <span class="fa fa-star" id="fourth"></span>
+    <span class="fa fa-star" id="fifth"></span>
+  
 
-        {% if note.rating == 4 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star checked" id="third"></span>
-        <span class="fa fa-star checked" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
+  {% elif note.rating == 4 %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star checked" id="second"></span>
+    <span class="fa fa-star checked" id="third"></span>
+    <span class="fa fa-star checked" id="fourth"></span>
+    <span class="fa fa-star" id="fifth"></span>
+  
 
-        {% if note.rating == 5 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star checked" id="third"></span>
-        <span class="fa fa-star checked" id="fourth"></span>
-        <span class="fa fa-star checked" id="fifth"></span>
-        {% endif %}
+  {% elif note.rating == 5 %}
+    <span class="fa fa-star checked" id="first"></span>
+    <span class="fa fa-star checked" id="second"></span>
+    <span class="fa fa-star checked" id="third"></span>
+    <span class="fa fa-star checked" id="fourth"></span>
+    <span class="fa fa-star checked" id="fifth"></span>
+
+  {% endif %}
 
 
   <form action="{% url 'update_note' note.pk %}" method="POST">
@@ -103,7 +110,7 @@ user is a variable provided to the template and is the current logged-in user
 
 {% empty %}
 
-    <p id='no_records'>No notes.</p>
+  <p id='no_records'>No notes.</p>
 
 {% endfor %}
 

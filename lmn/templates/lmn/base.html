@@ -34,7 +34,7 @@
     {% if user.is_authenticated %}
 
       <a href="{% url 'user_profile' user_pk=user.pk %}" class="breadcrumb">Your Notes</a>
-      <span id='welcome-user-msg'>You are logged in, <a href="{% url 'my_user_profile' %}">{{ user.username|title }}</a>.  <a href="{% url 'logout' %}">Logout</a></span>
+      <span id='welcome-user-msg'>You are logged in, <a id="user-link" href="{% url 'my_user_profile' %}">{{ user.username|title }}</a>.  <a href="{% url 'logout' %}">Logout</a></span>
       
 
     {% else %}

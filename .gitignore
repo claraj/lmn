@@ -15,3 +15,5 @@ env
 migrations
 debug.log
 
+
+media/
