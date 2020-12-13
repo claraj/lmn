@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
 from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from lmn.views.views_paginate import paginate_data
 
 
 def venues_for_artist(request, artist_pk):   # pk = artist_pk
@@ -28,7 +30,12 @@ def artist_list(request):
     else:
         artists = Artist.objects.all().order_by('name')
 
-    return render(request, 'lmn/artists/artist_list.html', { 'artists': artists, 'form': form, 'search_term': search_name })
+    #get page number 
+    page_number = request.GET.get('page')
+    # call paginate data function to implement the pagination
+    page_obj = paginate_data(page_number, artists, 3)
+
+    return render(request, 'lmn/artists/artist_list.html', { 'artists': artists, 'form': form, 'search_term': search_name, 'page_obj': page_obj })
 
 
 def artist_detail(request, artist_pk):

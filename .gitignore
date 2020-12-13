@@ -12,7 +12,12 @@ __pycache__
 venv
 env
 
-migrations
+
+.env
+.gcloudignore
+app.yaml
+
+
 debug.log
 
 

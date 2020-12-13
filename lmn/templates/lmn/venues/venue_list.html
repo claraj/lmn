@@ -24,20 +24,57 @@
 
   <div >
 
-    {% for venue in venues %}
+    {% for venue in page_obj %}
+
     
-      <div id="venue-{{ venue.pk }}" class="list-item"> 
-        <p id="venue-name"><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a></p><p id="city-state" >{{ venue.city }}, {{ venue.state }}</p>
+    <div id="venue-{{ venue.pk }}" class="list-item"> 
+      <p id="venue-name"><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a></p><p id="city-state" >{{ venue.city }}, {{ venue.state }}</p>
         
-        <p>See artists, notes, and add your own <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} notes</a></p>
-      </div>
-      <div class="divider"></div>
+      <p>See artists, notes, and add your own <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} notes</a></p>
+    </div>
+    <div class="divider"></div>
+
+
     {% empty %}
       <p>No venues found</p>
     {% endfor %}
-
     </div>
-
 </div>
+
+{% if page_obj.has_other_pages %}
+<!--add a way to navigate between different pages-->
+  <div class="">
+    Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+  </div>
+  <nav aria-label="...">
+    <ul class="pagination">
+
+      <li class="page-item">
+      {% if page_obj.has_previous %}
+        <a class="page-link" href="{% url 'venue_list'%}?page={{page_obj.previous_page_number}}">Previous</a>{% endif %}
+      </li>
+      
+      <!--get current page number-->
+      {% for n in page_obj.paginator.page_range %}
+        <!--check if the number from the view matches with the value of n-->
+        {% if page_obj.number == n %}
+          <li class="page-item active">
+            <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+          </li>
+        <!--display on 3 page indicator at a time-->
+        {% elif n > page_obj.number|add:-2 and n < page_obj.number|add:2 %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      
+      <li class="page-item">
+        {% if page_obj.has_next %}
+        <a class="page-link" href="{% url 'venue_list'%}?page={{page_obj.next_page_number}}">Next</a>{% endif %}
+      </li>
+    </ul>
+  </nav>
+{% endif %}
 
 {% endblock %}

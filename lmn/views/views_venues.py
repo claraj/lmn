@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from lmn.views.views_paginate import paginate_data
+
 
 def venue_list(request):
     form = VenueSearchForm()
@@ -18,7 +21,12 @@ def venue_list(request):
     else :
         venues = Venue.objects.all().order_by('name')   # Todo paginate
 
-    return render(request, 'lmn/venues/venue_list.html', { 'venues': venues, 'form': form, 'search_term': search_name })
+    #get page number 
+    page_number = request.GET.get('page')
+    # call paginate data function to implement the pagination
+    page_obj = paginate_data(page_number, venues, 2)
+
+    return render(request, 'lmn/venues/venue_list.html', { 'venues': venues, 'form': form, 'search_term': search_name, 'page_obj': page_obj })
 
 
 def artists_at_venue(request, venue_pk):   # pk = venue_pk

@@ -41,10 +41,17 @@ def my_user_profile(request):
             
         return redirect('my_user_profile')
     else:
+        profile = Profile.objects.get(user=request.user) #get the current user profile
+        reward = ""  
+        if profile.note_count: # check if user posted notes
+            num_notes = profile.note_count #get the user's number of notes
+            reward = decide_reward(num_notes) 
         user_form = UserProfileForm()
     context = {
         'user_form' : user_form,
-        'user_profile': request.user
+        'user_profile': request.user,
+        'reward': reward
+        
     }
     
     return render(request, 'lmn/users/profile.html', context)
@@ -79,3 +86,12 @@ def login_message(sender, user, request, **kwargs):
     username = user.username
     messages.info(request, 'You have logged in as ' + username.title(),  fail_silently=True)
 
+def decide_reward(num):
+    # user gets different rewards based the number of notes they post
+    if num > 5: #
+        reward = "gold"
+    elif num >= 3 and num < 5:
+        reward = "silver"
+    else:
+        reward = "bronze"
+    return reward
