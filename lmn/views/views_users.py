@@ -87,10 +87,10 @@ def login_message(sender, user, request, **kwargs):
     messages.info(request, 'You have logged in as ' + username.title(),  fail_silently=True)
 
 def decide_reward(num):
-    # the reward user gets is based on the number of their notes
+    # user gets different rewards based the number of notes they post
     if num > 5: #
         reward = "gold"
-    elif num > 3 and num < 5:
+    elif num >= 3 and num < 5:
         reward = "silver"
     else:
         reward = "bronze"

@@ -81,7 +81,7 @@ class Note(models.Model):
         #get current user
         obj = Profile.objects.filter(user=self.user)
         #update the note_count field in the profile model with the user's total number of notes
-        obj.update(note_count=num_notes)
+        obj.update(note_count=num_notes+1)
         #get reference to previous versionof this note
         old_note = Note.objects.filter(pk=self.pk).first()
         if old_note and old_note.photo: #check if an old note exists and has a photo
