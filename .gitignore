@@ -11,6 +11,10 @@ __pycache__
 # ignore virtual enviroments 
 venv
 env
+
 .env
 .gcloudignore
 app.yaml
+
+debug.log
+

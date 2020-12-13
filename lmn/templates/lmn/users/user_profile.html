@@ -1,4 +1,5 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
 
 
@@ -12,7 +13,29 @@ user is a variable provided to the template and is the current logged-in user
 
 -->
 
-<h2 id='username_notes'>{{ user_profile.username|title }}'s notes</h2>
+  <div>
+    <h2 class="center-align" style="text-decoration: underline;">User Profile</h2>
+  </div>
+        
+  <p class="account-heading">Username: {{ user_profile.username }}</p>
+  <p class="text-secondary">Email: {{ user_profile.email }}</p>
+  {% if user_profile.profile.favorite_Artist %}
+      <p class="text-secondary">Favorite Artist: {{ user_profile.profile.favorite_Artist }}</p>
+  {% endif %}
+
+  {% if user_profile.profile.favorite_Venue %}
+      <p class="text-secondary">Favorite Venue: {{ user_profile.profile.favorite_Venue }}</p>
+  {% endif %}
+  {% if user_profile.profile.favorite_Show %}
+      <p class="text-secondary">Favorite Show: {{ user_profile.profile.favorite_Show }}</p>
+  {% endif %}
+
+<div class="divider"></div>
+
+<div>
+  <h2 id='username_notes' class="center-align" style="text-decoration: underline;">{{ user_profile.username|title }}'s notes</h2>
+</div>
+
 
 {% for note in notes %}
 
@@ -24,6 +47,58 @@ user is a variable provided to the template and is the current logged-in user
   <p class="note_info">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</p>
   <p class="note_text">{{ note.text|truncatechars:300 }}</p>
   <p class="note_posted_at">{{ note.posted_date }}</p>
+
+  {% if note.rating == 1 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star" id="second"></span>
+        <span class="fa fa-star" id="third"></span>
+        <span class="fa fa-star" id="fourth"></span>
+        <span class="fa fa-star" id="fifth"></span>
+        {% endif %}
+
+        {% if note.rating == 2 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star checked" id="second"></span>
+        <span class="fa fa-star" id="third"></span>
+        <span class="fa fa-star" id="fourth"></span>
+        <span class="fa fa-star" id="fifth"></span>
+        {% endif %}
+
+        {% if note.rating == 3 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star checked" id="second"></span>
+        <span class="fa fa-star checked" id="third"></span>
+        <span class="fa fa-star" id="fourth"></span>
+        <span class="fa fa-star" id="fifth"></span>
+        {% endif %}
+
+        {% if note.rating == 4 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star checked" id="second"></span>
+        <span class="fa fa-star checked" id="third"></span>
+        <span class="fa fa-star checked" id="fourth"></span>
+        <span class="fa fa-star" id="fifth"></span>
+        {% endif %}
+
+        {% if note.rating == 5 %}
+        <span class="fa fa-star checked" id="first"></span>
+        <span class="fa fa-star checked" id="second"></span>
+        <span class="fa fa-star checked" id="third"></span>
+        <span class="fa fa-star checked" id="fourth"></span>
+        <span class="fa fa-star checked" id="fifth"></span>
+        {% endif %}
+
+
+  <form action="{% url 'update_note' note.pk %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="update">Update</button>
+  </form>
+
+  <form action="{% url 'delete_note' note.pk %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="delete">Delete</button>
+  </form>
+
 </div>
 
 {% empty %}
@@ -32,5 +107,6 @@ user is a variable provided to the template and is the current logged-in user
 
 {% endfor %}
 
+<script src="{% static 'js/confirm_delete.js' %}"></script>
 
 {% endblock %}
