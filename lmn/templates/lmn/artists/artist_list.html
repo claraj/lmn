@@ -20,7 +20,8 @@
 
 
 {% for artist in page_obj %}
-
+  <br>
+  <br>
   <div class="artist" id="artist_{{ artist.pk }}" class="list-item">
     <p>
       <a href="{% url 'artist_detail' artist_pk=artist.pk %}">{{ artist.name }}</a>
