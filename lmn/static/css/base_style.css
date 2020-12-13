@@ -3,12 +3,12 @@ body {
   background: #444d4d;
   color: antiquewhite;
   margin: 25px 50px;
-  background: #aa3939e3;
-  color: rgb(214, 146, 50);
+  /* background: #aa3939e3; */
+  color: rgb(228, 174, 99);
 }
 
 a {
-  color: rgb(69, 47, 128);
+  color: rgba(83, 178, 255, 0.877);
 }
 
 h1{
