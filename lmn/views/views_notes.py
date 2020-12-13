@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from lmn.views.views_paginate import paginate_data
 
 
 @login_required
@@ -31,6 +33,7 @@ def new_note(request, show_pk):
 
 
 def latest_notes(request):
+
     form = NoteSearchForm()
     search_name = request.GET.get('search_name')
 
@@ -38,7 +41,21 @@ def latest_notes(request):
         notes = Note.objects.filter(user__username__icontains=search_name).order_by('-posted_date')
     else:
         notes = Note.objects.all().order_by('-posted_date')
-    return render(request, 'lmn/notes/note_list.html', { 'notes': notes, 'form': form, 'search_term': search_name })
+        
+    #get page number 
+    page_number = request.GET.get('page')
+    # call paginate data function to implement the pagination
+    page_obj = paginate_data(page_number, notes, 4)
+    
+    context = {
+        'notes': notes,
+        'form': form, 
+        'search_term': search_name,
+        'page_obj': page_obj
+    }
+    
+    return render(request, 'lmn/notes/note_list.html', context)
+
 
 
 
@@ -96,4 +113,5 @@ def delete_note(request, note_pk):
         return redirect(request.META['HTTP_REFERER'])
     else:
         return HttpResponseForbidden
+
 

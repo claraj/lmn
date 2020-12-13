@@ -49,7 +49,7 @@
 {% endif %}
 
 
-{% for note in notes %}
+{% for note in page_obj %}
 
   <div id="note_{{ note.pk }}">
     <h3 class="note-title">{{ note.title }}</h3>
@@ -140,6 +140,43 @@
 
 {% endfor %}
 
+
+{% if page_obj.has_other_pages %}
+<!--add a way to navigate between different pages-->
+  <div class="">
+    Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
+  </div>
+  <nav aria-label="...">
+    <ul class="pagination">
+
+      <li class="page-item">
+      {% if page_obj.has_previous %}
+        <a class="page-link" href="{% url 'latest_notes'%}?page={{page_obj.previous_page_number}}">Previous</a>{% endif %}
+      </li>
+      
+      <!--get current page number-->
+      {% for n in page_obj.paginator.page_range %}
+        <!--check if the number from the view matches with the value of n-->
+        {% if page_obj.number == n %}
+          <li class="page-item active">
+            <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+          </li>
+        <!--display on 3 page indicator at a time-->
+        {% elif n > page_obj.number|add:-2 and n < page_obj.number|add:2 %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+      
+      <li class="page-item">
+        {% if page_obj.has_next %}
+        <a class="page-link" href="{% url 'latest_notes'%}?page={{page_obj.next_page_number}}">Next</a>{% endif %}
+      </li>
+    </ul>
+  </nav>
+{% endif %}
+
 <!-- If this is a list of notes for one show,
 display link to add new note for that show. -->
 
@@ -150,5 +187,6 @@ display link to add new note for that show. -->
 {% endif %}
 
 <script src="{% static 'js/confirm_delete.js' %}"></script>
+
 
 {% endblock %}
