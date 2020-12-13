@@ -33,3 +33,11 @@ a {
   font-weight: bold;
   color: black
 }
+
+.checked {
+  color: orange;
+}
+
+.unchecked {
+  color: antiquewhite;
+}
