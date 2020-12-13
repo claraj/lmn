@@ -25,12 +25,12 @@
   <div>
 
     {% for venue in venues %}
-
-    <div id="venue-{{ venue.pk }}" class="section"> 
-      <p><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a> {{ venue.city }}, {{ venue.state }}</p>
-      <p>See artists, notes, and add your own <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} notes</a></p>
-    </div>
-
+    
+      <div id="venue-{{ venue.pk }}" class="section"> 
+        <p><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a> {{ venue.city }}, {{ venue.state }}</p>
+        <p>See artists, notes, and add your own <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} notes</a></p>
+      </div>
+      <div class="divider"></div>
     {% empty %}
       <p>No venues found</p>
     {% endfor %}
