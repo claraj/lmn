@@ -11,3 +11,7 @@ __pycache__
 # ignore virtual enviroments 
 venv
 env
+
+migrations
+debug.log
+
