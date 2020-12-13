@@ -12,6 +12,5 @@ __pycache__
 venv
 env
 
-migrations
 debug.log
 
