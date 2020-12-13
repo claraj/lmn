@@ -14,6 +14,7 @@ import tempfile
 import filecmp
 import os
 from PIL import Image 
+import shutil
 
 # TODO verify correct templates are rendered.
 
@@ -439,6 +440,7 @@ class TestUserProfile(TestCase):
         response = self.client.get(reverse('homepage'))
         # login message 
         self.assertContains(response, 'You are logged in, <a href="/user/profile/">Alice</a>.')
+
         
     def test_logout(self):
         user = User.objects.get(pk=1)
@@ -539,15 +541,74 @@ class TestUserAuthentication(TestCase):
         # be redirected to the last page they were at, not the homepage.
         response = self.client.post(reverse('register'), {'username':'sam12345', 'email':'sam@sam.com', 'password1':'feRpj4w4pso3az@1!2', 'password2':'feRpj4w4pso3az@1!2', 'first_name':'sam', 'last_name' : 'sam'}, follow=True)
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
-        self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
+
+        self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))
         self.assertContains(response, 'Sam12345')  # page has user's name on it
 
+class TestUserProfilePage(TestCase):
+    
+    fixtures = ['testing_users', 'testing_user_profile']
+
+    def test_user_not_logged_in_should_get_sent_to_login_page(self):
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertRedirects(response, '/accounts/login/?next=/user/profile/')
+
+    def test_user_profile_page(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertTemplateUsed(response, 'lmn/users/profile.html')
+        self.assertContains(response, 'Username: alice')
+        # should have a Form to update profile
+        self.assertContains(response, 'Update Profile')
+
+    def test_new_user_with_no_data_added(self):
+        user = User.objects.get(pk=3)
+        self.client.force_login(user)
+        response = self.client.get(reverse('my_user_profile'))
+        # User should have their profile model being set up but no data being added on their profile yet
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Artist')
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Venue')
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Show')
+        
+        self.assertContains(response, 'Update Profile')
+
+
+    def test_user_profile_with_populated_data(self):
+        user = User.objects.get(pk=2)
+        self.client.force_login(user)
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertContains(response, 'Favorite Show: Show No2')
+        # Check if only data that is not being added show up on the page
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Artist')
+
+    def test_user_info_on_public_profile_page(self):
+        response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
+        self.assertContains(response, 'Alibaba')
+        self.assertTemplateUsed(response, 'lmn/users/user_profile.html')
+
+    def test_user_non_existing_info_on_public_profile_page(self):
+        response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
+        # This is not being added to the user profile
+        self.assertNotContains(response, 'Favorite Artist')
+
+    def test_user_profile_page_redirect_after_submit(self):
+        self.client.force_login(User.objects.get(pk=2))
+        response = self.client.get(reverse('my_user_profile'))
+        # Redirect the user back to the same page
+        self.assertContains(response, 'action="/user/profile/')
+
+
 class TestImageUpload(TestCase):
+
+    fixtures = ['testing_users', 'testing_venues', 'testing_artists', 'testing_shows']
+
     def setUp(self):
         user = User.objects.get(pk=1)
         self.client.force_login(user)
         self.MEDIA_ROOT = tempfile.mkdtemp()
-        
+    
+    def tearDown(self):
+        shutil.rmtree(self.MEDIA_ROOT)
 
     def create_temp_image_file(self):
         handle, tmp_img_file = tempfile.mkstemp(suffix='.jpg')
@@ -563,15 +624,19 @@ class TestImageUpload(TestCase):
         with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
         
             with open(img_file_path, 'rb') as img_file:
-                resp = self.client.post(reverse('new_note', kwargs={'show_pk': 1} ), {'photo': img_file }, follow=True)
+                new_notes = {
+                    'title': 'Title Test 1234',
+                    'text': 'This is a note section',
+                    'posted_date': '11/12/2020',
+                    'photo': img_file
+                }
+                resp = self.client.post(reverse('new_note', kwargs={'show_pk': 1} ), new_notes, follow=True)
                 
                 self.assertEqual(200, resp.status_code)
 
                 note_1 = Note.objects.get(pk=1)
                 img_file_name = os.path.basename(img_file_path)
                 expected_uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
-                print(expected_uploaded_file_path)
                 self.assertTrue(os.path.exists(expected_uploaded_file_path))
                 self.assertIsNotNone(note_1.photo)
                 self.assertTrue(filecmp.cmp( img_file_path,  expected_uploaded_file_path ))
-

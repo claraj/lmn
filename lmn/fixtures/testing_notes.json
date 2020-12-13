@@ -5,7 +5,10 @@
         "title" : "ok",
         "text" : "kinda ok",
         "posted_date" : "2017-02-12",
+
         "rating": "3"
+        "photo": ""
+
       }
     },
 
@@ -16,6 +19,7 @@
         "text" : "yay!",
         "posted_date" : "2017-02-13",
         "rating": "1"
+        "photo": ""
       }
     },
 
@@ -26,6 +30,7 @@
         "text" : "woo hoo!",
         "posted_date" : "2017-02-14",
         "rating": "5"
+        "photo": ""
       }
     }
 
