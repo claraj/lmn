@@ -110,3 +110,27 @@ Recommend using PaaS Postgres such as Elephant, instead of installing local Post
 - Update/delete your own notes
 - View the top rated shows/notes
 
+## Application Snapshots 
+- User Profile
+![User Profile](/images/UserProfile.png)
+- Update User Profile
+![Update User Profile](/images/UpdateProfile.png)
+- Public Profile
+![Public Profile](/images/Profile.png)
+- Artist List
+![Artist List](/images/artistlist.png)
+- Note List
+![Note List](/images/notelist.png)
+- Venue List
+![Venue List](/images/venuelist.png)
+- Update Notes
+![Update Notes](/images/UpdateNotes.png)
+- Note Details
+![Note Details](/images/NoteDetails.png)
+- Top Shows List
+![Top Shows List](/images/topshows.png)
+- Login Message
+![Login Message](/images/loginmessage.png)
+- Logout Message
+![Logout Message](/images/logoutmessage.png)
+
