@@ -26,7 +26,7 @@ def venue_list(request):
     # call paginate data function to implement the pagination
     page_obj = paginate_data(page_number, venues, 2)
 
-    return render(request, 'lmn/venues/venue_list.html', { 'venues': venues, 'form': form, 'search_term': search_name, 'page_obje': page_obj })
+    return render(request, 'lmn/venues/venue_list.html', { 'venues': venues, 'form': form, 'search_term': search_name, 'page_obj': page_obj })
 
 
 def artists_at_venue(request, venue_pk):   # pk = venue_pk
