@@ -19,10 +19,14 @@ class ArtistSearchForm(forms.Form):
     search_name = forms.CharField(label='Artist Name', max_length=200)
 
 
+class NoteSearchForm(forms.Form):
+    search_name = forms.CharField(label='Username', max_length=200)
+
+
 class NewNoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ('title', 'text', 'photo')
+        fields = ('title', 'text', 'photo', 'rating')
 
 
 class UserRegistrationForm(UserCreationForm):
