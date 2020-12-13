@@ -9,7 +9,7 @@
     <p>{{ show.venue.name}} on {{ show.show_date }}</p>
     <p><a href="{% url 'notes_for_show' show_pk=show.pk %}">See notes for this show and add your own</a></p>
   </div>
-
+  
 {% empty %}
   <P id="no-results">We have no records of venues this artist has played at<p>
 {% endfor %}

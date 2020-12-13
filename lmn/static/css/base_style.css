@@ -78,5 +78,10 @@ nav.clean .breadcrumb:before {
 
 .venue-link{
   font-weight: bold;
-  font-size: 18px;
+
+}
+
+.header-styles{
+  text-align: center;
+  text-decoration: underline;
 }

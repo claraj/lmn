@@ -1,7 +1,7 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
 
-<h2>Artist List</h2>
+<h2 class="header-styles">Artist List</h2>
 
 <P>Artist Search</p>
   <form action="{% url 'artist_list' %}">
@@ -15,7 +15,7 @@
     <a href="{% url 'artist_list' %}" id='clear_search'>(clear)</a>
   </h2>
 {% else %}
-  <h2 id='artist-list-title'>All artists</h2>
+  <h2 id='artist-list-title' class="header-styles">All artists</h2>
 {% endif %}
 
 
@@ -30,6 +30,7 @@
       <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }} notes</a>
     </p>  
   </div>
+  <div class="divider"></div>
 
 {% empty %}
   
