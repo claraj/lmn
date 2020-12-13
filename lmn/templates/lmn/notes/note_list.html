@@ -59,7 +59,7 @@
     </p>
 
     <p class="note-info">Posted on {{ note.posted_date }} by 
-      <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
+      <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username|title }}</a>
     </p>
 
     <p class='note-text'>Comments: {{ note.text|truncatechars:100 }}</p>
