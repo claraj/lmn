@@ -456,7 +456,26 @@ class TestUserProfile(TestCase):
         
         # message to ask user to login or sign up
         self.assertContains(response_redirect, 'Login or sign up')
+
+class TestTopShows(TestCase):
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]
+    
+    def test_top_shows_template(self):
+        response = self.client.get(reverse('top_shows'))
+        self.assertTemplateUsed(response, 'lmn/top_shows.html')
+
+    def test_top_shows_page_correct_rating_order(self):
+
+        response = self.client.get(reverse('top_shows'))
+
+        expected_notes_order = list(Note.objects.all().order_by('-rating'))
+        # Get the first note and expect it will be the top rating which is 5
+        first_note = response.context['notes'][0]
+        second_note = response.context['notes'][1]
         
+        self.assertEqual(first_note.rating, 5) 
+        # Second note should be 3
+        self.assertEqual(second_note.rating, 3)    
 
 class TestNotes(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show

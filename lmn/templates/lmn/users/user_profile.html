@@ -88,6 +88,7 @@ user is a variable provided to the template and is the current logged-in user
         <span class="fa fa-star checked" id="fifth"></span>
         {% endif %}
 
+
   <form action="{% url 'update_note' note.pk %}" method="POST">
     {% csrf_token %}
     <button type="submit" class="update">Update</button>

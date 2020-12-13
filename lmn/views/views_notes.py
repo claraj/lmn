@@ -61,6 +61,10 @@ def note_detail(request, note_pk):
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
 
 
+def top_shows(request):
+    notes = Note.objects.all().order_by('-rating')
+    return render(request, 'lmn/top_shows.html', { 'notes': notes })
+
 # Updates existing note based off instance, checks for matching user/note pk before allowing updates.
 @login_required
 def update_note(request, show_pk):
@@ -92,3 +96,4 @@ def delete_note(request, note_pk):
         return redirect(request.META['HTTP_REFERER'])
     else:
         return HttpResponseForbidden
+

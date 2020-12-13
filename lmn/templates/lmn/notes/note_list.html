@@ -67,6 +67,7 @@
       <p id="note-photo"><img src="{{ note.photo.url }}"></p>
     {% endif %}
 
+
     {% if note.rating == 1 %}
         <span class="fa fa-star checked" id="first"></span>
         <span class="fa fa-star" id="second"></span>
@@ -127,6 +128,7 @@
         http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F" target="_blank" class="twitter-share-button" data-size="small" data-show-count="false">Tweet</a>
      </p>
     </div>
+
 
   </div>  
 

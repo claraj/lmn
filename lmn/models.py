@@ -76,7 +76,8 @@ class Note(models.Model):
     text = models.TextField(max_length=1000, blank=False)
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
     photo = models.ImageField(upload_to='user_images/', blank=True, null=True)
-    rating = models.IntegerField( default=0, validators = [MaxValueValidator(5), MinValueValidator(1)] )
+
+    rating = models.IntegerField(default=0, validators = [MaxValueValidator(5), MinValueValidator(1)] )
 
 
     def save(self, *args, **kwargs):
