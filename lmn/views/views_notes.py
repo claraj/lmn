@@ -38,6 +38,7 @@ def latest_notes(request):
     search_name = request.GET.get('search_name')
 
     if search_name:
+        # Displays all notes by username
         notes = Note.objects.filter(user__username__icontains=search_name).order_by('-posted_date')
     else:
         notes = Note.objects.all().order_by('-posted_date')
@@ -65,6 +66,7 @@ def notes_for_show(request, show_pk):
     search_name = request.GET.get('search_name')
 
     if search_name:
+        # Displays notes for show by username
         notes = Note.objects.filter(user__username__icontains=search_name).filter(show=show_pk).order_by('-posted_date')
         show = Show.objects.get(pk=show_pk) 
     else:
