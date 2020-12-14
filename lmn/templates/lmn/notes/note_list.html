@@ -70,6 +70,7 @@
       <P>No Photo Available</P>
     {% endif %}
     
+    <!--Checks stars considered "checked" by note.rating-->
     <p class="note-rating">Rating: </p>
     {% if note.rating == 1 %}
       <span class="fa fa-star checked" id="first"></span>
@@ -114,13 +115,13 @@
 
       
     <div>
-
       {% if note.user.username == user.get_username %}
+        <!--Displays update note button only for current users notes-->
         <form action="{% url 'update_note' note.pk %}" method="POST">
           {% csrf_token %}
           <button type="submit" class="update">Update</button>
         </form>
-
+        <!--Displays delete note button only for current users notes-->
         <form action="{% url 'delete_note' note.pk %}" method="POST">
           {% csrf_token %}
           <button type="submit" class="delete">Delete</button>
