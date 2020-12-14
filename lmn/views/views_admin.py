@@ -11,14 +11,31 @@ logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctim
 
 #running the api request and saving the data and returning an ok response
 def get_all_events(request):
-    data = get_event_data()
-    get_and_save_event_information(data)
 
-    return HttpResponse('ok')
+    """This function calls two other functions, and serves to pass data between them, then returns a response depending on if we successfuly exctracted the data or not
+
+    :return: returning an http response depending on wether we got data from the api or not
+    :rtype: HttpResponse
+    """
+
+    data = get_event_data()
+
+    if(data != None):
+
+        get_and_save_event_information(data)
+        return HttpResponse('ok')
+
+    else:
+        return HttpResponse('404 - could not access API')
 
 
 # getting all the data from the api to send it elsewhere
 def get_event_data():
+    """This function makes a request to the ticketmaster api, and then returns all the raw json data
+
+    :return: either we return a dictionary with all the json data, or a HttpResponse with an error code
+    :rtype: Dictionary
+    """
 
     url = 'https://app.ticketmaster.com/discovery/v2/events' 
 
@@ -34,13 +51,18 @@ def get_event_data():
 
     except Exception as e:
         logging.error(e) #log
-        return HttpResponse('could not make request')
+        return None
     
 
 
 # extracting the useful data from the event data we got above and saving that to the database
 def get_and_save_event_information(data):
+    """This funtion takes all the data that was aquried from the api, parses throguh it getting the useful info, and stores that into our database.
 
+    :param data: Json data we got from the database
+    :type data: Dictionary
+    
+    """
 
     if data != None:
         events = data['_embedded']['events']
