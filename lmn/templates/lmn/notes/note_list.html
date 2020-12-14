@@ -7,10 +7,10 @@
 
 
 {% if request.path  == '/notes/latest/' %}
-<P>Notes Search</p>
+<h3>Notes Search</h3>
   <form action="{% url 'latest_notes' %}">
     {{ form }}
-    <input type='submit' value='Search All Notes'>
+    <input type='submit' value='Search All Notes' class="btn btn-default">
   </form>
 
 
@@ -19,13 +19,13 @@
   <a href="{% url 'latest_notes' %}" id='clear_search'>(clear)</a>
 </h2>
 {% else %}
-  <h2 id='note-list-title'>All notes</h2>
+  <h2 id='note-list-title' class="header-styles">All notes</h2>
 {% endif %}
 {% endif %}
 
 
 {% if '/notes/for_show/' in request.path %}
-<P>Notes Search</p>
+<h3>Notes Search</h3>
   <form action="{% url 'notes_for_show' show.id %}">
     {{ form }}
     <input type='submit' value='Search Notes For {{ show.venue.name }}'>
@@ -45,7 +45,7 @@
 {% if show %}
   <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
 {% else %}
-  <h2>Latest Notes</h2>
+  <h2 class="header-styles">Latest Notes</h2>
 {% endif %}
 
 
@@ -59,74 +59,79 @@
     </p>
 
     <p class="note-info">Posted on {{ note.posted_date }} by 
-      <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
+      <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username|title }}</a>
     </p>
 
-    <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+    <p class='note-text'>Comments: {{ note.text|truncatechars:100 }}</p>
+
     {% if note.photo %} <!--show if there is a photo-->
-      <p id="note-photo"><img src="{{ note.photo.url }}"></p>
+      <p id="note-photo">Photos: <br><img src="{{ note.photo.url }}" style="width:300px;height:350px;"></p>
+    {% else %}
+      <P>No Photo Available</P>
+    {% endif %}
+    
+    <p class="note-rating">Rating: </p>
+    {% if note.rating == 1 %}
+      <span class="fa fa-star checked" id="first"></span>
+      <span class="fa fa-star" id="second"></span>
+      <span class="fa fa-star" id="third"></span>
+      <span class="fa fa-star" id="fourth"></span>
+      <span class="fa fa-star" id="fifth"></span>
+        
+
+    {% elif note.rating == 2 %}
+      <span class="fa fa-star checked" id="first"></span>
+      <span class="fa fa-star checked" id="second"></span>
+      <span class="fa fa-star" id="third"></span>
+      <span class="fa fa-star" id="fourth"></span>
+      <span class="fa fa-star" id="fifth"></span>
+    
+
+    {% elif note.rating == 3 %}
+      <span class="fa fa-star checked" id="first"></span>
+      <span class="fa fa-star checked" id="second"></span>
+      <span class="fa fa-star checked" id="third"></span>
+      <span class="fa fa-star" id="fourth"></span>
+      <span class="fa fa-star" id="fifth"></span>
+    
+
+    {% elif note.rating == 4 %}
+      <span class="fa fa-star checked" id="first"></span>
+      <span class="fa fa-star checked" id="second"></span>
+      <span class="fa fa-star checked" id="third"></span>
+      <span class="fa fa-star checked" id="fourth"></span>
+      <span class="fa fa-star" id="fifth"></span>
+    
+
+    {% elif note.rating == 5 %}
+      <span class="fa fa-star checked" id="first"></span>
+      <span class="fa fa-star checked" id="second"></span>
+      <span class="fa fa-star checked" id="third"></span>
+      <span class="fa fa-star checked" id="fourth"></span>
+      <span class="fa fa-star checked" id="fifth"></span>
+
     {% endif %}
 
-
-    {% if note.rating == 1 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star" id="second"></span>
-        <span class="fa fa-star" id="third"></span>
-        <span class="fa fa-star" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
-
-        {% if note.rating == 2 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star" id="third"></span>
-        <span class="fa fa-star" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
-
-        {% if note.rating == 3 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star checked" id="third"></span>
-        <span class="fa fa-star" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
-
-        {% if note.rating == 4 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star checked" id="third"></span>
-        <span class="fa fa-star checked" id="fourth"></span>
-        <span class="fa fa-star" id="fifth"></span>
-        {% endif %}
-
-        {% if note.rating == 5 %}
-        <span class="fa fa-star checked" id="first"></span>
-        <span class="fa fa-star checked" id="second"></span>
-        <span class="fa fa-star checked" id="third"></span>
-        <span class="fa fa-star checked" id="fourth"></span>
-        <span class="fa fa-star checked" id="fifth"></span>
-        {% endif %}
-
+      
     <div>
 
-    {% if note.user.username == user.get_username %}
-    <form action="{% url 'update_note' note.pk %}" method="POST">
-      {% csrf_token %}
-      <button type="submit" class="update">Update</button>
-    </form>
+      {% if note.user.username == user.get_username %}
+        <form action="{% url 'update_note' note.pk %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="update">Update</button>
+        </form>
 
-    <form action="{% url 'delete_note' note.pk %}" method="POST">
-      {% csrf_token %}
-      <button type="submit" class="delete">Delete</button>
-    </form>
-    {% endif %}
+        <form action="{% url 'delete_note' note.pk %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="delete">Delete</button>
+        </form>
+      {% endif %}
 
-    <p>
+      <p>
         <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-size="small"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
         <a href="https://twitter.com/intent/tweet?text={{ note.text | truncatechars:20 }} %23{{ note.show.artist.name }} %23{{ note.show.venue.name }}%20More detail:%20&url=
         http%3A%2F%2F{{ request.get_host }}%2Fnotes%2Flatest%2F{{ note.pk }}%2F" target="_blank" class="twitter-share-button" data-size="small" data-show-count="false">Tweet</a>
-     </p>
+      </p>
     </div>
 
 
@@ -143,6 +148,8 @@
 
 {% if page_obj.has_other_pages %}
 <!--add a way to navigate between different pages-->
+<br>
+<br>
   <div class="">
     Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
   </div>

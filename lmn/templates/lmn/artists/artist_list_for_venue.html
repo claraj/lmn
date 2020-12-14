@@ -3,14 +3,17 @@
 {% block content %}
 
 
-<h2 id="artists-at-venue-title">Artists that have played at {{ venue.name }}</h2>
-
+<div class="card-panel grey darken-2" style="text-align:center;"><h2>Artists that have played at {{ venue.name }}</h2></div>
+<br>
+<br>
 {% for show in shows %}
 
-<div class="show" id="show_{{ show.pk }}">
-  <p>{{ show.artist.name}} on {{ show.show_date }}.
+<div class="show" id="show_{{ show.pk }}" class="list-item">
+  <p class="list-item">{{ show.artist.name}}
+    <div id="show-date">Date/Time : {{ show.show_date }}</div>
     <a href="{% url 'notes_for_show' show_pk=show.pk %}">See notes for this show, and add your own</a>
   </p>
+  <div class="divider"></div>
 </div>
 
 {% empty %}

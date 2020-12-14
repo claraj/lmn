@@ -26,11 +26,51 @@
 
         <p class="note-text">Comment: {{ note.text|truncatechars:100 }}</p>
 
-        <p class="note-rating">Rating: {{ note.rating }}</p>
+        <p class="note-rating">Rating: </p>
+        {% if note.rating == 1 %}
+            <span class="fa fa-star checked" id="first"></span>
+            <span class="fa fa-star" id="second"></span>
+            <span class="fa fa-star" id="third"></span>
+            <span class="fa fa-star" id="fourth"></span>
+            <span class="fa fa-star" id="fifth"></span>
+
+
+        {% elif note.rating == 2 %}
+            <span class="fa fa-star checked" id="first"></span>
+            <span class="fa fa-star checked" id="second"></span>
+            <span class="fa fa-star" id="third"></span>
+            <span class="fa fa-star" id="fourth"></span>
+            <span class="fa fa-star" id="fifth"></span>
+
+
+        {% elif note.rating == 3 %}
+            <span class="fa fa-star checked" id="first"></span>
+            <span class="fa fa-star checked" id="second"></span>
+            <span class="fa fa-star checked" id="third"></span>
+            <span class="fa fa-star" id="fourth"></span>
+            <span class="fa fa-star" id="fifth"></span>
+
+
+        {% elif note.rating == 4 %}
+            <span class="fa fa-star checked" id="first"></span>
+            <span class="fa fa-star checked" id="second"></span>
+            <span class="fa fa-star checked" id="third"></span>
+            <span class="fa fa-star checked" id="fourth"></span>
+            <span class="fa fa-star" id="fifth"></span>
+
+
+        {% elif note.rating == 5 %}
+            <span class="fa fa-star checked" id="first"></span>
+            <span class="fa fa-star checked" id="second"></span>
+            <span class="fa fa-star checked" id="third"></span>
+            <span class="fa fa-star checked" id="fourth"></span>
+            <span class="fa fa-star checked" id="fifth"></span>
+
+        {% endif %}
 
         
         {% if note.photo %}
-            <p>Photo</p>
+            <p>Photos: </p><br>
             <img src="{{ note.photo.url }}" style="width:300px;height:350px;">
         {% else %}
             <P>No Photo Available</P>

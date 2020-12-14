@@ -50,7 +50,7 @@ class NewNoteFormTests(TestCase):
 
 
     def test_ok_title_and_length_is_valid(self):
-        form_data = { "title": "blah blah", "text" : "blah, blah, blah."}
+        form_data = { "title": "blah blah", "text" : "blah, blah, blah.", "rating": 5 }
         form = NewNoteForm(form_data)
         self.assertTrue(form.is_valid())
 
