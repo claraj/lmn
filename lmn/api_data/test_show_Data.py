@@ -5,7 +5,7 @@ from django.db import transaction
 import logging
 
 
-from lmn.views import views_admin
+from lmn.api_data import views_admin
 
 
 MODELS = [Venue,Artist,Show]
