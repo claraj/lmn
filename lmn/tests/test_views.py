@@ -367,6 +367,7 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
 
         # Verify note is in database
         new_note_query = Note.objects.filter(text='ok', title='blah blah',rating= 1)
+
         self.assertEqual(new_note_query.count(), 1)
 
         # And one more note in DB than before
@@ -481,6 +482,7 @@ class TestTopShows(TestCase):
         # Second note should be 3
         self.assertEqual(second_note.rating, 3)    
 
+        
 class TestNotes(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
 
@@ -503,6 +505,39 @@ class TestNotes(TestCase):
         first, second = context[0], context[1]
         self.assertEqual(first.pk, 2)
         self.assertEqual(second.pk, 1)
+
+        
+    def test_noted_search_clear_link(self):
+        response = self.client.get( reverse('latest_notes') , {'search_name' : 'Alice'} )
+        # There is a clear link, it's url is the latest notes page
+        all_notes_url = reverse('latest_notes')
+        self.assertContains(response, all_notes_url)
+
+
+    def test_note_search_no_search_results(self):
+        response = self.client.get( reverse('latest_notes') , {'search_name' : 'Name'} )
+        self.assertNotContains(response, 'NOT')
+        self.assertNotContains(response, 'FOUND')
+        self.assertNotContains(response, 'HERE')
+        # Check the length of notes list is 0
+        self.assertEqual(len(response.context['notes']), 0)
+
+
+    def test_note_search_partial_match_search_results(self):
+        response = self.client.get(reverse('latest_notes'), {'search_name' : 'Alice'})
+        # Should be one responses ("ice")
+        self.assertContains(response, 'ice')
+        self.assertNotContains(response, 'Not Found')
+        # Check the length of notes list is 1
+        self.assertEqual(len(response.context['notes']), 1)
+
+        
+    def test_note_search_one_search_result(self):
+        response = self.client.get(reverse('latest_notes'), {'search_name' : 'Alice'} )
+        self.assertNotContains(response, 'Not Found')
+        self.assertContains(response, 'Alice')
+        # Check the length of notes list is 1
+        self.assertEqual(len(response.context['notes']), 1)
 
 
     def test_correct_templates_uses_for_notes(self):
