@@ -3,10 +3,47 @@ body {
   background: #444d4d;
   color: antiquewhite;
   margin: 25px 50px;
+  color: rgb(236, 188, 119);
 }
 
 a {
-  color: rgb(70, 193, 197);
+  color: rgba(83, 178, 255, 0.877);
+}
+
+p{
+  color: lightgoldenrodyellow;
+}
+
+label{
+  color: lightgoldenrodyellow;
+}
+
+h1{
+  text-align: center;
+}
+
+h2{
+  text-align: center;
+}
+
+#show-date{
+  font-style: italic;
+  color: antiquewhite;
+}
+
+#city-state{
+  font-style: italic;
+  color: antiquewhite;
+}
+
+#venue-name{
+  font-weight: bold;
+}
+
+#user-link{
+  color:rgb(16, 138, 219);
+  font-weight: bold;
+  font-size: large;
 }
 
 #welcome-user-msg, #login-or-sign-up {
@@ -25,16 +62,22 @@ a {
 
 .message-success {
   background: lightseagreen;
-  font-weight: bold;
-  color: black
+  font-style: italic;
+  color: black;
 }
 
 .message-error {
   background: lightpink;
-  font-weight: bold;
-  color: black
+  font-style: italic;
+  color: black;
 }
 
+.message-info{
+  color: black;
+  font-style: italic;
+}
+
+/* Used to define star rating selected */
 .checked {
   color: orange;
 }
@@ -58,4 +101,23 @@ nav.clean .breadcrumb {
 }
 nav.clean .breadcrumb:before {
   color: rgba(0, 0, 0, 0.7);
+}
+.header-link{
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.list-item{
+  padding-block: 20px;
+  font-size: 16px;
+}
+
+.venue-link{
+  font-weight: bold;
+}
+
+.header-styles{
+  text-align: center;
+  text-decoration: underline;
 }

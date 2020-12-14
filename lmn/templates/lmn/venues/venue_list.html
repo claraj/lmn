@@ -1,15 +1,15 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
 
-<h2>Venue List</h2>
+<h2 class="header-styles">Venue List</h2>
 
 <div>
 
-  <h2>Venue Search</h2>
+  <p>Venue Search</p>
 
   <form action="{% url 'venue_list' %}">
     {{ form }}
-    <input type='submit' value='Search'/>
+    <input class="btn btn-default" type='submit' value='Search'/>
   </form>
 
   <div>
@@ -18,18 +18,22 @@
         <a href="{% url 'venue_list' %}" id='clear_search'>clear</a>
       </h3>
     {% else %}
-      <h3 id="venue_list_title">All venues</h3>
+      <h3 id="venue_list_title" class="header-styles">All Venues</h3>
     {% endif %}
   </div>
 
-  <div>
+  <div >
 
     {% for venue in page_obj %}
 
-    <div id="venue-{{ venue.pk }}">
-      <p><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a> {{ venue.city }}, {{ venue.state }}</p>
+    
+    <div id="venue-{{ venue.pk }}" class="list-item"> 
+      <p id="venue-name"><a href="{% url 'venue_detail' venue_pk=venue.pk %}">{{ venue.name }}</a></p><p id="city-state" >{{ venue.city }}, {{ venue.state }}</p>
+        
       <p>See artists, notes, and add your own <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} notes</a></p>
     </div>
+    <div class="divider"></div>
+
 
     {% empty %}
       <p>No venues found</p>
@@ -39,6 +43,8 @@
 
 {% if page_obj.has_other_pages %}
 <!--add a way to navigate between different pages-->
+  <br>
+  <br>
   <div class="">
     Showing page {{page_obj.number}} of {{page_obj.paginator.num_pages}}
   </div>
