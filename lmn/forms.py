@@ -1,9 +1,10 @@
 from django import forms
-from .models import Note
+from .models import Note, Artist
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ValidationError
+
 
 
 class VenueSearchForm(forms.Form):
@@ -19,9 +20,12 @@ class NewNoteForm(forms.ModelForm):
         model = Note
         fields = ('title', 'text')
 
+class ArtistForm(forms.ModelForm):
+    class Meta:
+        model = Artist
+        fields = ['name']
 
 class UserRegistrationForm(UserCreationForm):
-
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')

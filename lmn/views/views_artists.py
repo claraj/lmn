@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 from ..models import Venue, Artist, Note, Show
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
+from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, ArtistForm
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -34,3 +34,15 @@ def artist_list(request):
 def artist_detail(request, artist_pk):
     artist = get_object_or_404(Artist, pk=artist_pk)
     return render(request, 'lmn/artists/artist_detail.html' , { 'artist': artist })
+
+
+def add_artist(request):
+    if request.method == 'POST':
+        new_artist_form = ArtistForm(request.POST)
+        if new_artist_form.is_valid():
+            new_artist_form.save()
+            # todo show success message or redirect to list of artist
+        else:
+            return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
+    new_artist_form = ArtistForm()    
+    return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})

@@ -3,6 +3,9 @@
 
 <h2>Artist List</h2>
 
+<a href="{% url 'add_artist' %}">Add Artist</a>
+
+
 <P>Artist Search</p>
   <form action="{% url 'artist_list' %}">
     {{ form }}

@@ -1,0 +1,11 @@
+{% extends 'lmn/base.html' %}
+
+{% block content %}
+
+<form method="POST" action="{% url 'add_artist' %}">
+    {% csrf_token %}
+    {{ new_artist_form }}
+    <button type=submit>Add Artist</button>
+</form>
+
+{% endblock %}
