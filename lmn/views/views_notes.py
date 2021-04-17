@@ -6,6 +6,7 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseForbidden
 
 
 
@@ -49,6 +50,9 @@ def note_detail(request, note_pk):
 @login_required    
 def edit_note(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
+
+    if note.user != request.user: # return an error if a user attempts to edit a note that doesn't belong to them
+        return HttpResponseForbidden()
 
     if request.method == 'POST':
         form = NewNoteForm(request.POST, request.FILES, instance=note)

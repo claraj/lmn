@@ -9,10 +9,13 @@
 <p id="note-title"><b>{{ note.title}}</b></p>
 <p id="note-text">{{ note.text }}</b>
 
-<p>
-    <a class='edit' href="{% url 'edit_note' note_pk=note.pk %}">Edit</a>
-</p>
+{% if note.user.pk == user.pk %}
 
+    <p>
+        <a class='edit' href="{% url 'edit_note' note_pk=note.pk %}">Edit</a>
+    </p>
+
+{% endif %}
 
     
 
