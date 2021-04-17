@@ -44,3 +44,21 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+
+    
+def edit_note(request, note_pk):
+    note = get_object_or_404(Note, pk=note_pk)
+
+    if request.method == 'POST':
+        form = NewNoteForm(request.POST, request.FILES, instance=note)
+
+        if form.is_valid(): # if all fields are filled out correctly, save the contents of the form to database
+            form.save()
+
+        return redirect('note_detail', note_pk=note_pk)
+
+    else: # this displays the place details if the request method is 'GET' instead of 'POST'
+        review_form = NewNoteForm(instance=note) # reuse NewNoteForm for editing notes.
+        return render(request, 'lmn/notes/edit_note.html', {'note': note, 'review_form': review_form})
+        
+
