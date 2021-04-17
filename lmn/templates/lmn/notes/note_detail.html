@@ -1,4 +1,5 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
 
 
@@ -15,8 +16,14 @@
         <a class='edit' href="{% url 'edit_note' note_pk=note.pk %}">Edit</a>
     </p>
 
+    <form action="{% url 'delete_note' note.pk %}" method="POST">
+        {% csrf_token %}
+        <button type=submit class="delete">DELETE</button>
+    </form>
+
+    <script src="{% static 'js/confirm_delete.js' %}"></script>
+
 {% endif %}
-
     
-
 {% endblock %}
+

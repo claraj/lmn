@@ -67,3 +67,12 @@ def edit_note(request, note_pk):
         return render(request, 'lmn/notes/edit_note.html', {'note': note, 'review_form': review_form})
         
 
+@login_required
+def delete_note(request, note_pk):
+    note = get_object_or_404(Note, pk=note_pk)
+
+    if note.user == request.user:
+        note.delete()
+        return redirect('user_profile', user_pk=note.user.pk) # redirects to the user's profile after deleting
+    else:
+        return HttpResponseForbidden()
