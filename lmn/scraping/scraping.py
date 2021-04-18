@@ -13,7 +13,7 @@ def scrape_first():
 # selecting elements with <div class="d-flex flex-column h-100 flex-fill">
     container_object = soup.select('.h-100')
     for html_item in container_object:
-        day = html_item.select('.day').text
+        day = html_item.select('.day')
         print(day)
     # print(artist)
     # for item in seive:
