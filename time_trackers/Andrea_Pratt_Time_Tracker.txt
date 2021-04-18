@@ -1,0 +1,40 @@
+Name: Andrea Pratt
+
+Keep notes on the tasks you worked on for Project 5. This worksheet will be used to assess your teamwork and individual contributions to the project. It will be used to help give credit for tasks for which there may not be direct evidence in the code, for example, helping others, research, troubleshooting.
+
+Rename this file so your name or initials are in the file name. 
+Each team member should keep their own document in their team’s GitHub repository.  Create a directory for everyone’s documents. 
+
+Make notes for each week. 
+
+Week beginning April 5th:
+
+1. Create Slack channel
+2. Initial planning with team members
+
+
+
+Week beginning Monday April 12th:
+
+1. Add feature to let users upload photos with their notes
+2. Add feature to let users edit and delete their own notes
+
+
+
+Week beginning Monday April 19th:
+
+
+
+Week beginning Monday April 26th:
+
+
+
+Week beginning Monday May 3rd:
+
+
+
+Week beginning Monday May 10th (Final week – deadline morning May 12th):
+
+
+
+
