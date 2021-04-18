@@ -10,6 +10,15 @@
 <p id="note-title"><b>{{ note.title}}</b></p>
 <p id="note-text">{{ note.text }}</b>
 
+
+    <h3>Image</h3>
+    {% if note.image %}
+    <img src="{{ note.image.url }}">
+    {% else %}
+    <P>No image uploaded</p>
+    {% endif %}
+
+
 {% if note.user.pk == user.pk %}
 
     <p>
@@ -25,5 +34,7 @@
 
 {% endif %}
     
+
+
 {% endblock %}
 
