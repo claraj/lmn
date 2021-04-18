@@ -6,6 +6,7 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseForbidden
 
 
 
@@ -44,3 +45,34 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+
+
+@login_required    
+def edit_note(request, note_pk):
+    note = get_object_or_404(Note, pk=note_pk)
+
+    if note.user != request.user: # return an error if a user attempts to edit a note that doesn't belong to them
+        return HttpResponseForbidden()
+
+    if request.method == 'POST':
+        form = NewNoteForm(request.POST, request.FILES, instance=note)
+
+        if form.is_valid(): # if all fields are filled out correctly, save the contents of the form to database
+            form.save()
+
+        return redirect('note_detail', note_pk=note_pk)
+
+    else: # this displays the place details if the request method is 'GET' instead of 'POST'
+        review_form = NewNoteForm(instance=note) # reuse NewNoteForm for editing notes.
+        return render(request, 'lmn/notes/edit_note.html', {'note': note, 'review_form': review_form})
+        
+
+@login_required
+def delete_note(request, note_pk):
+    note = get_object_or_404(Note, pk=note_pk)
+
+    if note.user == request.user:
+        note.delete()
+        return redirect('user_profile', user_pk=note.user.pk) # redirects to the user's profile after deleting
+    else:
+        return HttpResponseForbidden()
