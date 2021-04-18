@@ -11,9 +11,21 @@ def scrape_first():
         print(e)
     
 # selecting elements with <div class="d-flex flex-column h-100 flex-fill">
-    seive = soup.select('.h-100')
-    print(seive)
+    container_object = soup.select('.h-100')
+    for html_item in container_object:
+        day = html_item.select('.day').text
+        print(day)
+    # print(artist)
     # for item in seive:
-    #     print(item)
-
+    #     artist = item.find('a')['href'] 
+    #     day = item.find('.day')
+    #     month = item.find('.month')
+    #     year = item.find('.year')
+    #     venue_name = item.find('.venue_name')
+    #     print(f'{artist} {day} {month} {year} {venue_name}')
+# a href is band title
+#div class="month"> Apr
+#div class="day">3
+#div class="year">2021
+#div class="venue_name">Livestream
 scrape_first()
