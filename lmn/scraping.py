@@ -1,6 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
-from lmn.models import Venue, Artist, Note, Show
+import os
+import django
+import sys
+import requests 
+
+# include this file location on the path 
+sys.path.append(os.getcwd())   
+# explain where the settings are - these include where the db is 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lmnop_project.settings')
+django.setup() 
+
+from lmn.models import Venue, Show, Artist
 
 def scrape_first():
     url = 'https://first-avenue.com/shows/?orderby=past_shows'
@@ -31,15 +42,24 @@ def scrape_first():
             try:
                 a = Artist(name=band_name)
                 a.save()
-                
+                artist_id = a.id
+                print(artist_id)
+                print(f'created new artist named {a.name}')
+
                 v = Venue(name=venue_name, city='Minneapolis', state='MN')
                 v.save()
+                venue_id = v.id
+                print(venue_id)
+                print(f'created new venue named {v.name}')
 
-                s = Show(show_date=date, artist=band_name, venue=venue_name)
+                s = Show(show_date=date, artist=artist_id, venue=venue_id)
                 s.save()
+                print(f'created new show on {show_date}')
+
+            except django.db.utils.IntegrityError as e:
+                print('Duplicate entry, not added')
             except Exception as e:
                 print(e)
-            # print(f'{day} {month} {year}, {venue_name}. {band_name}')
- 
+
 if __name__ == "__main__":
     scrape_first()
