@@ -1,18 +1,74 @@
+<!DOCTYPE html>
 {% load static %}
 <html>
 <head>
   <title>LMNOP</title>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="{% static 'css/base_style.css' %}" type="text/css"></link>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  
+
 </head>
 
 <body>
+<div class="jumbotron jumbotron-fluid">
+  <h1>LMN</h1>
+  <div class="container-fluid"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="{% url 'venue_list' %}">Venues</a>
+          <a class="nav-item nav-link" href="{% url 'artist_list' %}">Artist</a>
+          <a class="nav-item nav-link" href="{% url 'latest_notes' %}">Notes</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
 
-<h1>LMN</h1>
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+    </ol>
 
-<a href="{% url 'venue_list' %}">Venues</a>
-<a href="{% url 'artist_list' %}">Artists</a>
-<a href="{% url 'latest_notes' %}">Notes</a>
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+      <div class="item active">
+        <img src="{% static 'img/purplestage.jpg' %}" alt="Image">
+        <div class="carousel-caption">
+          <h3>Sell $</h3>
+          <p>Money Money.</p>
+        </div>      
+      </div>
 
+      <div class="item">
+        <img src="{% static 'img/rockingchick.jpg' %}" alt="Image">
+        <div class="carousel-caption">
+          <h3>More Sell $</h3>
+          <p>Lorem ipsum...</p>
+        </div>      
+      </div>
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+</div>
+  
+
+
+</body>
 {% if user.is_authenticated %}
   <span id='welcome-user-msg'>You are logged in, <a href="{% url 'user_profile' user_pk=user.pk %}">{{ user.username }}</a>.  <a href="{% url 'logout' %}">Logout</a></span>
 
@@ -26,6 +82,8 @@
 
 {% block content %}
 {% endblock %}
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>
