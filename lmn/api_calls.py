@@ -16,11 +16,8 @@ def search_mb_place(place):
     result_list = []
     for place in places:
         new_name = place['name']
-        try:
-            new_address = place['address']
-        except KeyError as e:
-            new_address = 'No Address Found'
-            print(f'Error, no address found {e}')
+
+        new_address = place.get('address')
         new_venue = Venue(new_name, new_address)
         result_list.append(new_venue)
     return result_list
@@ -48,12 +45,12 @@ def search_mb_artist_by_name(name):
         try:
             new_desc = artist['disambiguation']
         except KeyError as e:
-            new_desc = 'none'
+            new_desc = 'None'
             print(f'Error, no description available {e}')
 
         new_artist = Artist(new_name, new_hometown, new_desc)
         result_list.append(new_artist)
     for a in result_list:
-        if a.desc == 'none':
+        if a.description == 'None':
             result_list.remove(a)
     return result_list

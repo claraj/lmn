@@ -46,15 +46,14 @@ def add_artist(request):
                 new_artist_form.save()
                 messages.info(request, 'Artist Saved')
                 return redirect('artist_list')
-            # todo show success message or redirect to list of artist DONE BUT SEE COMMENTS
+            # todo show success message or redirect to list of artist DONE
             except ValidationError:
                 messages.warning(request, 'Not a valid Artist')
-                return redirect(request, 'artist_list')  # do we want to do these redirects, or leave the user
-                # on the 'add' page? put them in just in case -SJ
+                return redirect(request, 'add_artist')  # redirects back to add page so user can correct
+
             except IntegrityError:
                 messages.warning(request, 'Artist already in database')
-                return redirect(request, 'artist_list')  # do we want to do these redirects, or leave the user
-                # on the 'add' page? put them in just in case -SJ
+
         else:
             return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
     new_artist_form = ArtistForm()
