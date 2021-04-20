@@ -1,4 +1,5 @@
 {% extends 'lmn/base.html' %}
+{% load static %}
 {% block content %}
 
 
@@ -9,4 +10,31 @@
 <p id="note-title"><b>{{ note.title}}</b></p>
 <p id="note-text">{{ note.text }}</b>
 
+
+    <h3>Image</h3>
+    {% if note.image %}
+    <img src="{{ note.image.url }}">
+    {% else %}
+    <P>No image uploaded</p>
+    {% endif %}
+
+
+{% if note.user.pk == user.pk %}
+
+    <p>
+        <a class='edit' href="{% url 'edit_note' note_pk=note.pk %}">Edit</a>
+    </p>
+
+    <form action="{% url 'delete_note' note.pk %}" method="POST">
+        {% csrf_token %}
+        <button type=submit class="delete">DELETE</button>
+    </form>
+
+    <script src="{% static 'js/confirm_delete.js' %}"></script>
+
+{% endif %}
+    
+
+
 {% endblock %}
+
