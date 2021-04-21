@@ -80,3 +80,9 @@ coverage report
 ### PostgreSQL
 
 Recommend using PaaS Postgres such as Elephant, instead of installing local Postgres. 
+
+
+### References 
+
+Pagination code adapted from: https://engineertodeveloper.com/how-to-create-pagination-using-django/
+
