@@ -50,12 +50,12 @@ def search_mb_artist_by_name(name):
             try:
                 new_desc = artist['disambiguation']  # API description of artist
             except KeyError as e:
-                new_desc = 'None'
+                new_desc = None
                 print(f'Error, no description available {e}')
             new_artist = Artist(new_name, new_hometown, new_desc)
             result_list.append(new_artist)
             for a in result_list:
-                if a.description == 'None':  # currently removing any Artists without description
+                if a.description is None:  # currently removing any Artists without description
                     result_list.remove(a)
             return result_list  # if successful, returns a list of artist objects
     except requests.ConnectionError as e:  # if no response from API returns none
