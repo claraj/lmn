@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'venues',
         'USER': 'music_fan',
-        'PASSWORD' : os.environ['MUSIC_FAN_PW'],
+        'PASSWORD': os.environ['MUSIC_FAN_PW'],
         'HOST': '/cloudsql/lmnop-311407:us-central1:lmnop-db',
         'PORT': '5432',
     }
@@ -89,7 +89,7 @@ if not os.getenv('GAE_INSTANCE'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3')  # cloud proxy first, then run migrations
         }
     }
 
