@@ -23,7 +23,6 @@ def venue_list(request):
         print(p.num_pages)
 
         page_num = request.GET.get('page', 1)
-
         try:
             page = p.page(page_num)
         except EmptyPage:
