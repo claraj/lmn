@@ -25,7 +25,7 @@ SECRET_KEY = 'o+do-*x%zn!43h+unn!46(xp$e6&)=y63v#lj3ywjuy8cihz9f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,28 +75,23 @@ WSGI_APPLICATION = 'lmnop_project.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-
-    # Uncomment this when you are ready to use Postgres.
-
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': '',
-    #     'USER' : '',
-    #     'PASSWORD' : os.environ[''],
-    #     'HOST' : '',
-    #     'PORT' : '5432',
-    # },
-
-    # And when you use Postgres, comment out or remove this DB config. 
-    # Using environment variables to detect where this app is running, and automatically use 
-    # an appropriate DB configuration, is a good idea.
-    
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'venues',
+        'USER': 'music_fan',
+        'PASSWORD' : os.environ['MUSIC_FAN_PW'],
+        'HOST': '/cloudsql/lmnop-311407:us-central1:lmnop-db',
+        'PORT': '5432',
     }
 }
 
+if not os.getenv('GAE_INSTANCE'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
