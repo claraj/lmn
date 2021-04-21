@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.core.paginator import EmptyPage, Paginator
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger, EmptyPage
 
 
 def venue_list(request):
@@ -15,20 +15,27 @@ def venue_list(request):
     if search_name:
         #search for this venue, display results
         venues = Venue.objects.filter(name__icontains=search_name).order_by('name')
-    else :
+    else:
         venues = Venue.objects.all().order_by('name')   # Todo paginate
-        p = Paginator(venues, 2) # allows only 2 venues to be viewed per page
+        paginator = Paginator(venues, 2) # allows only 2 venues to be viewed per page
 
-        print('Number of Pages:')
-        print(p.num_pages)
+        if request.GET.get('page'):
+            page = int(request.GET.get('page'))
+        else:
+            page = None
 
-        page_num = request.GET.get('page', 1)
         try:
-            page = p.page(page_num)
+            venues = paginator.page(page)
+        except PageNotAnInteger:
+            venues = paginator.page(1)
+            page = 1
         except EmptyPage:
-            page = p.page(1) # shows page one rather then empty
+            venues = paginator.page(paginator.num_pages)
+            page = paginator.num_pages
 
-    return render(request, 'lmn/venues/venue_list.html', {  'venues': venues, 'form': form, 'search_term': search_name, 'page' : page})
+        return render(request, 'lmn/venues/venue_list.html', {'venues' : venues, 
+                     'page_range': paginator.page_range, 'num_pages' : paginator.num_pages, 
+                     'current_page': page})
 
 
 def artists_at_venue(request, venue_pk):   # pk = venue_pk
