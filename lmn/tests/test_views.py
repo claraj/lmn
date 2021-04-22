@@ -469,6 +469,24 @@ class TestNotes(TestCase):
         self.assertTemplateUsed(response, 'lmn/notes/new_note.html')
 
 
+class TestUserNotes(TestCase):
+
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]
+
+    def test_delete_own_note(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
+        note_2 = Note.objects.filter(pk=1).first()
+        self.assertIsNone(note_2)   
+
+
+    def test_delete_someone_else_note(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.post(reverse('delete_note',  args=(2,)), follow=True)
+        self.assertEqual(403, response.status_code)
+        note_2 = Note.objects.get(pk=2)
+        self.assertIsNotNone(note_2)   
+
 
 class TestUserAuthentication(TestCase):
 
