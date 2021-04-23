@@ -516,3 +516,25 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's username on it
+
+
+class TestErrorViews(TestCase):
+    
+    def test_404_view(self):
+        response = self.client.get('this isnt a url on the site')
+        self.assertEqual(404, response.status_code)
+        self.assertTemplateUsed('404.html')
+
+
+    def test_404_view_note(self):
+        # example view that uses the database, get note with ID 10000
+        response = self.client.get(reverse('note_detail', kwargs={'note_pk': 1}))
+        self.assertEqual(404, response.status_code)
+        self.assertTemplateUsed('404.html')
+
+
+    def test_403_view(self):
+        # there are no current views that return 403. When users can edit notes, or edit 
+        # their profiles, or do other activities when it must be verified that the 
+        # correct user is signed in (else 403) then this test can be written.
+        pass 
