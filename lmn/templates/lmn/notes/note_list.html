@@ -8,6 +8,15 @@
   <h2>Latest Notes</h2>
 {% endif %}
 
+<!-- If this is a list of notes for one show,
+display link to add new note for that show. -->
+
+{% if show %}
+
+  <a id="add-new-show-link" href="{% url 'new_note' show_pk=show.pk %}">Add your own notes for this show</a>
+
+{% endif %}
+
 
 {% for note in notes %}
 
@@ -36,13 +45,5 @@
 
 {% endfor %}
 
-<!-- If this is a list of notes for one show,
-display link to add new note for that show. -->
-
-{% if show %}
-
-  <a href="{% url 'new_note' show_pk=show.pk %}">Add your own notes</a>
-
-{% endif %}
 
 {% endblock %}

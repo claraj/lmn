@@ -19,5 +19,9 @@ a {
   border-radius: 5px;
   padding: 2px;
   margin: 2px;
-  /* font-weight: bold; */
+}
+
+#add-new-show-link {
+  font-size: large;
+  color: violet;
 }
