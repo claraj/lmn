@@ -1,6 +1,7 @@
 [flake8]
-# Ignore line too long, trailing whitespace
-ignore = E501, W291 
+# Ignore trailing whitespace
+ignore = W291 
+max-line-length = 120
 exclude =
     # No need to traverse our git directory
     .git,

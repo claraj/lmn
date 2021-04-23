@@ -6,6 +6,7 @@ import string
 
 # Test that forms are validating correctly, and don't accept invalid data
 
+
 class NewNoteFormTests(TestCase):
 
     def test_missing_title_is_invalid(self):

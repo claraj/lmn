@@ -342,8 +342,9 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
         self.assertTemplateUsed('lmn/notes/new_note.html')
 
         # nothing added to database
-        self.assertEqual(Note.objects.count(), initial_note_count)   # 2 test notes provided in fixture, should still be 2
-
+        # 2 test notes provided in fixture, should still be 2
+        self.assertEqual(Note.objects.count(), initial_note_count)   
+        
 
     def test_add_note_database_updated_correctly(self):
         initial_note_count = Note.objects.count()
@@ -381,7 +382,8 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
 
 
 class TestUserProfile(TestCase):
-    fixtures = ['testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes']  # Have to add artists and venues because of foreign key constrains in show
+    # Have to add artists and venues because of foreign key constrains in show
+    fixtures = ['testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes'] 
 
     # verify correct list of reviews for a user
     def test_user_profile_show_list_of_their_notes(self):

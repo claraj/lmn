@@ -34,7 +34,7 @@ will be able to use these to log into admin console at
 
 
 ```
-python manage.py test lmn.tests
+python manage.py test
 ```
 
 Or just some of the tests,
@@ -76,6 +76,15 @@ coverage run --source='.' manage.py test lmn.tests
 coverage report
 ```
 
+### Linting
+
+Ensure requirements are installed 
+
+```
+flake8 .
+```
+
+Configure linting rules if desired in the .flake8 file. 
 
 ### PostgreSQL
 
