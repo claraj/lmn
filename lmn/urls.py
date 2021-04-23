@@ -1,11 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from . import views
 from .views import views_main, views_artists, views_venues, views_notes, views_users
 
-
-# app_name = 'lmn'
 
 urlpatterns = [
 

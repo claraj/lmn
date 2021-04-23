@@ -95,8 +95,8 @@ class BrowseArtists(LiveServerTestCase):
         # assert list of venues that artist has played at is shown, most recent first
         # Should be show pk = 2 venue 1 first ave on 2017-01-02 , show pk = 1 venue 2, turf club on 2016-11-02
         # Assert a link to add notes is shown for each show
-        expected_shows =  [ { "pk" : 2 , "show_date" : "Jan. 2, 2017", "venue" : 'The Turf Club' },
-        {"model" : "lmn.show", "pk" : 1 , "show_date" : "Nov. 4, 2016", "venue" : 'First Avenue' } ]
+        expected_shows =  [ { "pk": 2 , "show_date": "Jan. 2, 2017", "venue": 'The Turf Club'},
+        {"model": "lmn.show", "pk": 1 , "show_date": "Nov. 4, 2016", "venue": 'First Avenue'} ]
 
         show_divs = self.browser.find_elements_by_class_name('show')
 
@@ -115,7 +115,7 @@ class BrowseArtists(LiveServerTestCase):
         assert 'notes/for_show/2' in self.browser.current_url
 
         # should be two notes, awsome and ok, in that order - most recently posted first
-        # Trying out a different way of finding and checking properties of elements. A loop is less typing :)
+        # Trying out a different way of finding and checking properties of elements. A loop is less typing:)
 
         first_note_div = self.browser.find_element_by_id('note_2')
         # Is the title (in a H3 element) 'awesome' ?
@@ -304,8 +304,8 @@ class BrowseVenues(LiveServerTestCase):
         # assert list of venues that venue has played at is shown, most recent first
         # Should be show pk = 2 venue 1 first ave on 2017-01-02 , show pk = 1 venue 2, turf club on 2016-11-02
         # Assert a link to add notes is shown for each show
-        expected_shows =  [ { "pk" : 4 , "show_date" : "Jan. 21, 2017", "artist" : 'ACDC' },
-        { "pk" : 1 , "show_date" : "Nov. 4, 2016", "artist" : 'REM' } ]
+        expected_shows =  [ { "pk": 4 , "show_date": "Jan. 21, 2017", "artist": 'ACDC'},
+        { "pk": 1 , "show_date": "Nov. 4, 2016", "artist": 'REM'} ]
 
         show_divs = self.browser.find_elements_by_class_name('show')
 
