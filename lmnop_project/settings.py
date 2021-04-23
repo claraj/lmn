@@ -81,16 +81,16 @@ DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
     #     'NAME': '',
-    #     'USER' : '',
-    #     'PASSWORD' : os.environ[''],
-    #     'HOST' : '',
-    #     'PORT' : '5432',
+    #     'USER': '',
+    #     'PASSWORD': os.environ[''],
+    #     'HOST': '',
+    #     'PORT': '5432',
     # },
 
     # And when you use Postgres, comment out or remove this DB config. 
     # Using environment variables to detect where this app is running, and automatically use 
     # an appropriate DB configuration, is a good idea.
-    
+
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
