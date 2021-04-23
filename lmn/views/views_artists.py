@@ -13,7 +13,8 @@ def venues_for_artist(request, artist_pk):
 
 
 def artist_list(request):
-    """ Get a list of all artists, ordered by name,
+    """ Get a list of all artists, ordered by name.
+
     If request contains a get parameter search_name then 
     only include artists with names containing that text. """
     form = ArtistSearchForm()

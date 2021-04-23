@@ -21,7 +21,6 @@ class NewNoteFormTests(TestCase):
             form = NewNoteForm(form_data)
             self.assertFalse(form.is_valid())
 
-
     def test_missing_text_is_invalid(self):
         form_data = {'title': 'blah blah'}
         form = NewNoteForm(form_data)
@@ -34,20 +33,17 @@ class NewNoteFormTests(TestCase):
             form = NewNoteForm(form_data)
             self.assertFalse(form.is_valid())
 
-
     def test_title_too_long_is_invalid(self):
         # Max length is 200
         form_data = {'title': 'a' * 201}
         form = NewNoteForm(form_data)
         self.assertFalse(form.is_valid())
 
-
     def test_text_too_long_is_invalid(self):
         # Max length is 1000
         form_data = {'title': 'a' * 1001}
         form = NewNoteForm(form_data)
         self.assertFalse(form.is_valid())
-
 
     def test_ok_title_and_length_is_valid(self):
         form_data = {'title': 'blah blah', 'text': 'blah, blah, blah.'}
@@ -72,7 +68,6 @@ class RegistrationFormTests(TestCase):
         form = UserRegistrationForm(form_data)
         self.assertTrue(form.is_valid())
 
-
     def test_register_user_with_missing_data_fails(self):
         form_data = {
             'username': 'bob', 
@@ -90,7 +85,6 @@ class RegistrationFormTests(TestCase):
             form = UserRegistrationForm(copy_of_form_data)
             self.assertFalse(form.is_valid())
 
-
     def test_register_user_with_password_mismatch_fails(self):
         form_data = {
             'username': 'another_bob', 
@@ -103,7 +97,6 @@ class RegistrationFormTests(TestCase):
 
         form = UserRegistrationForm(form_data)
         self.assertFalse(form.is_valid())
-
 
     def test_register_user_with_email_already_in_db_fails(self):
         # Create a user with email bob@bob.com
@@ -123,7 +116,6 @@ class RegistrationFormTests(TestCase):
         form = UserRegistrationForm(form_data)
         self.assertFalse(form.is_valid())
 
-
     def test_register_user_with_username_already_in_db_fails(self):
 
         # Create a user with username bob
@@ -142,7 +134,6 @@ class RegistrationFormTests(TestCase):
 
         form = UserRegistrationForm(form_data)
         self.assertFalse(form.is_valid())
-
 
     def test_register_user_with_username_already_in_db_case_insensitive_fails(self):
         # Create a user with username bob
@@ -164,7 +155,6 @@ class RegistrationFormTests(TestCase):
 
             form = UserRegistrationForm(form_data)
             self.assertFalse(form.is_valid())
-
 
     def test_register_user_with_email_already_in_db_case_insensitive_fails(self):
         # Create a user with username bob

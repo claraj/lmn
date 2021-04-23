@@ -1,6 +1,11 @@
 [flake8]
 # Ignore trailing whitespace, some docstring checks
 ignore = W291, D202, D210, D400
+per-file-ignores =
+    # ignore missing docstrings in test files 
+    lmn/tests/*:D
+    lmn/functional_tests/*:D
+    __init__.py:D
 max-line-length = 120
 exclude =
     # No need to traverse our git directory

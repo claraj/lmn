@@ -10,7 +10,9 @@ from ..models import Note
 
 def user_profile(request, user_pk):
     """ Get user profile for any user on the site. 
-    Any user may view any other user's profile. """
+    
+    Any user may view any other user's profile. 
+    """
     user = User.objects.get(pk=user_pk)
     usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
     return render(request, 'lmn/users/user_profile.html', {'user_profile': user, 'notes': usernotes})
@@ -24,8 +26,11 @@ def my_user_profile(request):
 
 
 def register(request):
-    """ GET request - present a user registration form.
-    POST request - register a new user """
+    """ Handles user registration flow
+
+    GET request - present a user registration form.
+    POST request - register a new user
+    """
 
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)

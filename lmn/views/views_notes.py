@@ -1,6 +1,5 @@
-"""
-Views related to reating and viewing Notes for shows.
-"""
+""" Views related to creating and viewing Notes for shows. """
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
