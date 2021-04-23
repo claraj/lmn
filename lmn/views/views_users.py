@@ -9,7 +9,8 @@ from ..models import Note
 
 
 def user_profile(request, user_pk):
-    """ Get user profile for any user on the site. Any user may view any other user's profile. """
+    """ Get user profile for any user on the site. 
+    Any user may view any other user's profile. """
     user = User.objects.get(pk=user_pk)
     usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
     return render(request, 'lmn/users/user_profile.html', {'user_profile': user, 'notes': usernotes})
@@ -17,7 +18,7 @@ def user_profile(request, user_pk):
 
 @login_required
 def my_user_profile(request):
-    """ A route for a user to view their own profile. """
+    """ Responds with the logged-in user's profile """
     # TODO - editable version for logged-in user to edit their own profile
     return redirect('user_profile', user_pk=request.user.pk)
 

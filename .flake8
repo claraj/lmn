@@ -1,6 +1,6 @@
 [flake8]
-# Ignore trailing whitespace
-ignore = W291 
+# Ignore trailing whitespace, some docstring checks
+ignore = W291, D202, D210, D400
 max-line-length = 120
 exclude =
     # No need to traverse our git directory

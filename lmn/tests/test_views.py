@@ -16,7 +16,8 @@ from django.contrib.auth.models import User
 
 class TestEmptyViews(TestCase):
 
-    """ main views - the ones in the navigation menu """
+    """ Main views - the ones in the navigation menu """
+
     def test_with_no_artists_returns_empty_list(self):
         response = self.client.get(reverse('artist_list'))
         self.assertFalse(response.context['artists'])  # An empty list is false
