@@ -6,7 +6,8 @@ from django.contrib.auth import authenticate
 
 import re
 import datetime
-from datetime import timezone
+# from datetime import timezone
+from django.utils import timezone
 
 from lmn.models import Note
 from django.contrib.auth.models import User
@@ -127,13 +128,15 @@ class TestArtistViews(TestCase):
         self.assertEqual(show1.artist.name, 'REM')
         self.assertEqual(show1.venue.name, 'The Turf Club')
 
-        expected_date = datetime.datetime(2017, 2, 2, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+        # From the fixture, show 2's "show_date": "2017-02-02T19:30:00-06:00"
+        expected_date = datetime.datetime(2017, 2, 2, 19, 30, 0, tzinfo=timezone.utc)
+        self.assertEqual(show1.show_date, expected_date)
 
+        # from the fixture, show 1's "show_date": "2017-01-02T17:30:00-00:00",
         self.assertEqual(show2.artist.name, 'REM')
         self.assertEqual(show2.venue.name, 'The Turf Club')
-        expected_date = datetime.datetime(2017, 1, 2, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show2.show_date - expected_date).total_seconds())
+        expected_date = datetime.datetime(2017, 1, 2, 17, 30, 0, tzinfo=timezone.utc)
+        self.assertEqual(show2.show_date, expected_date)
 
         # Artist 2 (ACDC) has played at venue 1 (First Ave)
 
@@ -143,12 +146,13 @@ class TestArtistViews(TestCase):
         show1 = shows[0]
         self.assertEqual(1, len(shows))
 
+        # This show has "show_date": "2017-01-21T21:45:00-00:00",
         self.assertEqual(show1.artist.name, 'ACDC')
         self.assertEqual(show1.venue.name, 'First Avenue')
-        expected_date = datetime.datetime(2017, 1, 21, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+        expected_date = datetime.datetime(2017, 1, 21, 21, 45, 0, tzinfo=timezone.utc)
+        self.assertEqual(show1.show_date, expected_date)
 
-        # Artist 3 , no shows
+        # Artist 3, no shows
 
         url = reverse('venues_for_artist', kwargs={'artist_pk': 3})
         response = self.client.get(url)
@@ -234,13 +238,13 @@ class TestVenues(TestCase):
         self.assertEqual(show1.artist.name, 'REM')
         self.assertEqual(show1.venue.name, 'The Turf Club')
 
-        expected_date = datetime.datetime(2017, 2, 2, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+        expected_date = datetime.datetime(2017, 2, 2, 19, 30, 0, tzinfo=timezone.utc)
+        self.assertEqual(show1.show_date, expected_date)
 
         self.assertEqual(show2.artist.name, 'REM')
         self.assertEqual(show2.venue.name, 'The Turf Club')
-        expected_date = datetime.datetime(2017, 1, 2, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show2.show_date - expected_date).total_seconds())
+        expected_date = datetime.datetime(2017, 1, 2, 17, 30, 0, tzinfo=timezone.utc)
+        self.assertEqual(show2.show_date, expected_date)
 
         # Artist 2 (ACDC) has played at venue 1 (First Ave)
 
@@ -252,8 +256,8 @@ class TestVenues(TestCase):
 
         self.assertEqual(show1.artist.name, 'ACDC')
         self.assertEqual(show1.venue.name, 'First Avenue')
-        expected_date = datetime.datetime(2017, 1, 21, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+        expected_date = datetime.datetime(2017, 1, 21, 21, 45, 0, tzinfo=timezone.utc)
+        self.assertEqual(show1.show_date, expected_date)
 
         # Venue 3 has not had any shows
 
