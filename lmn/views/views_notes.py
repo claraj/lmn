@@ -25,8 +25,8 @@ def new_note(request, show_pk):
 
 
 def latest_notes(request):
-    """ Get all Notes, ordered with most recent first"""
-    notes = Note.objects.all().order_by('-posted_date')
+    """ Get the 20 most recent Notes, ordered with most recent first"""
+    notes = Note.objects.all().order_by('-posted_date')[:20]   # the 20 most recent notes
     return render(request, 'lmn/notes/note_list.html', {'notes': notes})
 
 
