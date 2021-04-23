@@ -32,8 +32,8 @@ def latest_notes(request):
 
 def notes_for_show(request, show_pk): 
     """ Get Notes for one show, most recent first """
+    show = get_object_or_404(Show, pk=show_pk)  
     notes = Note.objects.filter(show=show_pk).order_by('-posted_date')
-    show = Show.objects.get(pk=show_pk)  
     return render(request, 'lmn/notes/note_list.html', {'show': show, 'notes': notes})
 
 

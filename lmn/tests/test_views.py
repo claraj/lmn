@@ -451,6 +451,11 @@ class TestNotes(TestCase):
         self.assertEqual(second.pk, 1)
 
 
+    def test_notes_for_show_when_show_not_found(self):
+        response = self.client.get(reverse('notes_for_show', kwargs={'show_pk': 10000}))
+        self.assertEqual(404, response.status_code)
+
+
     def test_correct_templates_uses_for_notes(self):
         response = self.client.get(reverse('latest_notes'))
         self.assertTemplateUsed(response, 'lmn/notes/note_list.html')
