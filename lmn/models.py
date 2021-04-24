@@ -72,5 +72,5 @@ class Note(models.Model):
 """ A single user. """
 
 
-class User(models.Model):
+class UserProfile(models.Model):
     name = models.TextField(max_length=200, blank=False)
