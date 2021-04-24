@@ -83,8 +83,8 @@ class Profile(models.Model):
     # name = models.TextField(max_length=200, blank=False)
     twitter_username = models.CharField(max_length=15, blank=True)  # Twitter usernames cannot be longer than 15 characters
     bio = models.TextField(max_length=2000, blank=True)
-    favorite_artist = models.ForeignKey(Artist, blank=True, on_delete=models.SET_NULL)
-    favorite_show = models.ForeignKey(Show, blank=True, on_delete=models.SET_NULL)
+    favorite_artist = models.ForeignKey(Artist, blank=True, null=True, on_delete=models.SET_NULL)
+    favorite_show = models.ForeignKey(Show, blank=True, null=True, on_delete=models.SET_NULL)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
