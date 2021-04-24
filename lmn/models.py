@@ -69,7 +69,11 @@ class Note(models.Model):
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
 
 
-""" A single user. """
+"""
+A single user.
+Instructions for making this work is credited to:
+https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
+"""
 
 
 class UserProfile(models.Model):
