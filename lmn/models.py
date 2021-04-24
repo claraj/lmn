@@ -74,4 +74,3 @@ class Note(models.Model):
 
 class User(models.Model):
     name = models.TextField(max_length=200, blank=False)
-    pass
