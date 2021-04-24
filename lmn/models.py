@@ -76,5 +76,5 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'Name: {self.user.first_name}{self.user.last_name}, Email: {self.user.email}, \
-          Profile Image: {self.profile_image}, Shows Seen: {self.shows_seen}, Bio: {self.bio}, \
-          Badges: {self.badges}'
+          Profile Image: {self.profile_image}, Shows Seen: {self.shows_seen.all()}, Bio: {self.bio}, \
+          Badges: {self.badges.all()}'

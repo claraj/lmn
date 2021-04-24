@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from ..models import Venue, Artist, Note, Show
+from ..models import Venue, Artist, Note, Show, UserProfile
 from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
 
 from django.contrib.auth.decorators import login_required
@@ -50,6 +50,8 @@ def note_detail(request, note_pk):
 @login_required    
 def edit_note(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
+
+    user_profile = UserProfile.objects.get(pk=4)
 
     if note.user != request.user: # return an error if a user attempts to edit a note that doesn't belong to them
         return HttpResponseForbidden()
