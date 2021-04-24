@@ -1,5 +1,5 @@
 from django import forms
-from .models import Note, Artist
+from .models import Note, Artist, Profile
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
