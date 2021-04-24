@@ -82,3 +82,15 @@ class UserRegistrationForm(UserCreationForm):
             user.save()
 
         return user
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('twitter_username', 'bio', 'favorite_artist', 'favorite_show')
