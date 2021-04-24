@@ -74,4 +74,4 @@ class Note(models.Model):
 
 class UserProfile(models.Model):
     name = models.TextField(max_length=200, blank=False)
-    twitter_username = models.TextField(max_length=15, blank=True)
+    twitter_username = models.TextField(max_length=15, blank=True)  # Twitter usernames cannot be longer than 15 characters
