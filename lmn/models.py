@@ -58,3 +58,23 @@ class Note(models.Model):
     def __str__(self):
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date} Image: {self.image}'
 
+
+class Badge(models.Model):
+    name = models.CharField(max_length=50, blank=False)
+    description = models.CharField(max_length=200, blank=False)
+
+    def __str__(self):
+        return f'Name: {self.name}, Description: {self.description}'
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_image = models.ImageField(upload_to='user_profile_images/', blank=True, null=True)
+    shows_seen = models.ManyToManyField(Show)
+    bio = models.TextField(blank=True, null=True)
+    badges = models.ManyToManyField(Badge)
+
+    def __str__(self):
+        return f'Name: {self.user.first_name}{self.user.last_name}, Email: {self.user.email}, \
+          Profile Image: {self.profile_image}, Shows Seen: {self.shows_seen}, Bio: {self.bio}, \
+          Badges: {self.badges}'
