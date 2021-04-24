@@ -82,6 +82,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # name = models.TextField(max_length=200, blank=False)
     twitter_username = models.TextField(max_length=15, blank=True)  # Twitter usernames cannot be longer than 15 characters
+    bio = models.TextField(max_length=2000, blank=True)
     favorite_artist = models.ForeignKey(Artist, blank=True, on_delete=models.SET_NULL)
     favorite_show = models.ForeignKey(Show, blank=True, on_delete=models.SET_NULL)
 
