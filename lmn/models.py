@@ -67,7 +67,7 @@ class Badge(models.Model):
         return f'Name: {self.name}, Description: {self.description}'
 
 
-class UserProfile(models.Model):
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='user_profile_images/', blank=True, null=True)
     shows_seen = models.ManyToManyField(Show)
