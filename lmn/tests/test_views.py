@@ -476,8 +476,9 @@ class TestUserNotes(TestCase):
     def test_delete_own_note(self):
         self.client.force_login(User.objects.first())
         response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
-        note_2 = Note.objects.filter(pk=1).first()
-        self.assertIsNone(note_2)   
+        self.assertEqual(200, response.status_code)
+        note_1 = Note.objects.filter(pk=1).first()
+        self.assertIsNone(note_1)   
 
 
     def test_delete_someone_else_note(self):
