@@ -13,7 +13,8 @@ def user_profile(request, user_pk):
     # Get user profile for any user on the site
     user = User.objects.get(pk=user_pk)
     usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
-    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user , 'notes': usernotes })
+    profile = Profile.objects.get(user=user.pk)
+    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user , 'notes': usernotes }, 'profile': profile)
 
 
 @login_required
