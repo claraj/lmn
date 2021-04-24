@@ -22,9 +22,9 @@ User._meta.get_field('first_name')._blank = False
 
 class Artist(models.Model):
     """ updated model to match API call results """
-    name = models.CharField(max_length=200, blank=False)
-    hometown = models.CharField(max_length=200, blank=False)
-    description = models.CharField(max_length=200, blank=False)
+    name = models.CharField(max_length=200, blank=False, default='none')
+    hometown = models.CharField(max_length=200, blank=False, default='none')
+    description = models.CharField(max_length=200, blank=False, default='none')
 
     def __str__(self):
         artist_string = f'Artist: {self.name} From: {self.hometown} Description: {self.description}'
@@ -36,8 +36,8 @@ class Artist(models.Model):
 
 class Venue(models.Model):
     """ updated model to match API call results """
-    name = models.CharField(max_length=200, blank=False, unique=True)
-    address = models.CharField(max_length=400, blank=False, unique=True)
+    name = models.CharField(max_length=200, blank=False, unique=True, default='none')
+    address = models.CharField(max_length=400, blank=False, unique=True, default='none')
 
     def __str__(self):
         return f'Name: {self.name} Location: {self.address}'
