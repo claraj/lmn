@@ -12,7 +12,7 @@ user is a variable provided to the template and is the current logged-in user
 
 -->
 
-<h2>{{ user_profile.get_full_name }}</h2>
+<h2>{{ user_profile.get_full_name }} ({{user_profile.username}})</h2>
 <ul>
 	<li>Twitter Username: {{ user_profile.profile.twitter_username }}</li>
 	<li>Bio: {{ user_profile.profile.bio }}</li>
@@ -20,7 +20,7 @@ user is a variable provided to the template and is the current logged-in user
 	<li>Favorite Show: {{ user_profile.profile.favorite_show }}</li>
 </ul>
 
-<h2 id='username_notes'>{{ user_profile.username }}'s notes</h2>
+<h2 id='username_notes'>{{ user_profile.get_full_name }}'s notes</h2>
 
 {% for note in notes %}
 
