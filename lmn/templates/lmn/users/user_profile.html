@@ -36,7 +36,7 @@ user is a variable provided to the template and is the current logged-in user
 
 {% for show in shows_seen %}
 
-      <p><a href="{% url 'notes_for_show' show_pk=show.pk %}">{{ show }}></a></p>
+      <p><a href="{% url 'notes_for_show' show_pk=show.pk %}">{{ show }}</a></p>
 
 {% endfor %}
 
