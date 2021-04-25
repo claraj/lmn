@@ -2,6 +2,7 @@ from django.db import models
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
 import datetime
 
 # Every model gets a primary key field by default.
@@ -73,6 +74,28 @@ class Profile(models.Model):
     shows_seen = models.ManyToManyField(Show)
     bio = models.TextField(blank=True, null=True)
     badges = models.ManyToManyField(Badge)
+
+
+    def save(self, *args, **kwargs):
+        old_profile = Profile.objects.filter(pk=self.pk).first()
+        if old_profile and old_profile.profile_image:
+            if old_profile.profile_image != self.profile_image:
+                self.delete_image(old_profile.profile_image)
+
+        super().save(*args, **kwargs)
+
+
+    def delete_image(self, image):
+        if default_storage.exists(image.name):
+            default_storage.delete(image.name)
+
+
+    def delete(self, *args, **kwargs):
+        if self.profile_image:
+            self.delete_image(self.profile_image)
+
+        super().delete(*args, **kwargs)
+
 
     def __str__(self):
         return f'Name: {self.user.first_name}{self.user.last_name}, Email: {self.user.email}, \
