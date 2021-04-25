@@ -51,8 +51,6 @@ def note_detail(request, note_pk):
 def edit_note(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
 
-    user_profile = UserProfile.objects.get(pk=4)
-
     if note.user != request.user: # return an error if a user attempts to edit a note that doesn't belong to them
         return HttpResponseForbidden()
 
