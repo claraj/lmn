@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 import datetime
+from django.db.models.signals import post_save
 
 # Every model gets a primary key field by default.
 
@@ -101,3 +102,11 @@ class Profile(models.Model):
         return f'Name: {self.user.first_name}{self.user.last_name}, Email: {self.user.email}, \
           Profile Image: {self.profile_image}, Shows Seen: {self.shows_seen.all()}, Bio: {self.bio}, \
           Badges: {self.badges.all()}'
+
+
+def create_profile(sender, **kwargs):
+    user = kwargs["instance"]
+    if kwargs["created"]:
+        user_profile = Profile(user=user)
+        user_profile.save()
+post_save.connect(create_profile, sender=User)
