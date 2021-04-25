@@ -50,3 +50,14 @@ background-color: black;
   display: none; 
   }
 }
+.image-container {
+  align-self: right;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+}
+.imglogo {
+  width: 200px;
+  height: auto;
+  margin: 0 0 0 0;
+}
