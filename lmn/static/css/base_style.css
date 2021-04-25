@@ -51,13 +51,18 @@ background-color: black;
   }
 }
 .image-container {
-  align-self: right;
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
+  border-style:ridge;
+  border-color: black;
+  border-width: 2px;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;  
+  
 }
 .imglogo {
-  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 150px;
   height: auto;
   margin: 0 0 0 0;
 }
