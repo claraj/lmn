@@ -23,6 +23,11 @@ Week beginning Monday April 12th:
 
 Week beginning Monday April 19th:
 
+1. Help team research pagination and implement basic version
+2. Work on image upload tests (still running into issues)
+3. Modify database tables and front end to display additional information about each user
+4. Meet with team Sunday 4/25 to discuss overall project goals
+
 
 
 Week beginning Monday April 26th:
