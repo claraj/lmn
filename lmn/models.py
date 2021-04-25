@@ -45,7 +45,8 @@ class Show(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Artist: {self.artist.name} At: {self.venue.name} On: {self.show_date}'
+        formatted_show_date = self.show_date.strftime("%b %d %Y")
+        return f'Artist: {self.artist.name} At: {self.venue.name} On: {formatted_show_date}'
 
 
 """ One user's opinion of one show. """
