@@ -37,12 +37,22 @@ background-color: black;
   background-color: black;
   font-family: 'Lucida Sans';
 }
-    
-.carousel-inner img {
-  width: 50%; /* Set width to 100% */
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 450;
+  width: 50%;
+}    
+.carousel-inner {
+  width: 100%; /* Set width to 100% */
   margin: auto;
-  min-height:10px;
-  
+  min-height: 100px;
+  height: 450px;
+  border: 1px solid rgb(22, 189, 189);
+  border-radius: 4px;
+  padding: 5px;
+  width: auto;
 }
   /* Hide the carousel text when the screen is less than 600 pixels wide */
 @media (max-width: 600px) {
