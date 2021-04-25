@@ -1,5 +1,6 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
+{% load thumbnail %}
 
 
 <!-- A user's profile page.
@@ -12,7 +13,42 @@ user is a variable provided to the template and is the current logged-in user
 
 -->
 
-<h2 id='username_notes'>{{ user_profile.username }}'s notes</h2>
+<h2>{{ user_profile.first_name }}'s Information</h2>
+
+<h3>Profile Photo:</h3>
+    {% if user_profile.profile.profile_image %}
+    {% thumbnail user_profile.profile.profile_image "100x100" as im %}
+    <img src="{{ im.url }}">
+    {% endthumbnail %} 
+    {% else %}
+    <P>No profile image uploaded</p>
+    {% endif %}
+
+<h3>Username: {{user_profile.username }}</h3>
+
+<h3>Name: {{ user_profile.first_name }} {{ user_profile.last_name }}</h3>
+
+<h3>Email: {{ user_profile.email }}</h3>
+
+<h3>Social Media: TODO Implement social media.</h3>
+
+<h3>Shows Seen: </h3>
+
+{% for show in shows_seen %}
+
+      <p><a href="{% url 'notes_for_show' show_pk=show.pk %}">{{ show }}></a></p>
+
+{% endfor %}
+
+<h3>Badges: </h3>
+
+{% for badge in badges %}
+
+      <h3>{{ badge }}</h3>
+
+{% endfor %}
+
+<h2 id='username_notes'>Notes:</h2>
 
 {% for note in notes %}
 

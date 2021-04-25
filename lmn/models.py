@@ -2,6 +2,7 @@ from django.db import models
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
 import datetime
 
 # Every model gets a primary key field by default.
@@ -43,7 +44,7 @@ class Show(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Artist: {self.artist} At: {self.venue} On: {self.show_date}'
+        return f'Artist: {self.artist.name} At: {self.venue.name} On: {self.show_date}'
 
 
 """ One user's opinion of one show. """
@@ -58,3 +59,45 @@ class Note(models.Model):
     def __str__(self):
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date} Image: {self.image}'
 
+
+class Badge(models.Model):
+    name = models.CharField(max_length=50, blank=False)
+    description = models.CharField(max_length=200, blank=False)
+
+    def __str__(self):
+        return f'Name: {self.name}, Description: {self.description}'
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_image = models.ImageField(upload_to='user_profile_images/', blank=True, null=True)
+    shows_seen = models.ManyToManyField(Show)
+    bio = models.TextField(blank=True, null=True)
+    badges = models.ManyToManyField(Badge)
+
+
+    def save(self, *args, **kwargs):
+        old_profile = Profile.objects.filter(pk=self.pk).first()
+        if old_profile and old_profile.profile_image:
+            if old_profile.profile_image != self.profile_image:
+                self.delete_image(old_profile.profile_image)
+
+        super().save(*args, **kwargs)
+
+
+    def delete_image(self, image):
+        if default_storage.exists(image.name):
+            default_storage.delete(image.name)
+
+
+    def delete(self, *args, **kwargs):
+        if self.profile_image:
+            self.delete_image(self.profile_image)
+
+        super().delete(*args, **kwargs)
+
+
+    def __str__(self):
+        return f'Name: {self.user.first_name}{self.user.last_name}, Email: {self.user.email}, \
+          Profile Image: {self.profile_image}, Shows Seen: {self.shows_seen.all()}, Bio: {self.bio}, \
+          Badges: {self.badges.all()}'
