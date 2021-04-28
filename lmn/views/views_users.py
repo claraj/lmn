@@ -54,6 +54,15 @@ def edit_user(request, user_pk):
         raise PermissionDenied
 
 
+@login_required
+def my_user_profile(request):
+    if request.user.is_authenticated: # determine the current user and redirect to their user profile
+        user_pk = request.user.id
+        return redirect('user_profile', user_pk=user_pk)
+    else:
+        raise PermissionDenied
+
+
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -62,7 +71,7 @@ def register(request):
             user = authenticate(username=request.POST['username'], password=request.POST['password1'])
             if user:
                 login(request, user)
-                return redirect('login')
+                return redirect('my_user_profile')
             else:
                 messages.add_message(request, messages.ERROR, 'Unable to log in new user')
         else:

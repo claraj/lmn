@@ -144,7 +144,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'lmn/media/')
 
 
 # Where to send user after successful login, and logout, if no other page is provided.
-LOGIN_REDIRECT_URL = 'homepage'
+LOGIN_REDIRECT_URL = 'my_user_profile'
 LOGOUT_REDIRECT_URL = 'homepage'
 
 
