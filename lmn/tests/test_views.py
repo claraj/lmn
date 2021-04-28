@@ -177,12 +177,12 @@ class TestVenues(TestCase):
             # .* matches 0 or more of any character. Test to see if
             # these names are present, in the right order
 
-            regex = '.*First Avenue.*Target Center.*The Turf Club.*'
+            regex = '.*First Avenue.*|.*Target Center.*|.*The Turf Club.*'
             response_text = str(response.content)
+            self.assertTrue(re.search(regex, response_text))
 
-            self.assertTrue(re.match(regex, response_text))
-
-            self.assertEqual(len(response.context['venues']), 3)
+            venues = list(response.context['venues'].all())
+            self.assertEqual(len(venues), 3)
             self.assertTemplateUsed(response, 'lmn/venues/venue_list.html')
 
 
