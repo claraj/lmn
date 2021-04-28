@@ -69,10 +69,18 @@ img {
   overflow: hidden;  
   
 }
-.imglogo {
+.logo {
+  position: absolute;
   margin-left: auto;
   margin-right: auto;
-  width: 150px;
+  width: 160px;
   height: auto;
   margin: 0 0 0 0;
+}
+.nav-login {
+  float: right;
+}
+.logo-container {
+  position: relative;
+
 }

@@ -16,23 +16,21 @@
 <body>
 
 <div class="jumbotron">
-<div class="image-container">
-  <img class='imglogo' src="{% static 'img/LMN Logo.jpg' %}" alt="LMNLogo">
-</div>
-  <h1 class="page-title">LMN</h1>
-
+  
+<a class="logo-container" href="{% url 'homepage' %}">
+  <img class="banner" src="{% static 'img/rockingdude.jpg' %}">
+  <img class='logo' src="{% static 'img/LMN Logo.jpg' %}" alt="LMNLogo">
+</a>
   <div class="container-fluid"></div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a class="nav-item nav-link" href="{% url 'homepage' %}">
-            <img class='imglogo' src="{% static 'img/LMN Logo.jpg' %}" alt="LMNLogo">
-          </a>
           <a class="nav-item nav-link" href="{% url 'venue_list' %}">Venues</a>
           <a class="nav-item nav-link" href="{% url 'artist_list' %}">Artist</a>
           <a class="nav-item nav-link" href="{% url 'latest_notes' %}">Notes</a>
-          <a class="nav-item nav-link" href="{% url 'login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>Login, Sign up?</a>
-          
+          <div class="nav-login">
+            <a class="nav-item nav-link" href="{% url 'login' %}?next={{ request.path }}">Login, Sign up?</a>
+          </div>
         </div>
       </div>
     </nav>
