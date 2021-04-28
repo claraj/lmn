@@ -12,6 +12,8 @@ __pycache__
 venv
 env
 
+# artifact from time tracker document
+.tmp
 
 lmn/media/user_images/*
 
