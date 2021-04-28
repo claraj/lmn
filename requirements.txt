@@ -16,7 +16,6 @@ PyGithub==1.54.1
 PyJWT==1.7.1
 wrapt==1.12.1
 gunicorn==20.0.4
-asgiref==3.2.10
 cachetools==4.2.2
 cffi==1.14.5
 django-mathfilters==1.0.0

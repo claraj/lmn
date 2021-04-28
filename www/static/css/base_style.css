@@ -3,7 +3,6 @@ body {
   background: #444d4d;
   color: antiquewhite;
 }
-
 a {
   color: rgb(70, 193, 197);
 }
@@ -14,10 +13,40 @@ a {
   padding-right: 10px;
 }
 
+/* title */
+
+.page-title {
+padding-left: 1pc;
+font-family: 'Lucida Sans';
+color: white;
+background-color: black;
+}
+
+
 .error {
   background-color: #b73f08;
   border-radius: 5px;
   padding: 2px;
   margin: 2px;
   /* font-weight: bold; */
+}
+/* Remove the navbar's default margin-bottom and rounded borders */ 
+.navbar-nav {
+  margin-bottom: 0;
+  border-radius: 0;
+  background-color: black;
+  font-family: 'Lucida Sans';
+}
+    
+.carousel-inner img {
+  width: 50%; /* Set width to 100% */
+  margin: auto;
+  min-height:10px;
+  
+}
+  /* Hide the carousel text when the screen is less than 600 pixels wide */
+@media (max-width: 600px) {
+.carousel-caption {
+  display: none; 
+  }
 }
