@@ -1,7 +1,7 @@
 body {
-  font-family: monospace;
-  background: #444d4d;
-  color: antiquewhite;
+  background-color:black;
+  font-family: "Lucida Console", "Courier New", monospace;
+  color: white;
 }
 a {
   color: rgb(70, 193, 197);
@@ -12,16 +12,6 @@ a {
   right: 0px;
   padding-right: 10px;
 }
-
-/* title */
-
-.page-title {
-padding-left: 1pc;
-font-family: 'Lucida Sans';
-color: white;
-background-color: black;
-}
-
 
 .error {
   background-color: #b73f08;
@@ -35,7 +25,7 @@ background-color: black;
   margin-bottom: 0;
   border-radius: 0;
   background-color: black;
-  font-family: 'Lucida Sans';
+  font-family: "Lucida Console", "Courier New", monospace;
 }
 img {
   display: block;
@@ -50,7 +40,7 @@ img {
   margin: auto;
   min-height: 100px;
   height: 450px;
-  padding: 10px 20px;
+  padding: 30px;
   width: auto;
 }
   /* Hide the carousel text when the screen is less than 600 pixels wide */
@@ -77,14 +67,21 @@ img {
   height: auto;
   margin: 0 0 0 0;
 }
-
-h2 {
+.page-title{
   width: auto;
   height: 150px;
+  padding: 60px;
+  text-align: center;
+  background: black;
+  color: white;
+  font-size: 30px;
+  font-family: "Lucida Console", "Courier New", monospace;
 }
-body {
-  background-color: black;
-}
+
 .jumbotron {
   background-color: black;
+}
+
+.topnav-right {
+  float: right;
 }
