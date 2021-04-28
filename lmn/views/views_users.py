@@ -54,12 +54,6 @@ def edit_user(request, user_pk):
         raise PermissionDenied
 
 
-@login_required
-def my_user_profile(request):
-    # TODO - editable version for logged-in user to edit their own profile
-    return redirect('user_profile', user_pk=request.user.pk)
-
-
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
