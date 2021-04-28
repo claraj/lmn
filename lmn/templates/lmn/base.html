@@ -1,31 +1,47 @@
+<!DOCTYPE html>
+
 {% load static %}
-<html>
+<html lang="en">
 <head>
   <title>LMNOP</title>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/base_style.css' %}" type="text/css"></link>
+  
+
 </head>
 
 <body>
+<div class="jumbotron">
 
-<h1>LMN</h1>
+  <h1 class="page-title">LMN</h1>
 
-<a href="{% url 'venue_list' %}">Venues</a>
-<a href="{% url 'artist_list' %}">Artists</a>
-<a href="{% url 'latest_notes' %}">Notes</a>
+  <div class="container-fluid"></div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="{% url 'venue_list' %}">Venues</a>
+          <a class="nav-item nav-link" href="{% url 'artist_list' %}">Artist</a>
+          <a class="nav-item nav-link" href="{% url 'latest_notes' %}">Notes</a>
+          <a class="nav-item nav-link" href="{% url 'login' %}?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>Login, Sign up?</a>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
 
-{% if user.is_authenticated %}
-  <span id='welcome-user-msg'>You are logged in, <a href="{% url 'user_profile' user_pk=user.pk %}">{{ user.username }}</a>.  <a href="{% url 'logout' %}">Logout</a></span>
 
-{% else %}
-
-  <span id='login-or-sign-up'><a href="{% url 'login' %}?next={{ request.path }}">Login or sign up</a></span>
-
-{% endif %}
+</body>
 
 <hr>
 
 {% block content %}
 {% endblock %}
-
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

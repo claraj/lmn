@@ -12,7 +12,10 @@ __pycache__
 venv
 env
 
-
+# ignore user images
 lmn/media/user_images/*
+lmn/media/user_profile_images/*
+
+# ignore GCP cred files
 app.yaml
 lmn_creds.json

@@ -134,26 +134,29 @@ class TestArtistViews(TestCase):
         self.assertEqual(show1.artist.name, 'REM')
         self.assertEqual(show1.venue.name, 'The Turf Club')
 
-        expected_date = datetime.datetime(2017, 2, 2, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+         # From the fixture, show 2's "show_date": "2017-02-02T19:30:00-06:00"
+        expected_date = datetime.datetime(2017, 2, 2, 19, 30, 0, tzinfo=timezone.utc)
+        self.assertEqual(show1.show_date, expected_date)
 
+        # from the fixture, show 1's "show_date": "2017-01-02T17:30:00-00:00",
         self.assertEqual(show2.artist.name, 'REM')
         self.assertEqual(show2.venue.name, 'The Turf Club')
-        expected_date = datetime.datetime(2017, 1, 2, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show2.show_date - expected_date).total_seconds())
+        expected_date = datetime.datetime(2017, 1, 2, 17, 30, 0, tzinfo=timezone.utc)
+        self.assertEqual(show2.show_date, expected_date)
 
         # Artist 2 (ACDC) has played at venue 1 (First Ave)
 
-        url = reverse('venues_for_artist', kwargs={'artist_pk':2})
+        url = reverse('venues_for_artist', kwargs={'artist_pk': 2})
         response = self.client.get(url)
         shows = list(response.context['shows'].all())
         show1 = shows[0]
         self.assertEqual(1, len(shows))
 
+        # This show has "show_date": "2017-01-21T21:45:00-00:00",
         self.assertEqual(show1.artist.name, 'ACDC')
         self.assertEqual(show1.venue.name, 'First Avenue')
-        expected_date = datetime.datetime(2017, 1, 21, 0, 0, tzinfo=timezone.utc)
-        self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+        expected_date = datetime.datetime(2017, 1, 21, 21, 45, 0, tzinfo=timezone.utc)
+        self.assertEqual(show1.show_date, expected_date)
 
         # Artist 3 , no shows
 
@@ -253,17 +256,17 @@ class TestVenues(TestCase):
             self.assertEqual(show1.artist.name, 'REM')
             self.assertEqual(show1.venue.name, 'The Turf Club')
 
-            expected_date = datetime.datetime(2017, 2, 2, 0, 0, tzinfo=timezone.utc)
-            self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+            expected_date = datetime.datetime(2017, 2, 2, 19, 30, 0, tzinfo=timezone.utc)
+            self.assertEqual(show1.show_date, expected_date)
 
             self.assertEqual(show2.artist.name, 'REM')
             self.assertEqual(show2.venue.name, 'The Turf Club')
-            expected_date = datetime.datetime(2017, 1, 2, 0, 0, tzinfo=timezone.utc)
-            self.assertEqual(0, (show2.show_date - expected_date).total_seconds())
+            expected_date = datetime.datetime(2017, 1, 2, 17, 30, 0, tzinfo=timezone.utc)
+            self.assertEqual(show2.show_date, expected_date)
 
             # Artist 2 (ACDC) has played at venue 1 (First Ave)
 
-            url = reverse('artists_at_venue', kwargs={'venue_pk':1})
+            url = reverse('artists_at_venue', kwargs={'venue_pk': 1})
             response = self.client.get(url)
             shows = list(response.context['shows'].all())
             show1 = shows[0]
@@ -271,8 +274,8 @@ class TestVenues(TestCase):
 
             self.assertEqual(show1.artist.name, 'ACDC')
             self.assertEqual(show1.venue.name, 'First Avenue')
-            expected_date = datetime.datetime(2017, 1, 21, 0, 0, tzinfo=timezone.utc)
-            self.assertEqual(0, (show1.show_date - expected_date).total_seconds())
+            expected_date = datetime.datetime(2017, 1, 21, 21, 45, 0, tzinfo=timezone.utc)
+            self.assertEqual(show1.show_date, expected_date)
 
             # Venue 3 has not had any shows
 
@@ -468,6 +471,25 @@ class TestNotes(TestCase):
         response = self.client.get(reverse('new_note', kwargs={'show_pk':1}))
         self.assertTemplateUsed(response, 'lmn/notes/new_note.html')
 
+
+class TestUserNotes(TestCase):
+
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]
+
+    def test_delete_own_note(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.post(reverse('delete_note', args=(1,)), follow=True)
+        self.assertEqual(200, response.status_code)
+        note_1 = Note.objects.filter(pk=1).first()
+        self.assertIsNone(note_1)   
+
+
+    def test_delete_someone_else_note(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.post(reverse('delete_note',  args=(2,)), follow=True)
+        self.assertEqual(403, response.status_code)
+        note_2 = Note.objects.get(pk=2)
+        self.assertIsNotNone(note_2)   
 
 
 class TestUserAuthentication(TestCase):
