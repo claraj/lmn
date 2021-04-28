@@ -12,9 +12,7 @@ __pycache__
 venv
 env
 
-
+# ignore user uploaded images and their cache files
 lmn/media/user_images/
-
 lmn/media/user_profile_images/
-
 lmn/media/cache/
