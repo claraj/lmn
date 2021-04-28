@@ -80,7 +80,15 @@ img {
 .nav-login {
   float: right;
 }
-.logo-container {
+.banner {
   position: relative;
+  width: auto;
+  height: 150px;
 
+}
+body {
+  background-color: black;
+}
+.jumbotron {
+  background-color: black;
 }
