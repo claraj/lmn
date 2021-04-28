@@ -1,0 +1,17 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+<h1>Edit Profile</h1>
+
+<form method="POST" action="{% url 'edit_user' user_pk=user.pk %}" enctype="multipart/form-data">
+  
+  <div>
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ formset.as_p }}
+  </div>
+  <input type='submit' value='Update Profile'>
+</form>
+
+
+{% endblock %}
