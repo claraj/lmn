@@ -138,11 +138,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'lmn/media/')
 
 # STATIC_URL = '/static/'
 
-MEDIA_URL = '/lmn/media/'
+# MEDIA_URL = '/lmn/media/'
 
 GS_STATIC_FILE_BUCKET = 'lmnop-311407.appspot.com'
 
 STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'user-lmn-image-uploads'
+MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
+
+from google.oauth2 import service_account
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file('lmn_creds.json')
 
 # Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'
