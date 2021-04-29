@@ -187,8 +187,7 @@ class TestVenues(TestCase):
             regex = '.*First Avenue.*|.*Target Center.*|.*The Turf Club.*'
             response_text = str(response.content)
             self.assertTrue(re.search(regex, response_text))
-
-            venues = list(response.context['venues'].all())
+            venues = list(response.context['venues'])
             self.assertEqual(len(venues), 3)
             self.assertTemplateUsed(response, 'lmn/venues/venue_list.html')
 
@@ -421,22 +420,22 @@ class TestUserProfile(TestCase):
     def test_username_shown_on_profile_page(self):
         # A string "username's notes" is visible
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
-        self.assertContains(response, 'alice\'s notes')
+        self.assertContains(response, 'alice\'s Information')
         
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'bob\'s notes')
+        self.assertContains(response, 'bob\'s Information')
 
 
     def test_correct_user_name_shown_different_profiles(self):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a class="nav-item nav-link" href="/user/profile/2/">bob</a>')
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a class="nav-item nav-link" href="/user/profile/2/">bob</a>')
         
 
 class TestNotes(TestCase):
