@@ -18,7 +18,7 @@ def venue_list(request):
     else:
         venues = Venue.objects.all().order_by('name')   # Todo paginate
     
-    paginator = Paginator(venues, 2) # allows only 2 venues to be viewed per page
+    paginator = Paginator(venues, 10) # allows only 10 venues to be viewed per page
 
     if request.GET.get('page'):
         page = int(request.GET.get('page'))

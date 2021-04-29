@@ -73,9 +73,9 @@ class Badge(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='user_profile_images/', blank=True, null=True)
-    shows_seen = models.ManyToManyField(Show)
+    shows_seen = models.ManyToManyField(Show, blank=True)
     bio = models.TextField(blank=True, null=True)
-    badges = models.ManyToManyField(Badge)
+    badges = models.ManyToManyField(Badge, blank=True)
 
 
     def save(self, *args, **kwargs):
