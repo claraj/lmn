@@ -66,8 +66,10 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user = authenticate(username=request.POST['username'], password=request.POST['password1'])
+            
             if user:
                 login(request, user)
+                messages.info(request, 'Thank you, for signing up!')
                 return redirect('login')
             else:
                 messages.add_message(request, messages.ERROR, 'Unable to log in new user')
