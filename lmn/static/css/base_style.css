@@ -26,12 +26,14 @@ a {
   border-radius: 0;
   background-color: black;
   font-family: "Lucida Console", "Courier New", monospace;
+  padding: 5px;
+  
 }
 img {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  height: 450;
+  height: 450px;
   width: 100%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }    
@@ -39,7 +41,7 @@ img {
   width: 100%; /* Set width to 100% */
   margin: auto;
   min-height: 100px;
-  height: 450px;
+  height: 500px;
   padding: 30px;
   width: auto;
 }
