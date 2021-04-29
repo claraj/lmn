@@ -58,6 +58,28 @@ class Note(models.Model):
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
     image = models.ImageField(upload_to='user_images/', blank=True, null=True)
 
+
+    def save(self, *args, **kwargs):
+        old_note = Note.objects.filter(pk=self.pk).first()
+        if old_note and old_note.image:
+            if old_note.image != self.image:
+                self.delete_image(old_note.image)
+
+        super().save(*args, **kwargs)
+
+
+    def delete_image(self, image):
+        if default_storage.exists(image.name):
+            default_storage.delete(image.name)
+
+
+    def delete(self, *args, **kwargs):
+        if self.image:
+            self.delete_image(self.image)
+
+        super().delete(*args, **kwargs)
+
+
     def __str__(self):
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date} Image: {self.image}'
 
