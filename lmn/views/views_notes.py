@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseForbidden
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger, EmptyPage
 
 
 
@@ -31,8 +32,27 @@ def new_note(request, show_pk):
 
 
 def latest_notes(request):
-    notes = Note.objects.all().order_by('-posted_date')[:20]   # the 20 most recent notes
-    return render(request, 'lmn/notes/note_list.html', { 'notes': notes })
+    notes = Note.objects.all().order_by('-posted_date')[:100]   # the 100 most recent notes
+
+    paginator = Paginator(notes, 10) # allows only 10 artists to be viewed per page
+
+    if request.GET.get('page'):
+        page = int(request.GET.get('page'))
+    else:
+        page = None
+
+    try:
+        notes = paginator.page(page)
+    except PageNotAnInteger:
+        notes = paginator.page(1)
+        page = 1
+    except EmptyPage:
+        notes = paginator.page(paginator.num_pages)
+        page = paginator.num_pages
+
+    return render(request, 'lmn/notes/note_list.html', {'notes' : notes, 
+                  'page_range': paginator.page_range, 'num_pages' : paginator.num_pages, 
+                  'current_page': page})
 
 
 def notes_for_show(request, show_pk): 

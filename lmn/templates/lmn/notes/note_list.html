@@ -1,5 +1,6 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
+{% load mathfilters %}
 
 
 {% if show %}
@@ -8,6 +9,7 @@
   <h2>Latest Notes</h2>
 {% endif %}
 
+<p> Page {{ current_page }} of {{ num_pages }}</p>
 
 {% for note in notes %}
 
@@ -44,5 +46,29 @@ display link to add new note for that show. -->
   <a href="{% url 'new_note' show_pk=show.pk %}">Add your own notes</a>
 
 {% endif %}
+
+<div class="container mt-3 d-flex justify-content-center">
+  <nav aria-label="Pagination Navigation">
+    <ul class="pagination">
+     <li class="page-item {% if current_page == 1 %} disabled {% endif %}">
+      <a class="page-link" href="?page={{ current_page|sub:1 }}" aria-label="Previous">
+       <span aria-hidden="true">«</span>
+       <span class="sr-only">Previous</span>
+      </a>
+     </li>
+     {% for i in page_range %}
+     <li class="page-item"><a class="page-link {% if i == current_page %} active {% endif %}" href="?page={{ i }}">{{ i }}</a></li>
+     {% endfor %}
+     
+     <li class="page-item {% if current_page == num_pages %} disabled {% endif %}">
+      <a class="page-link" href="?page={{ current_page|add:1 }}" aria-label="Next">
+       <span aria-hidden="true">»</span>
+       <span class="sr-only">Next</span>
+      </a>
+     </li>
+    </ul>
+ </nav>
+</div>
+
 
 {% endblock %}
