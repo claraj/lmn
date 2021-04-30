@@ -13,6 +13,13 @@ user is a variable provided to the template and is the current logged-in user
 
 -->
 
+{% if user.pk == user_profile.pk %}
+
+    <a href="{% url 'edit_user' user_pk=user.pk %}">Edit Profile</a>
+
+{% endif %}
+
+
 <h2>{{ user_profile.first_name }}'s Information</h2>
 
 <h3>Profile Photo:</h3>
@@ -29,6 +36,8 @@ user is a variable provided to the template and is the current logged-in user
 <h3>Name: {{ user_profile.first_name }} {{ user_profile.last_name }}</h3>
 
 <h3>Email: {{ user_profile.email }}</h3>
+
+<span><h3>Bio:</h3> {{ user_profile.profile.bio }}</span>
 
 <h3>Social Media: TODO Implement social media.</h3>
 
