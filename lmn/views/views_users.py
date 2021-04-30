@@ -71,6 +71,7 @@ def register(request):
             user = authenticate(username=request.POST['username'], password=request.POST['password1'])
             if user:
                 login(request, user)
+                messages.info(request, 'Account created successfully!')
                 return redirect('my_user_profile')
             else:
                 messages.add_message(request, messages.ERROR, 'Unable to log in new user')
