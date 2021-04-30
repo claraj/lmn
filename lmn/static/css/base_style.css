@@ -85,3 +85,7 @@ a {
   width: 300px;
   height: 300px;
 }
+
+.success-message {
+  color: rgb(36, 214, 36);
+}
