@@ -3,16 +3,16 @@
 {% load mathfilters %}
 
 
-<h2>Venue List</h2>
+<h1>VENUES</h1>
 
 <div>
 
-  <h2>Venue Search</h2>
-
   <form action="{% url 'venue_list' %}">
     {{ form }}
-    <input type='submit' value='Search'/>
+    <span><input type='submit' value='Search'/> Page {{ current_page }} of {{ num_pages }}</span>
+
   </form>
+
 
   <div>
     {% if search_term %}

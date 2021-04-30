@@ -6,6 +6,7 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger, EmptyPage
 
 from django.utils import timezone
 
@@ -28,7 +29,25 @@ def artist_list(request):
     else:
         artists = Artist.objects.all().order_by('name')
 
-    return render(request, 'lmn/artists/artist_list.html', { 'artists': artists, 'form': form, 'search_term': search_name })
+    paginator = Paginator(artists, 10) # allows only 10 artists to be viewed per page
+
+    if request.GET.get('page'):
+        page = int(request.GET.get('page'))
+    else:
+        page = None
+
+    try:
+        artists = paginator.page(page)
+    except PageNotAnInteger:
+        artists = paginator.page(1)
+        page = 1
+    except EmptyPage:
+        artists = paginator.page(paginator.num_pages)
+        page = paginator.num_pages
+
+    return render(request, 'lmn/artists/artist_list.html', {'form': form, 'search_term': search_name, 
+                    'artists' : artists, 'page_range': paginator.page_range, 'num_pages' : paginator.num_pages, 
+                     'current_page': page})
 
 
 def artist_detail(request, artist_pk):
