@@ -13,6 +13,14 @@ user is a variable provided to the template and is the current logged-in user
 
 -->
 
+{% if messages %}
+    {% for message in messages %}
+    <h3 class='success-message'>{{ message }}</h3>
+    {% endfor %}
+
+{% endif %}
+
+
 {% if user.pk == user_profile.pk %}
 
     <a href="{% url 'edit_user' user_pk=user.pk %}">Edit Profile</a>
