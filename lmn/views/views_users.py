@@ -16,7 +16,11 @@ def user_profile(request, user_pk):
     user = User.objects.get(pk=user_pk)
     user_shows = user.profile.shows_seen.all()
     user_badges = user.profile.badges.all()
-    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'shows_seen': user_shows, 'badges': user_badges })
+    usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
+    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 
+                  'shows_seen': user_shows, 
+                  'badges': user_badges, 
+                  'notes': usernotes})
 
 
 @login_required() # only logged in users should access this
