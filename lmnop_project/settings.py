@@ -21,7 +21,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'o+do-*x%zn!43h+unn!46(xp$e6&)=y63v#lj3ywjuy8cihz9f'
 SECRET_KEY = ''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
 
 
@@ -141,24 +140,29 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'lmn/media/')
 
-# STATIC_URL = '/static/'
+if os.getenv('GAE_INSTANCE'):
+    # Static and media files at app engine
+    GS_STATIC_FILE_BUCKET = 'lmnop-311407.appspot.com'
 
-# MEDIA_URL = '/lmn/media/'
+    STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
 
-GS_STATIC_FILE_BUCKET = 'lmnop-311407.appspot.com'
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = 'user-lmn-image-uploads'
+    MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
 
-STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+    from google.oauth2 import service_account
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file('lmn_creds.json')
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = 'user-lmn-image-uploads'
-MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
+else:
+    # Developing locally
+    STATIC_URL = '/static/'
 
-from google.oauth2 import service_account
-GS_CREDENTIALS = service_account.Credentials.from_service_account_file('lmn_creds.json')
+    # Media URL, for user-created media - becomes part of the URL when images are displayed
+    MEDIA_URL = '/media/'
 
 # Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'
 LOGOUT_REDIRECT_URL = 'homepage'
 
 
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
