@@ -53,7 +53,6 @@ def add_artist(request):
 
             except IntegrityError:
                 messages.warning(request, 'Artist already in database')
-
         else:
             return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
     new_artist_form = ArtistForm()

@@ -2,27 +2,36 @@
 <html>
 <head>
   <title>LMNOP</title>
+  <link rel="shortcut icon" href="{% static '/img/music.png' %}"/>
   <link rel="stylesheet" href="{% static 'css/base_style.css' %}" type="text/css"></link>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">  
+  <meta name="viewport" content="initial-scale=1">
 </head>
 
 <body>
 
-<h1>LMN</h1>
+<div class='navbar'>
 
-<a href="{% url 'venue_list' %}">Venues</a>
-<a href="{% url 'artist_list' %}">Artists</a>
-<a href="{% url 'latest_notes' %}">Notes</a>
+  <img id="logo" src="{% static '/img/logo.png' %}">
 
-{% if user.is_authenticated %}
-  <span id='welcome-user-msg'>You are logged in, <a href="{% url 'user_profile' user_pk=user.pk %}">{{ user.username }}</a>.  <a href="{% url 'logout' %}">Logout</a></span>
+  <ul id="nav-links">
+    <li><a href="{% url 'venue_list' %}">Venues</a></li>
+    <li><a href="{% url 'artist_list' %}">Artists</a></li>
+    <li><a href="{% url 'latest_notes' %}">Notes</a></li>
+  </ul>
 
-{% else %}
+
+  {% if user.is_authenticated %}
+    <span id='welcome-user-msg'><a href="{% url 'user_profile' user_pk=user.pk %}"><img id="profile" src="{% static '/img/profile.png' %}"></a><br> <a href="{% url 'logout' %}">Logout</a></span>
+
+  {% else %}
 
   <span id='login-or-sign-up'><a href="{% url 'login' %}?next={{ request.path }}">Login or sign up</a></span>
 
-{% endif %}
+  {% endif %}
 
-<hr>
+</div>
 
 {% block content %}
 {% endblock %}
