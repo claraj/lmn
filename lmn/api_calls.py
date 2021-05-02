@@ -52,11 +52,11 @@ def search_mb_artist_by_name(name):
             except KeyError as e:
                 new_desc = None
                 print(f'Error, no description available {e}')
-            new_artist = Artist(new_name, new_hometown, new_desc)
+            new_artist = Artist(name=new_name, hometown=new_hometown, description=new_desc)
             result_list.append(new_artist)
-            for a in result_list:
-                if a.description is None:  # currently removing any Artists without description
-                    result_list.remove(a)
+            # for a in result_list:
+            #     if a.description is None:  # currently removing any Artists without description
+            #         result_list.remove(a)
             return result_list  # if successful, returns a list of artist objects
     except requests.ConnectionError as e:  # if no response from API returns none
         print(f'Error with connection {e}')

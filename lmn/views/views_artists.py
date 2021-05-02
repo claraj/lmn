@@ -7,7 +7,7 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-
+from lmn.api_calls import search_mb_artist_by_name
 from django.utils import timezone
 
 
@@ -42,6 +42,10 @@ def add_artist(request):
     if request.method == 'POST':
         new_artist_form = ArtistForm(request.POST)
         if new_artist_form.is_valid():
+            search_artist = new_artist_form.cleaned_data['name']
+            search_results = search_mb_artist_by_name(search_artist)
+            for a in search_results:
+                print(a)
             try:
                 new_artist_form.save()
                 messages.info(request, 'Artist Saved')
