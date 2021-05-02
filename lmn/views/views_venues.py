@@ -9,9 +9,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
 
-def venue_list(request):
-    form = VenueSearchForm()
-    search_name = request.GET.get('search_name')
+def venue_list(request):  # pagination made possible by a ridiculously deep rabbit hole of docs and tutorials
+    form = VenueSearchForm()  # most notable was prob Corey Schafer
+    search_name = request.GET.get('search_name')  # (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g)
     page = request.GET.get('page')  # page query
     if search_name:
         # search for this venue, display results
@@ -24,7 +24,7 @@ def venue_list(request):
         except EmptyPage:
             venues = paginator.page(paginator.num_pages)  # if the page is out of range, deliver the last page
     else:
-        venues_list = Venue.objects.all().order_by('name')   # Todo paginate
+        venues_list = Venue.objects.all().order_by('name')
         paginator = Paginator(venues_list, 6)
         try:
             venues = paginator.page(page)

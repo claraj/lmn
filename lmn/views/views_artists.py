@@ -22,9 +22,9 @@ def venues_for_artist(request, artist_pk):  # pk = artist_pk
     return render(request, 'lmn/venues/venue_list_for_artist.html', {'artist': artist, 'shows': shows})
 
 
-def artist_list(request):
-    form = ArtistSearchForm()
-    search_name = request.GET.get('search_name')
+def artist_list(request):  # pagination made possible by a ridiculously deep rabbit hole of docs and tutorials
+    form = ArtistSearchForm()  # most notable was prob Corey Schafer
+    search_name = request.GET.get('search_name')  # (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g)
     page = request.GET.get('page')  # page query
     if search_name:
         artists_list = Artist.objects.filter(name__icontains=search_name).order_by('name')
