@@ -16,22 +16,26 @@ def user_profile(request, user_pk):
     user = User.objects.get(pk=user_pk)
     user_shows = user.profile.shows_seen.all()
     user_badges = user.profile.badges.all()
-    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'shows_seen': user_shows, 'badges': user_badges })
+    usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
+    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 
+                  'shows_seen': user_shows, 
+                  'badges': user_badges, 
+                  'notes': usernotes})
 
 
 @login_required() # only logged in users should access this
-def edit_user(request, pk):
+def edit_user(request, user_pk):
     # querying the User object with pk from url
-    user = User.objects.get(pk=pk)
+    user = User.objects.get(pk=user_pk)
 
     # prepopulate ProfileForm with retrieved user values from above.
     user_form = UserForm(instance=user)
 
     # The sorcery begins from here, see explanation below
-    ProfileInlineFormset = inlineformset_factory(User, Profile, fields=('website', 'bio', 'phone', 'city', 'country', 'organization'))
+    ProfileInlineFormset = inlineformset_factory(User, Profile, fields=('profile_image', 'shows_seen', 'bio', 'badges'), can_delete=False)
     formset = ProfileInlineFormset(instance=user)
 
-    if request.user.is_authenticated() and request.user.id == user.id:
+    if request.user.is_authenticated and request.user.id == user.id:
         if request.method == "POST":
             user_form = UserForm(request.POST, request.FILES, instance=user)
             formset = ProfileInlineFormset(request.POST, request.FILES, instance=user)
@@ -43,11 +47,11 @@ def edit_user(request, pk):
                 if formset.is_valid():
                     created_user.save()
                     formset.save()
-                    return HttpResponseRedirect('/accounts/profile/')
+                    return redirect('user_profile', user_pk=request.user.pk)
 
-        return render(request, "account/account_update.html", {
-            "noodle": pk,
-            "noodle_form": user_form,
+        return render(request, "lmn/users/edit_user.html", {
+            "user_pk": user_pk,
+            "user_form": user_form,
             "formset": formset,
         })
     else:
@@ -56,8 +60,11 @@ def edit_user(request, pk):
 
 @login_required
 def my_user_profile(request):
-    # TODO - editable version for logged-in user to edit their own profile
-    return redirect('user_profile', user_pk=request.user.pk)
+    if request.user.is_authenticated: # determine the current user and redirect to their user profile
+        user_pk = request.user.id
+        return redirect('user_profile', user_pk=user_pk)
+    else:
+        raise PermissionDenied
 
 
 def register(request):
@@ -68,7 +75,8 @@ def register(request):
             user = authenticate(username=request.POST['username'], password=request.POST['password1'])
             if user:
                 login(request, user)
-                return redirect('login')
+                messages.info(request, 'Account created successfully!')
+                return redirect('my_user_profile')
             else:
                 messages.add_message(request, messages.ERROR, 'Unable to log in new user')
         else:

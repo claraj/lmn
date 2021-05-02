@@ -1,5 +1,10 @@
+import tempfile
+import filecmp
+import os 
+
 from django.test import TestCase, Client
 
+from django.test import override_settings
 from django.urls import reverse
 from django.contrib import auth
 from django.contrib.auth import authenticate
@@ -9,6 +14,8 @@ from django.contrib.auth.models import User
 
 import re, datetime
 from datetime import timezone
+
+from PIL import Image 
 
 # TODO verify correct templates are rendered.
 
@@ -177,12 +184,11 @@ class TestVenues(TestCase):
             # .* matches 0 or more of any character. Test to see if
             # these names are present, in the right order
 
-            regex = '.*First Avenue.*Target Center.*The Turf Club.*'
+            regex = '.*First Avenue.*|.*Target Center.*|.*The Turf Club.*'
             response_text = str(response.content)
-
-            self.assertTrue(re.match(regex, response_text))
-
-            self.assertEqual(len(response.context['venues']), 3)
+            self.assertTrue(re.search(regex, response_text))
+            venues = list(response.context['venues'])
+            self.assertEqual(len(venues), 3)
             self.assertTemplateUsed(response, 'lmn/venues/venue_list.html')
 
 
@@ -414,22 +420,22 @@ class TestUserProfile(TestCase):
     def test_username_shown_on_profile_page(self):
         # A string "username's notes" is visible
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
-        self.assertContains(response, 'alice\'s notes')
+        self.assertContains(response, 'alice\'s Information')
         
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'bob\'s notes')
+        self.assertContains(response, 'bob\'s Information')
 
 
     def test_correct_user_name_shown_different_profiles(self):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a class="nav-item nav-link" href="/user/profile/2/">bob</a>')
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>.')
+        self.assertContains(response, 'You are logged in, <a class="nav-item nav-link" href="/user/profile/2/">bob</a>')
         
 
 class TestNotes(TestCase):
@@ -517,3 +523,125 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+
+class TestImageUpload(TestCase):
+
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]
+
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+        self.MEDIA_ROOT = tempfile.mkdtemp()
+
+
+    def create_temp_image_file(self):
+        handle, tmp_img_file = tempfile.mkstemp(suffix='.jpg')
+        img = Image.new('RGB', (10, 10) )
+        img.save(tmp_img_file, format='JPEG')
+        return tmp_img_file
+
+
+    def test_upload_new_image_for_own_note(self):
+        
+        img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(img_file_path, 'rb') as img_file:
+
+                resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 1} ), 
+                       {'image': img_file, 
+                        'title': 'Hello', 
+                        'text': 'Yo'}, 
+                       follow=True)
+
+                self.assertEqual(200, resp.status_code)
+
+                note_1 = Note.objects.get(pk=1)
+                img_file_name = os.path.basename(img_file_path)
+                expected_uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
+
+                self.assertTrue(os.path.exists(expected_uploaded_file_path))
+                self.assertIsNotNone(note_1.image)
+                self.assertTrue(filecmp.cmp( img_file_path,  expected_uploaded_file_path ))
+
+
+    def test_change_image_for_own_note_expect_old_deleted(self):
+        
+        first_img_file_path = self.create_temp_image_file()
+        second_img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(first_img_file_path, 'rb') as first_img_file:
+
+                resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 1} ), 
+                       {'image': first_img_file, 
+                        'title': 'Hello', 
+                        'text': 'Yo'}, 
+                       follow=True)
+
+                note_1 = Note.objects.get(pk=1)
+
+                first_uploaded_image = note_1.image.name
+
+                with open(second_img_file_path, 'rb') as second_img_file:
+                    resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 1} ), 
+                           {'image': second_img_file, 
+                            'title': 'Hello', 
+                            'text': 'Yo'}, 
+                           follow=True)
+
+                    note_1 = Note.objects.get(pk=1)
+
+                    second_uploaded_image = note_1.image.name
+
+                    first_path = os.path.join('lmn', self.MEDIA_ROOT, first_uploaded_image)
+                    second_path = os.path.join('lmn', self.MEDIA_ROOT, second_uploaded_image)
+
+                    self.assertFalse(os.path.exists(first_path))
+                    self.assertTrue(os.path.exists(second_path))
+
+
+    def test_upload_image_for_someone_else_note(self):
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+  
+            img_file = self.create_temp_image_file()
+            with open(img_file, 'rb') as image:
+                resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 2} ), 
+                       {'image': img_file, 
+                        'title': 'Hello', 
+                        'text': 'Yo'}, 
+                       follow=True)
+                self.assertEqual(403, resp.status_code)
+
+                note_2 = Note.objects.get(pk=2)
+                self.assertFalse(note_2.image)  
+
+
+    def test_delete_note_with_image_image_deleted(self):
+        
+        img_file_path = self.create_temp_image_file()
+
+        with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
+        
+            with open(img_file_path, 'rb') as img_file:
+                resp = self.client.post(reverse('edit_note', kwargs={'note_pk': 1} ), 
+                       {'image': img_file, 
+                        'title': 'Hello', 
+                        'text': 'Yo'}, 
+                       follow=True)
+                
+                self.assertEqual(200, resp.status_code)
+
+                note_1 = Note.objects.get(pk=1)
+                img_file_name = os.path.basename(img_file_path)
+                
+                uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
+
+                note_1 = Note.objects.get(pk=1)
+                note_1.delete()
+
+                self.assertFalse(os.path.exists(uploaded_file_path))

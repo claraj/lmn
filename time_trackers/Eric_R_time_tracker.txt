@@ -3,26 +3,40 @@ Name: Eric Rudzinski
 Keep notes on the tasks you worked on for Project 5. This worksheet will be used to assess your teamwork and individual contributions to the project. It will be used to help give credit for tasks for which there may not be direct evidence in the code, for example, helping others, research, troubleshooting.
 
 Rename this file so your name or initials are in the file name. 
-Each team member should keep their own document in their team’s GitHub repository.  Create a directory for everyone’s documents. 
+Each team member should keep their own document in their teamâ€™s GitHub repository.  Create a directory for everyoneâ€™s documents. 
 
 Make notes for each week. 
 
 Week beginning April 5th
 Met with team. We all collaborated on ideas and who was doing what. We all set up our timeline. Then we all made sure we had our projects we were working on set up properly. Meaning we made sure everyone related to GitHub and the project environment was set up. 
 
-Week beginning Monday April 12th
+
+Week beginning Monday April 12th
 We met with our team on Sunday. We worked together to solve issues we had with some of the branches that had been created and then we merged them with our main. We all brain stormed ideas about what we were going to do. I set up bootstrap within our Django app. I have been working on the CSS and HTML parts of the web page. Ran in to a snag with the CSS not applying to my page.  I am going to troubleshoot and make it work. 
 
-Week beginning Monday April 19th
+
+Week beginning Monday April 19th
+We all met again at our planed Sunday meeting time. The meeting went well we all talked and discussed how we want to page to look. We discussed what parts of the project we still need to do and prioritize. We then looked at pull requests and issues we had with some of the new features we worked on. I created a list of items that I will be working on. Here is some of that list: 
+add padding to to main page css 
+move login to right side of screen
+Extend pagnation from 2 venue view to 10
+re-image carousel images. 
+nav bar disapears unless in full screen
+userprofile.html needs updating
+welcome message
+goodby message
 
 
-Week beginning Monday April 26th
+Week beginning Monday April 26th
 
 
-Week beginning Monday May 3rd
+
+Week beginning Monday May 3rd
 
 
-Week beginning Monday May 10th (Final week – deadline morning May 12th)
+
+Week beginning Monday May 10th (Final week â€“ deadline morning May 12th)
 
 
-
+
+
