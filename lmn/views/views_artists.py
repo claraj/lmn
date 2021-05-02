@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from ..models import Venue, Artist, Note, Show
@@ -24,10 +25,25 @@ def venues_for_artist(request, artist_pk):  # pk = artist_pk
 def artist_list(request):
     form = ArtistSearchForm()
     search_name = request.GET.get('search_name')
+    page = request.GET.get('page', 1)
     if search_name:
-        artists = Artist.objects.filter(name__icontains=search_name).order_by('name')
+        artists_list = Artist.objects.filter(name__icontains=search_name).order_by('name')
+        paginator = Paginator(artists_list, 6)
+        try:
+            artists = paginator.page(page)
+        except PageNotAnInteger:
+            artists = paginator.page(1)
+        except EmptyPage:
+            artists = paginator.page(paginator.num_pages)
     else:
-        artists = Artist.objects.all().order_by('name')
+        artists_list = Artist.objects.all().order_by('name')
+        paginator = Paginator(artists_list, 6)
+        try:
+            artists = paginator.page(page)
+        except PageNotAnInteger:
+            artists = paginator.page(1)
+        except EmptyPage:
+            artists = paginator.page(paginator.num_pages)
 
     return render(request, 'lmn/artists/artist_list.html',
                   {'artists': artists, 'form': form, 'search_term': search_name})
