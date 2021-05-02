@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect, get_object_or_404
 
 from ..models import Venue, Artist, Note, Show
@@ -11,12 +12,26 @@ from django.contrib.auth import authenticate, login, logout
 def venue_list(request):
     form = VenueSearchForm()
     search_name = request.GET.get('search_name')
-
+    page = request.GET.get('page')  # page query
     if search_name:
-        #search for this venue, display results
-        venues = Venue.objects.filter(name__icontains=search_name).order_by('name')
-    else :
-        venues = Venue.objects.all().order_by('name')   # Todo paginate
+        # search for this venue, display results
+        venues_list = Venue.objects.filter(name__icontains=search_name).order_by('name')
+        paginator = Paginator(venues_list, 6)  # creates a paginator that will chop up the list into pages
+        try:
+            venues = paginator.page(page)  # gets the number of pages from paginator
+        except PageNotAnInteger:
+            venues = paginator.page(1)  # if the page is not an integer, deliver the first page
+        except EmptyPage:
+            venues = paginator.page(paginator.num_pages)  # if the page is out of range, deliver the last page
+    else:
+        venues_list = Venue.objects.all().order_by('name')   # Todo paginate
+        paginator = Paginator(venues_list, 6)
+        try:
+            venues = paginator.page(page)
+        except PageNotAnInteger:
+            venues = paginator.page(1)
+        except EmptyPage:
+            venues = paginator.page(paginator.num_pages)
 
     return render(request, 'lmn/venues/venue_list.html', { 'venues': venues, 'form': form, 'search_term': search_name })
 
