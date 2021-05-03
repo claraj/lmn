@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 
+
 def venue_list(request):  # pagination made possible by a ridiculously deep rabbit hole of docs and tutorials
     form = VenueSearchForm()  # most notable was prob Corey Schafer
     search_name = request.GET.get('search_name')  # (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g)
