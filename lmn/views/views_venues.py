@@ -8,7 +8,7 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 def venue_list(request):
     form = VenueSearchForm()
