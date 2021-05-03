@@ -92,5 +92,22 @@ li a {
   /* font-weight: bold; */
 }
 
+.goodbye {
+  position: absolute;
+  left: 35%;
+  top: 20%;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
 
+.goodbye h1 {
+  padding: 0;
+  margin: 0;
+  font-size: 80px;
+}
+
+.goodbye a {
+  font-size: 20px;
+}
 
