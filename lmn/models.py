@@ -5,6 +5,17 @@ from django.contrib.auth.models import User
 import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+RATE_CHOICES = (
+    ("", ""),
+    ("Terrible", "Terrible"),
+    ("Bad", "Bad"),
+    ("Not bad", "Not bad"),
+    ("Good", "Good"),
+    ("Great", "Great"),
+
+)
 
 # Every model gets a primary key field by default.
 
@@ -66,9 +77,10 @@ class Note(models.Model):
     title = models.CharField(max_length=200, blank=True)
     text = models.TextField(max_length=1000, blank=True)
     posted_date = models.DateTimeField(auto_now_add=True, blank=True)
+    Rate = models.CharField(max_length = 8, choices=RATE_CHOICES,default = '0')
 
     def __str__(self):
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date} Rated at: {self.Rate}'
 
 
 """
