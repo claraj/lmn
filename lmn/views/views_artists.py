@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from ..models import Venue, Artist, Note, Show
@@ -21,13 +22,28 @@ def venues_for_artist(request, artist_pk):  # pk = artist_pk
     return render(request, 'lmn/venues/venue_list_for_artist.html', {'artist': artist, 'shows': shows})
 
 
-def artist_list(request):
-    form = ArtistSearchForm()
-    search_name = request.GET.get('search_name')
+def artist_list(request):  # pagination made possible by a ridiculously deep rabbit hole of docs and tutorials
+    form = ArtistSearchForm()  # most notable was prob Corey Schafer
+    search_name = request.GET.get('search_name')  # (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g)
+    page = request.GET.get('page')  # page query
     if search_name:
-        artists = Artist.objects.filter(name__icontains=search_name).order_by('name')
+        artists_list = Artist.objects.filter(name__icontains=search_name).order_by('name')
+        paginator = Paginator(artists_list, 6)  # creates a paginator that will chop up the list into pages
+        try:
+            artists = paginator.page(page)  # gets the number of pages from paginator
+        except PageNotAnInteger:
+            artists = paginator.page(1)  # if the page is not an integer, deliver the first page
+        except EmptyPage:
+            artists = paginator.page(paginator.num_pages)  # if the page is out of range, deliver the last page
     else:
-        artists = Artist.objects.all().order_by('name')
+        artists_list = Artist.objects.all().order_by('name')
+        paginator = Paginator(artists_list, 6)
+        try:
+            artists = paginator.page(page)
+        except PageNotAnInteger:
+            artists = paginator.page(1)
+        except EmptyPage:
+            artists = paginator.page(paginator.num_pages)
 
     return render(request, 'lmn/artists/artist_list.html',
                   {'artists': artists, 'form': form, 'search_term': search_name})
