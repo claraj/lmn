@@ -14,3 +14,4 @@ env
 
 # ignore Mac settings
 .DS_Store
+cloud_sql_proxy

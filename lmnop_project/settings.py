@@ -25,7 +25,7 @@ SECRET_KEY = 'o+do-*x%zn!43h+unn!46(xp$e6&)=y63v#lj3ywjuy8cihz9f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -78,25 +78,28 @@ DATABASES = {
 
     # Uncomment this when you are ready to use Postgres.
 
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': '',
-    #     'USER' : '',
-    #     'PASSWORD' : os.environ[''],
-    #     'HOST' : '',
-    #     'PORT' : '5432',
-    # },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'lmnop',
+        'USER' : 'lmnop-user',
+        'PASSWORD' : os.environ['LMNOP_USER_PW'], #'lmnop2021!'
+        'HOST' : '/cloudsql/lmnop-312618:us-central1:lmnop-db',
+        'PORT' : '5432',
+    },
 
     # And when you use Postgres, comment out or remove this DB config. 
     # Using environment variables to detect where this app is running, and automatically use 
     # an appropriate DB configuration, is a good idea.
     
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
 }
 
+#check if running on Google App Engine - if not default db is set to local
+if not os.getenv('GAE_INSTANCE'):
+    DATABASES['default']['HOST'] = '127.0.0.1'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -134,7 +137,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
+
+# STATIC_URL = '/static/'
+GS_STATIC_FILE_BUCKET = 'lmnop-312618.appspot.com'
+STATIC_URL = f'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+
+
 
 
 # Where to send user after successful login, and logout, if no other page is provided.
