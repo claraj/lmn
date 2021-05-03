@@ -15,6 +15,7 @@ urlpatterns = [
     path('venues/list/', views_venues.venue_list, name='venue_list'),
     path('venues/detail/<int:venue_pk>/', views_venues.venue_detail, name='venue_detail'),
     path('venues/artists_at/<int:venue_pk>/', views_venues.artists_at_venue, name='artists_at_venue'),
+    path('venues/list/add_venue', views_venues.add_venue, name='add_venue'),
 
     # Note related
     path('notes/latest/', views_notes.latest_notes, name='latest_notes'),

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Note, Artist, Profile
+from .models import Note, Artist, Profile, Venue
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -24,6 +24,11 @@ class ArtistForm(forms.ModelForm):
     class Meta:
         model = Artist
         fields = ['name']
+
+class VenueForm(forms.ModelForm):
+    class Meta:
+        model = Venue
+        fields = ['name', 'address']
 
 class UserRegistrationForm(UserCreationForm):
     class Meta:
