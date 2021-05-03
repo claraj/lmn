@@ -15,12 +15,11 @@ def new_note(request, show_pk):
     show = get_object_or_404(Show, pk=show_pk)
 
     if request.method == 'POST':
-        form = NewNoteForm(request.POST, request.FILES, instance=show)
+        form = NewNoteForm(request.POST, request.FILES) 
         if form.is_valid():
             note = form.save(commit=False)
             note.user = request.user
             note.show = show
-            # note.photo = photo
             note.save()
             return redirect('note_detail', note_pk=note.pk)
 
