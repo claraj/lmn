@@ -8,7 +8,7 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 
 def venue_list(request):
     form = VenueSearchForm()
@@ -41,12 +41,12 @@ def add_venue(request):
     if request.method == 'POST':
         new_venue_form = VenueForm(request.POST)
         if new_venue_form.is_valid():
-            search_venue = new_venue_form.cleaned_data['name']
-            search_results = search_mb_place(search_venue)
+            search_venue = new_venue_form.cleaned_data['name']  # grabs the entered name to use as a search term
+            search_results = search_mb_place(search_venue)  # returns a list of artist objects from api
             for a in search_results:
-                print(a)
+                print(a)  # for testing, prints every returned artist to terminal TODO delete when not needed
             try:
-                new_venue_form.save()
+                new_venue_form.save()  # still currently saving whatever is entered (user data, not api)
                 messages.info(request, 'Venue Saved')
                 return redirect('venue_list')
             except ValidationError:
