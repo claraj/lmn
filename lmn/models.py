@@ -66,9 +66,20 @@ class Note(models.Model):
     title = models.CharField(max_length=200, blank=True)
     text = models.TextField(max_length=1000, blank=True)
     posted_date = models.DateTimeField(auto_now_add=True, blank=True)
+    photo = models.ImageField(upload_to='user_images/', blank=True, null=True) # issue 4 upload photographs with associated notes by chris
+
+    # def save(self, *args, **kwargs):
+    #     #get reference to previous version of this Place
+    #     old_note = Note.objects.filter(pk=self.pk).first()
+    #     if old_note and old_note.photo:
+    #         if old_note.photo != self.photo:
+    #             self.delete_photo(old_note.photo)
+        
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
+        photo_str = self.photo.url if self.photo else 'no photo' # issue 4 upload photographs with associated notes by chris
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Photo: {photo_str} Posted on: {self.posted_date}'
 
 
 """
