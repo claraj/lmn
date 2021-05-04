@@ -56,10 +56,9 @@ def latest_notes(request):
                   'current_page': page})
 
 def most_notes(request):
-    notes = Note.objects.annotate(num_notes=Count('show_id')).order_by('-num_notes')[:10]
-    # show = Show.objects.select_related()
-     # top 10 shows with most notes
-    return render(request, 'lmn/notes/most_notes.html', {'notes': notes })  
+    shows = Show.objects.annotate(num_notes=Count('note')).order_by('-num_notes')[:10]
+    # top 10 shows with most notes
+    return render(request, 'lmn/notes/most_notes.html', {'shows': shows })  
 
 def notes_for_show(request, show_pk): 
     # Notes for show, most recent first
