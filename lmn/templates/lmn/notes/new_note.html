@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<form method="POST" action="{% url 'new_note' show_pk=show.pk %}">
+<form method="POST" action="{% url 'new_note' show_pk=show.pk %}" enctype="multipart/form-data">
   
   <div>
     {% csrf_token %}
