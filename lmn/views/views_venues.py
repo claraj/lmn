@@ -58,19 +58,21 @@ def add_venue(request):
         if new_venue_form.is_valid():
             search_venue = new_venue_form.cleaned_data['name']  # grabs the entered name to use as a search term
             search_results = search_mb_place(search_venue)  # returns a list of artist objects from api
-            for a in search_results:
-                print(a)  # for testing, prints every returned artist to terminal TODO delete when not needed
-            try:
-                new_venue_form.save()  # still currently saving whatever is entered (user data, not api)
-                messages.info(request, 'Venue Saved')
-                return redirect('venue_list')
-            except ValidationError:
-                messages.warning(request, 'Not a valid Venue')
-                return redirect(request, 'add_venue')  # redirects back to add page so user can correct
-
-            except IntegrityError:
-                messages.warning(request, 'Venue already in database')
-        else:
-            return render(request, 'lmn/venues/add_venue.html', {'new_venue_form': new_venue_form})
+            return render(request, 'lmn/venues/add_venue.html', {'search_results': search_results})
+        #     for a in search_results:
+        #         print(a)  # for testing, prints every returned artist to terminal TODO delete when not needed
+        #     try:
+        #         new_venue_form.save()  # still currently saving whatever is entered (user data, not api)
+        #         messages.info(request, 'Venue Saved')
+        #
+        #         return redirect('venue_list')
+        #     except ValidationError:
+        #         messages.warning(request, 'Not a valid Venue')
+        #         return redirect(request, 'add_venue')  # redirects back to add page so user can correct
+        #
+        #     except IntegrityError:
+        #         messages.warning(request, 'Venue already in database')
+        # else:
+        #     return render(request, 'lmn/venues/add_venue.html', {'new_venue_form': new_venue_form})
     new_venue_form = VenueForm()
     return render(request, 'lmn/venues/add_venue.html', {'new_venue_form': new_venue_form})

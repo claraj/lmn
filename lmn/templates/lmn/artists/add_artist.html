@@ -7,9 +7,9 @@
     {{ new_artist_form }}
     <button type=submit>Add Artist</button>
 </form>
+
     <div>
     {% for result in search_results %}
-
   <div>
     <p>
       <a>{{ result }}</a>
@@ -17,4 +17,5 @@
     </div>
         </div>
 {% endfor %}
+
 {% endblock %}
