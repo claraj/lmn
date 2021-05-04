@@ -6,8 +6,7 @@ from django.contrib.auth import authenticate
 
 import re
 import datetime
-# from datetime import timezone
-from django.utils import timezone
+from datetime import timezone
 
 from lmn.models import Note
 from django.contrib.auth.models import User

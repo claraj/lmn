@@ -57,13 +57,13 @@ If your DB is hosted at Elephant, your tests might time out, and you might need 
 Run tests with
 
 ```
-python manage.py test lmn.tests.functional_tests
+python manage.py test lmn.tests.functional_tests.functional_tests
 ```
 
 Or select tests, for example,
 ```
-python manage.py test lmn.tests.functional_tests.HomePageTest
-python manage.py test lmn.tests.functional_tests.BrowseArtists.test_searching_artists
+python manage.py test lmn.functional_tests.functional_tests.HomePageTest
+python manage.py test lmn.functional_tests.functional_tests.BrowseArtists.test_searching_artists
 ```
 
 
@@ -78,7 +78,7 @@ coverage report
 
 ### Linting
 
-Ensure requirements are installed 
+Ensure requirements are installed, then run,
 
 ```
 flake8 .
@@ -86,6 +86,6 @@ flake8 .
 
 Configure linting rules if desired in the .flake8 file. 
 
-### PostgreSQL
+### Databases
 
-Recommend using PaaS Postgres such as Elephant, instead of installing local Postgres. 
+You will likely want to configure the app to use SQLite locally, and PaaS database when deployed.  
