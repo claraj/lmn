@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.forms import ValidationError
 
 
-
 class VenueSearchForm(forms.Form):
     search_name = forms.CharField(label='Venue Name', max_length=200)
 
@@ -18,7 +17,7 @@ class ArtistSearchForm(forms.Form):
 class NewNoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ('title', 'text', 'photo') # issue 4 upload photographs with associated notes by chris
+        fields = ('title', 'text', 'photo','Rate' ) # issue 4 upload photographs with associated notes by chris
 
 class ArtistForm(forms.ModelForm):
     class Meta:

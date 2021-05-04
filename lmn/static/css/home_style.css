@@ -1,0 +1,45 @@
+.home-container {
+    position: relative;
+    left: 10%;
+    top: 0;
+}
+
+h1 {
+    position: absolute;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.25);
+    left: 30%;
+    top: 8%;
+    font-size: 50px;
+}
+
+.home-prompt {
+    position: -webkit-sticky;
+    position: sticky;
+    width: 100%;
+    height: 100%;
+    left: 10%;
+    bottom: 0%;
+}
+
+.home-prompt #get-started {
+    position: absolute;
+    top: 45%;
+    left: 35%;
+}
+
+button {
+background: linear-gradient(270deg, #35CDFD 0%, #C078FF 100%);
+border-radius: 10px;
+border: none;
+height: 70px;
+width: 150px;
+color: white;
+font-weight: bold;
+font-size: large;
+}
+
+button:hover{
+    background:rgb(110, 225, 253);
+}
+
+
