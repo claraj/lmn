@@ -60,19 +60,21 @@ def add_artist(request):
         if new_artist_form.is_valid():
             search_artist = new_artist_form.cleaned_data['name']  # grabs the entered name to use as a search term
             search_results = search_mb_artist_by_name(search_artist)  # returns a list of artist objects from api
-            for a in search_results:
-                print(a)  # for testing, prints every returned artist to terminal TODO delete when not needed
-            try:
-                new_artist_form.save()  # still currently saving whatever is entered (user data, not api)
-                messages.info(request, 'Artist Saved')
-                return redirect('artist_list')
-            except ValidationError:
-                messages.warning(request, 'Not a valid Artist')
-                return redirect(request, 'add_artist')  # redirects back to add page so user can correct
+            new_artist_form = ArtistForm()
+            return render(request, 'lmn/artists/add_artist.html', {'search_results': search_results})
+            # for a in search_results:
+            #     print(a)  # for testing, prints every returned artist to terminal TODO delete when not needed
+            # try:
+            #     new_artist_form.save()  # still currently saving whatever is entered (user data, not api)
+            #     messages.info(request, 'Artist Saved')
+            #     return redirect('artist_list')
+            # except ValidationError:
+            #     messages.warning(request, 'Not a valid Artist')
+            #     return redirect(request, 'add_artist')  # redirects back to add page so user can correct
 
-            except IntegrityError:
-                messages.warning(request, 'Artist already in database')
-        else:
-            return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
+        #     except IntegrityError:
+        #         messages.warning(request, 'Artist already in database')
+        # else:
+        #     return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
     new_artist_form = ArtistForm()
     return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
