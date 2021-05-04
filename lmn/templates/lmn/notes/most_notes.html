@@ -2,11 +2,9 @@
 {% block content %}
 {% load mathfilters %}
 
-{% for show in shows %}
-  <h2 id="show-title">{{ notes.num_notes }}Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
-  <h2>Latest Notes</h2>
-
 {% for note in notes %}
+   <h2 id="show-title">{{ note.num_notes }} Notes for {{ note.show }} at {{ note.show.venue.name }} on {{ note.show.show_date }} </h2>
+  <h2>Latest Notes</h2>
 
   <div id="note_{{ note.pk }}">
     <h3 class="note_title">
@@ -31,7 +29,6 @@
 
   <p>No notes.</p>
 
-{% endfor %}
 {% endfor %}
 <!-- If this is a list of notes for one show,
 display link to add new note for that show. -->
