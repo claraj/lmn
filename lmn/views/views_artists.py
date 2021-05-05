@@ -84,9 +84,10 @@ def add_artist(request):
 
 
 
-def save_artist(request, artist):
+def save_artist(request):
     # new_artist = SaveArtistForm(request.POST)
     if request.method == 'POST':
+        print(request)
 
 
         # print(new_artist.name)

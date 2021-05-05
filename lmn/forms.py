@@ -26,8 +26,10 @@ class ArtistForm(forms.ModelForm):
         fields = ['name']
 
 
-class SaveArtistForm(forms):
-    artist = Artist()
+class SaveArtistForm(forms.ModelForm):
+    class Meta:
+        model = Artist
+        fields = ['name', 'hometown', 'description']
 
 
 
