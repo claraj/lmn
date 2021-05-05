@@ -4,7 +4,7 @@
 
 
 {% if show %}
-  <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
+  <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }} Rating: {{ show.rating }}/5</h2>
 {% else %}
   <h2>Latest Notes</h2>
 {% endif %}
