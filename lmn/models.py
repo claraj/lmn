@@ -5,6 +5,17 @@ from django.contrib.auth.models import User
 import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+RATE_CHOICES = (
+    ("", ""),
+    ("Terrible", "Terrible"),
+    ("Bad", "Bad"),
+    ("Not bad", "Not bad"),
+    ("Good", "Good"),
+    ("Great", "Great"),
+
+)
 
 # Every model gets a primary key field by default.
 
@@ -66,9 +77,12 @@ class Note(models.Model):
     title = models.CharField(max_length=200, blank=True)
     text = models.TextField(max_length=1000, blank=True)
     posted_date = models.DateTimeField(auto_now_add=True, blank=True)
+    photo = models.ImageField(upload_to='user_images/', blank=True, null=True) # issue 4 upload photographs with associated notes by chris
+    Rate = models.CharField(max_length = 8, choices=RATE_CHOICES,default = '0')
 
     def __str__(self):
-        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Posted on: {self.posted_date}'
+        photo_str = self.photo.url if self.photo else 'no photo' # issue 4 upload photographs with associated notes by chris
+        return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Photo: {photo_str} Posted on: {self.posted_date} Rated at: {self.Rate}'
 
 
 """

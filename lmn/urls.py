@@ -18,7 +18,7 @@ urlpatterns = [
     path('venues/list/add_venue', views_venues.add_venue, name='add_venue'),
 
     # Note related
-    path('notes/latest/', views_notes.latest_notes, name='latest_notes'),
+    path('notes/latest/', views_notes.latest_notes, name='latest_notes'), 
     path('notes/detail/<int:note_pk>/', views_notes.note_detail, name='note_detail'),
     path('notes/for_show/<int:show_pk>/', views_notes.notes_for_show, name='notes_for_show'),
     path('notes/add/<int:show_pk>/', views_notes.new_note, name='new_note'),

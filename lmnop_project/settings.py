@@ -136,6 +136,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'  # issue 4 upload photographs with associated notes by chris
+
+#where in the file system to save user-uploaded files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # issue 4 upload photographs with associated notes by chris
 
 # Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'

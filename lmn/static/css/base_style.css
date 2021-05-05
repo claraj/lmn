@@ -16,7 +16,6 @@ body {
   height: 60;
   background: #212121;
   box-shadow: 0px 3px 3px rgba(24, 24, 24, 0.774);
-
 }
 
 a {
@@ -92,7 +91,6 @@ li a {
   /* font-weight: bold; */
 }
 
-
 .goodbye {
   position: absolute;
   left: 35%;
@@ -111,3 +109,4 @@ li a {
 .goodbye a {
   font-size: 20px;
 }
+
