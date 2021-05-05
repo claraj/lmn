@@ -8,6 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
+def goodbye(request):
+    logout(request)
+    #redirect to sucess page after log out
+    return render(request, 'lmn/users/goodbye.html')
+
 
 def user_profile(request, user_pk):
     # Get user profile for any user on the site
@@ -40,3 +45,5 @@ def register(request):
 
     form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form} )
+
+
