@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from ..models import Venue, Artist, Note, Show
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, ArtistForm
+from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, ArtistForm, SaveArtistForm
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
@@ -62,6 +62,8 @@ def add_artist(request):
             search_results = search_mb_artist_by_name(search_artist)  # returns a list of artist objects from api
             new_artist_form = ArtistForm()
             return render(request, 'lmn/artists/add_artist.html', {'search_results': search_results})
+
+
             # for a in search_results:
             #     print(a)  # for testing, prints every returned artist to terminal TODO delete when not needed
             # try:
@@ -78,3 +80,11 @@ def add_artist(request):
         #     return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
     new_artist_form = ArtistForm()
     return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
+
+
+
+def save_artist(request, artist):
+    if request.method == 'POST':
+        artist =
+        if new_artist_form.is_valid():
+            print(artist.name)

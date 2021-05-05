@@ -13,6 +13,11 @@
   <div>
     <p>
       <a>{{ result }}</a>
+<form method="POST" action="{% url 'save_artist' artist=result %}">
+    {% csrf_token %}
+    {{ new_artist_form }}
+    <button type=submit>Save</button>
+</form>
     </p>
     </div>
         </div>
