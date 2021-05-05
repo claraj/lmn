@@ -1,10 +1,11 @@
 from django.db import models
 
-from django.db import models
+from django.db.models import Avg
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 import datetime
 from django.db.models.signals import post_save
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Every model gets a primary key field by default.
 
@@ -44,9 +45,24 @@ class Show(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
 
+    @property
+    def rating(self):
+        rating_out_of_five_dict = self.ratings.all().aggregate(Avg('rating_out_of_five'))
+        rating_out_of_five = rating_out_of_five_dict['rating_out_of_five__avg']
+        return round(rating_out_of_five, 1) # returns a rounded version of a shows average rating
+
+
     def __str__(self):
         formatted_show_date = self.show_date.strftime("%b %d %Y")
         return f'Artist: {self.artist.name} At: {self.venue.name} On: {formatted_show_date}'
+
+
+class ShowRating(models.Model):
+    show = models.ForeignKey(Show, null=True, on_delete=models.CASCADE, related_name='ratings')
+    rating_out_of_five = models.PositiveIntegerField(null=False,  validators=[MaxValueValidator(5), MinValueValidator(1)])
+
+    def __str__(self):
+        return f'Show: {self.show} Rating: {self.rating_out_of_five}/5'
 
 
 """ One user's opinion of one show. """
