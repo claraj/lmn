@@ -7,7 +7,8 @@
   
   <div>
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ note_form.as_p }}
+    {{ rating_form.as_p }}
   </div>
   <input type='submit' value='Add Note'>
 </form>

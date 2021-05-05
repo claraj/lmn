@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from ..models import Venue, Artist, Note, Show, Profile
+from ..models import Venue, Artist, Note, Show, Profile, ShowRating
 from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, NewShowRatingForm
 
 from django.contrib.auth.decorators import login_required
@@ -17,18 +17,24 @@ def new_note(request, show_pk):
     show = get_object_or_404(Show, pk=show_pk)
 
     if request.method == 'POST':
-        form = NewNoteForm(request.POST, request.FILES)
-        if form.is_valid():
-            note = form.save(commit=False)
+        note_form = NewNoteForm(request.POST, request.FILES)
+        rating_form = NewShowRatingForm(request.POST)
+        if note_form.is_valid() and rating_form.is_valid():
+            note = note_form.save(commit=False)
+            rating = rating_form.save(commit=False)
             note.user = request.user
+            rating.user = request.user
             note.show = show
+            rating.show = show
             note.save()
+            rating.save()
             return redirect('note_detail', note_pk=note.pk)
 
     else:
-        form = NewNoteForm()
+        note_form = NewNoteForm()
+        rating_form = NewShowRatingForm()
 
-    return render(request, 'lmn/notes/new_note.html' , { 'form': form , 'show': show })
+    return render(request, 'lmn/notes/new_note.html' , { 'note_form': note_form, 'rating_form': rating_form, 'show': show })
 
 
 def latest_notes(request):
@@ -57,7 +63,8 @@ def latest_notes(request):
 
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
-    return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+    rating = get_object_or_404(ShowRating, show=note.show, user=note.user)
+    return render(request, 'lmn/notes/note_detail.html' , { 'note': note, 'rating': rating.rating_out_of_five })
 
 
 @login_required    

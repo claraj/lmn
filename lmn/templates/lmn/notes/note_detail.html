@@ -7,16 +7,22 @@
     <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
 </h2>
 
+{% if rating %}
+
+<h3>You rated this show: {{ rating }}/5</h3>
+
+{% endif %}
+
 <p id="note-title"><b>{{ note.title}}</b></p>
 <p id="note-text">{{ note.text }}</b>
 
 
-    <h3>Image</h3>
-    {% if note.image %}
-    <img class='note-image' src="{{ note.image.url }}">
-    {% else %}
-    <P>No image uploaded</p>
-    {% endif %}
+<h3>Image</h3>
+{% if note.image %}
+<img class='note-image' src="{{ note.image.url }}">
+{% else %}
+<P>No image uploaded</p>
+ {% endif %}
 
 
 {% if note.user.pk == user.pk %}
