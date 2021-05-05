@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
 from ..models import Venue, Artist, Note, Show, Profile
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
+from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, NewShowRatingForm
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -58,8 +58,9 @@ def latest_notes(request):
 def notes_for_show(request, show_pk): 
     # Notes for show, most recent first
     notes = Note.objects.filter(show=show_pk).order_by('-posted_date')
-    show = Show.objects.get(pk=show_pk)  
-    return render(request, 'lmn/notes/note_list.html', { 'show': show, 'notes': notes })
+    show = Show.objects.get(pk=show_pk) 
+    rating_form = NewShowRatingForm()
+    return render(request, 'lmn/notes/note_list.html', { 'show': show, 'notes': notes, 'rating_form': rating_form })
 
 
 def note_detail(request, note_pk):

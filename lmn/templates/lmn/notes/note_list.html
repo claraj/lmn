@@ -43,6 +43,15 @@ display link to add new note for that show. -->
 
 {% if show %}
 
+  <form method="POST" action="{% url 'save_show_rating' show_pk=show.pk %}">
+    
+    <div>
+      {% csrf_token %}
+      {{ rating_form.as_p }}
+    </div>
+    <input type='submit' value='Save Rating'>
+  </form>
+
   <a href="{% url 'new_note' show_pk=show.pk %}">Add your own notes</a>
 
 {% endif %}

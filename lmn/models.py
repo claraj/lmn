@@ -49,7 +49,10 @@ class Show(models.Model):
     def rating(self):
         rating_out_of_five_dict = self.ratings.all().aggregate(Avg('rating_out_of_five'))
         rating_out_of_five = rating_out_of_five_dict['rating_out_of_five__avg']
-        return round(rating_out_of_five, 1) # returns a rounded version of a shows average rating
+        if rating_out_of_five != None:
+            return round(rating_out_of_five, 1) # returns a rounded version of a shows average rating
+        else:
+            return '-'
 
 
     def __str__(self):
@@ -60,6 +63,7 @@ class Show(models.Model):
 class ShowRating(models.Model):
     show = models.ForeignKey(Show, null=True, on_delete=models.CASCADE, related_name='ratings')
     rating_out_of_five = models.PositiveIntegerField(null=False,  validators=[MaxValueValidator(5), MinValueValidator(1)])
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Show: {self.show} Rating: {self.rating_out_of_five}/5'
