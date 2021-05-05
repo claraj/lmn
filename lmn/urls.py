@@ -19,7 +19,6 @@ urlpatterns = [
     # Note related
     path('notes/latest/', views_notes.latest_notes, name='latest_notes'),
     path('notes/detail/<int:note_pk>/', views_notes.note_detail, name='note_detail'),
-    path('notes/for_show/<int:show_pk>/', views_notes.notes_for_show, name='notes_for_show'),
     path('notes/add/<int:show_pk>/', views_notes.new_note, name='new_note'),
     path('notes/edit/<int:note_pk>/', views_notes.edit_note, name='edit_note'),
     path('notes/delete/<int:note_pk>/', views_notes.delete_note, name='delete_note'),
@@ -31,6 +30,7 @@ urlpatterns = [
 
     # Show related
     path('shows/rate/<int:show_pk>/', views_shows.save_show_rating, name='save_show_rating'),
+    path('shows/detail/<int:show_pk>/', views_shows.show_detail, name='show_detail'),
 
     # User related
     path('user/profile/<int:user_pk>/', views_users.user_profile, name='user_profile'),
