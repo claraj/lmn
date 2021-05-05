@@ -64,9 +64,7 @@ class Note(models.Model):
         if old_note and old_note.image:
             if old_note.image != self.image:
                 self.delete_image(old_note.image)
-        # note_count = Notes.objects.all().count()
-        # if note_count == 50:
-        #     badge = Badge(self, checkbadgename, '50 revews', Profile.pk)
+       
         super().save(*args, **kwargs)
 
 
@@ -89,7 +87,6 @@ class Note(models.Model):
 class Badge(models.Model):
     name = models.CharField(max_length=50, blank=False)
     description = models.CharField(max_length=200, blank=False)
-    # user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Name: {self.name}, Description: {self.description}'
