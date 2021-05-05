@@ -65,6 +65,11 @@ class ShowRating(models.Model):
     rating_out_of_five = models.PositiveIntegerField(null=False,  validators=[MaxValueValidator(5), MinValueValidator(1)])
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['show', 'user'], name="user_rated_show")
+        ]
+
     def __str__(self):
         return f'Show: {self.show} Rating: {self.rating_out_of_five}/5'
 

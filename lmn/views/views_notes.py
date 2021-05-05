@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseForbidden
 from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger, EmptyPage
+from django.db.utils import IntegrityError
 
 
 
@@ -27,12 +28,23 @@ def new_note(request, show_pk):
             note.show = show
             rating.show = show
             note.save()
-            rating.save()
+
+            try:
+                rating.save()
+            except IntegrityError:
+                print('This user has already rated this show.')
+
             return redirect('note_detail', note_pk=note.pk)
 
     else:
         note_form = NewNoteForm()
-        rating_form = NewShowRatingForm()
+        user_rating = ShowRating.objects.filter(show=show, user=request.user).first()
+
+        if user_rating:
+            rating_form = None
+            # TODO add a message showing the user rating
+        else:
+            rating_form = NewShowRatingForm()
 
     return render(request, 'lmn/notes/new_note.html' , { 'note_form': note_form, 'rating_form': rating_form, 'show': show })
 

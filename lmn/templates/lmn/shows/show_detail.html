@@ -4,17 +4,33 @@
 <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
 <h2>Rating: {{ show.rating }}/5</h2>
 
+{% if user.is_authenticated %}
 
-<form method="POST" action="{% url 'save_show_rating' show_pk=show.pk %}">
-    
-    <div>
-      {% csrf_token %}
-      {{ rating_form.as_p }}
-    </div>
-    <input type='submit' value='Save Rating'>
-  </form>
+  <a href="{% url 'new_note' show_pk=show.pk %}">Add your own note</a>
 
-  <a href="{% url 'new_note' show_pk=show.pk %}">Add your own notes</a>
+  {% if rating_form %}
+    <form method="POST" action="{% url 'save_show_rating' show_pk=show.pk %}">
+        
+        <div>
+          {% csrf_token %}
+          {{ rating_form.as_p }}
+        </div>
+        <input type='submit' value='Save Rating'>
+      </form>
 
+  {% else %}
+
+    <p>You've already rated this show.</p>
+
+  {% endif %}
+
+
+{% else %}
+
+  <p>Please login or sign up to rate this show and add your own notes.</p> 
+
+{% endif %}
+
+  
 
 {% endblock %}
