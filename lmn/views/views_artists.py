@@ -60,8 +60,9 @@ def add_artist(request):
         if new_artist_form.is_valid():
             search_artist = new_artist_form.cleaned_data['name']  # grabs the entered name to use as a search term
             search_results = search_mb_artist_by_name(search_artist)  # returns a list of artist objects from api
-            new_artist_form = ArtistForm()
-            return render(request, 'lmn/artists/add_artist.html', {'search_results': search_results})
+            save_artist_form = SaveArtistForm()
+            return render(request, 'lmn/artists/add_artist.html', {'search_results': search_results,
+                                                                   'save_artist_form': save_artist_form})
 
 
             # for a in search_results:
@@ -84,7 +85,10 @@ def add_artist(request):
 
 
 def save_artist(request, artist):
+    # new_artist = SaveArtistForm(request.POST)
     if request.method == 'POST':
-        artist =
-        if new_artist_form.is_valid():
-            print(artist.name)
+
+
+        # print(new_artist.name)
+    else:
+        return redirect(request, 'add_artist')

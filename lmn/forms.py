@@ -30,6 +30,7 @@ class SaveArtistForm(forms):
     artist = Artist()
 
 
+
 class VenueForm(forms.ModelForm):
     class Meta:
         model = Venue
