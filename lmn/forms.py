@@ -26,6 +26,12 @@ class NewNoteForm(forms.ModelForm):
         fields = ('title', 'text', 'image')
 
 
+class NewShowRating(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ('rating_out_of_five',)
+
+
 class UserRegistrationForm(UserCreationForm):
 
     class Meta:
