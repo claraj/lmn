@@ -22,17 +22,17 @@ def new_note(request, show_pk):
         note_form = NewNoteForm(request.POST, request.FILES)
         rating_form = NewShowRatingForm(request.POST)
 
-        if rating_form.is_valid():
+        if rating_form.is_valid(): # Form can be empty and still valid, but the database doesn't allow nulls
             try:
                 with transaction.atomic():
                     rating = rating_form.save(commit=False)
                     rating.user = request.user
                     rating.show = show
                     rating.save()
-            except IntegrityError:
-                print('This user has already rated this show.')
+            except IntegrityError as e: # If the user creates a note without a rating, the db NOT NULL constraint will fail
+                print(e)                # This is the intended behavior
 
-        if note_form.is_valid():
+        if note_form.is_valid(): # Note form must not be blank to be valid
             note = note_form.save(commit=False)
             note.user = request.user
             note.show = show
@@ -44,9 +44,8 @@ def new_note(request, show_pk):
         note_form = NewNoteForm()
         user_rating = ShowRating.objects.filter(show=show, user=request.user).first()
 
-        if user_rating:
+        if user_rating: # user can only have 1 rating per show, if they've already rated it, do not show rating form
             rating_form = None
-            # TODO add a message showing the user rating
         else:
             rating_form = NewShowRatingForm()
 
