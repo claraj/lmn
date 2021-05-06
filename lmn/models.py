@@ -62,7 +62,7 @@ class Show(models.Model):
 
 class ShowRating(models.Model):
     show = models.ForeignKey(Show, null=True, on_delete=models.CASCADE, related_name='ratings')
-    rating_out_of_five = models.PositiveIntegerField(null=False,  validators=[MaxValueValidator(5), MinValueValidator(1)])
+    rating_out_of_five = models.PositiveIntegerField(null=False,  blank=True, validators=[MaxValueValidator(5), MinValueValidator(1)])
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     class Meta:

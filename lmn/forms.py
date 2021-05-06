@@ -30,12 +30,7 @@ class NewShowRatingForm(forms.ModelForm):
     class Meta:
         model = ShowRating
         fields = ('rating_out_of_five',)
-
-    def __init__(self, *args, **kwargs):
-
-        super(NewShowRatingForm, self).__init__(*args, **kwargs)
-        self.fields['rating_out_of_five'].required = False
-
+        
 
 class UserRegistrationForm(UserCreationForm):
 
