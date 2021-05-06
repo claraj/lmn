@@ -8,6 +8,8 @@ from django.test import override_settings
 from django.urls import reverse
 from django.contrib import auth
 from django.contrib.auth import authenticate
+from django.db.utils import IntegrityError
+from django.db import transaction
 
 from lmn.models import Venue, Artist, Note, Show, ShowRating
 from django.contrib.auth.models import User
@@ -652,17 +654,260 @@ class TestShowRatings(TestCase):
         self.client.force_login(user)
 
 
-    def test_add_rating_rating_exists(self):
+    def test_add_rating_rating_exists_in_database(self):
 
         initial_rating_count = ShowRating.objects.count()
+        new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 3}, follow=True)
+        new_rating_query = ShowRating.objects.filter(rating_out_of_five=3)
 
+        self.assertEqual(new_rating_query.count(), 1)
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_add_blank_rating_rating_not_saved(self):
+
+        initial_rating_count = ShowRating.objects.count()
+        new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
+        response = self.client.post(new_rating_url, {'rating_out_of_five': ''}, follow=True)
+
+        with self.assertRaises(ValueError):
+            new_rating_query = ShowRating.objects.filter(rating_out_of_five='')   
+
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_add_string_rating_rating_not_saved(self):
+
+        initial_rating_count = ShowRating.objects.count()
+        new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 'five out of five'}, follow=True)
+
+        with self.assertRaises(ValueError):
+            new_rating_query = ShowRating.objects.filter(rating_out_of_five='five out of five')   
+
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_add_rating_below_1_rating_not_saved(self):
+
+        initial_rating_count = ShowRating.objects.count()
         new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
 
+        # test invalid rating
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 0}, follow=True)
+        new_invalid_rating_query = ShowRating.objects.filter(rating_out_of_five=0)
+
+        self.assertEqual(new_invalid_rating_query.count(), 0)
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count)
+        self.assertEqual(response.status_code, 200)
+
+        # test valid rating
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 1}, follow=True)
+        new_valid_rating_query = ShowRating.objects.filter(rating_out_of_five=1)
+
+        self.assertEqual(new_valid_rating_query.count(), 1)
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
+        self.assertEqual(response.status_code, 200)
+
+
+
+    def test_add_rating_above_5_rating_not_saved(self):
+
+        initial_rating_count = ShowRating.objects.count()
+        new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
+
+        # test invalid rating
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 6}, follow=True)
+        new_invalid_rating_query = ShowRating.objects.filter(rating_out_of_five=6)
+
+        self.assertEqual(new_invalid_rating_query.count(), 0)   
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count)
+        self.assertEqual(response.status_code, 200)
+
+        # test valid rating
+        # test valid rating
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 5}, follow=True)
+        new_valid_rating_query = ShowRating.objects.filter(rating_out_of_five=5)
+
+        self.assertEqual(new_valid_rating_query.count(), 1)
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_user_can_only_rate_each_show_once(self):
+
+        initial_rating_count = ShowRating.objects.count()
+        new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
+
+        # test valid first rating
         response = self.client.post(new_rating_url, {'rating_out_of_five': 3}, follow=True)
+        first_rating_query = ShowRating.objects.filter(rating_out_of_five=3)
 
+        self.assertEqual(first_rating_query.count(), 1)
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
+        self.assertEqual(response.status_code, 200)
+
+        # test invalid second rating
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+
+                response = self.client.post(new_rating_url, {'rating_out_of_five': 2}, follow=True) 
+                second_rating_query = ShowRating.objects.filter(rating_out_of_five=2)
+
+                self.assertEqual(second_rating_query.count(), 0)
+                self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
+                self.assertEqual(response.status_code, 200)
+
+
+    def test_two_users_can_rate_same_show(self):
+
+        initial_rating_count = ShowRating.objects.count()
+        new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
+
+        # test first user
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 3}, follow=True)
+        first_user_rating_query = ShowRating.objects.filter(rating_out_of_five=3)
+
+        self.assertEqual(first_user_rating_query.count(), 1)
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
+        self.assertContains(response, 'alice')
+        self.assertEqual(response.status_code, 200)
+
+        # login second user
+        user = User.objects.get(pk=2)
+        self.client.force_login(user)
+
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 2}, follow=True)
+        second_user_rating_query = ShowRating.objects.filter(rating_out_of_five=2)
+
+        self.assertContains(response, 'bob')
+        self.assertEqual(second_user_rating_query.count(), 1)
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count + 2)
+        self.assertEqual(response.status_code, 200)
+
+    
+    def test_user_already_rated_show_message(self):
+
+        initial_rating_count = ShowRating.objects.count()
+        new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
+        
+        response = self.client.get(reverse('show_detail', kwargs={'show_pk':1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'You\'ve already rated this show.')
+
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 3}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        first_rating_query = ShowRating.objects.filter(rating_out_of_five=3)
+
+        response = self.client.get(reverse('show_detail', kwargs={'show_pk':1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'You\'ve already rated this show.')
+
+        # test new user - already rated message should not be shown
+        user = User.objects.get(pk=2)
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('show_detail', kwargs={'show_pk':1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'You\'ve already rated this show.')
+
+
+    def test_rate_show_in_show_detail_message_displayed_in_new_note(self):
+
+        initial_rating_count = ShowRating.objects.count()
+        new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
+
+        # user already rated show message should not display before show is rated
+        response = self.client.get(reverse('new_note', kwargs={'show_pk':1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'You\'ve already rated this show.')
+
+        # rate show on show detail page
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 3}, follow=True)
         new_rating_query = ShowRating.objects.filter(rating_out_of_five=3)
-        self.assertEqual(new_rating_query.count(), 1)
 
+        # rating is saved in database
+        self.assertEqual(new_rating_query.count(), 1)
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
+
+        # user already rated show message should be displayed when created a new note for that show
+        response = self.client.get(reverse('new_note', kwargs={'show_pk':1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'You\'ve already rated this show.')
+
+
+class TestRateShowsInNotes(TestCase):
+
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows']
+
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+
+
+    def test_create_note_without_rating_rating_not_saved(self):
+
+        initial_note_count = Note.objects.count()
+        initial_rating_count = ShowRating.objects.count()
+
+        new_note_url = reverse('new_note', kwargs={'show_pk':1})
+
+        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah' }, follow=True)
+
+        # Verify note is in database
+        new_note_query = Note.objects.filter(text='ok', title='blah blah')  
+
+        self.assertEqual(new_note_query.count(), 1)
+        self.assertEqual(Note.objects.count(), initial_note_count + 1)
+        self.assertEqual(response.status_code, 200)
+
+        # Verify no new ratings in the database
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count)
+
+
+    def test_create_note_with_rating_both_saved(self):
+
+        initial_note_count = Note.objects.count()
+        initial_rating_count = ShowRating.objects.count()
+
+        new_note_url = reverse('new_note', kwargs={'show_pk':1})
+        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah', 'rating_out_of_five': 4}, follow=True)
+
+        # Verify note is in database
+        new_note_query = Note.objects.filter(text='ok', title='blah blah')
+        self.assertEqual(new_note_query.count(), 1)
+        self.assertEqual(response.status_code, 200)
+
+        # Verify rating is in database
+        new_rating_query = ShowRating.objects.filter(rating_out_of_five=4)
+        self.assertEqual(new_rating_query.count(), 1)
+        self.assertEqual(Note.objects.count(), initial_note_count + 1)
         self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
 
 
+    def test_rate_show_in_new_note_message_displayed_in_show_detail(self):
+        
+        initial_rating_count = ShowRating.objects.count()
+        new_rating_url = reverse('new_note', kwargs={'show_pk':1})
+
+        # user already rated show message should not display before show is rated
+        response = self.client.get(reverse('show_detail', kwargs={'show_pk':1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'You\'ve already rated this show.')
+
+        # rate show on show detail page
+        response = self.client.post(new_rating_url, {'text':'ok', 'title':'blah blah', 'rating_out_of_five':4}, follow=True)
+        new_rating_query = ShowRating.objects.filter(rating_out_of_five=4)
+
+        # rating is saved in database
+        self.assertEqual(new_rating_query.count(), 1)
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
+
+        # user already rated show message should be displayed when created a new note for that show
+        response = self.client.get(reverse('new_note', kwargs={'show_pk':1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'You\'ve already rated this show.')
