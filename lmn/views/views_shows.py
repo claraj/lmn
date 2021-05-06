@@ -28,7 +28,7 @@ def save_show_rating(request, show_pk):
 
     if request.method == 'POST':
         rating_form = NewShowRatingForm(request.POST)
-        if rating_form.is_valid():
+        if rating_form.is_valid() and rating_form.data['rating_out_of_five']:
             rating = rating_form.save(commit=False)
             rating.user = request.user
             rating.show = show

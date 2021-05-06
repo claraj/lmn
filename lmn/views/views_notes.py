@@ -20,19 +20,21 @@ def new_note(request, show_pk):
     if request.method == 'POST':
         note_form = NewNoteForm(request.POST, request.FILES)
         rating_form = NewShowRatingForm(request.POST)
-        if note_form.is_valid() and rating_form.is_valid():
-            note = note_form.save(commit=False)
-            rating = rating_form.save(commit=False)
-            note.user = request.user
-            rating.user = request.user
-            note.show = show
-            rating.show = show
-            note.save()
 
+        if rating_form.is_valid():
+            rating = rating_form.save(commit=False)
+            rating.user = request.user
+            rating.show = show
             try:
                 rating.save()
             except IntegrityError:
                 print('This user has already rated this show.')
+
+        if note_form.is_valid():
+            note = note_form.save(commit=False)
+            note.user = request.user
+            note.show = show
+            note.save()
 
             return redirect('note_detail', note_pk=note.pk)
 
@@ -75,8 +77,13 @@ def latest_notes(request):
 
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
-    rating = get_object_or_404(ShowRating, show=note.show, user=note.user)
-    return render(request, 'lmn/notes/note_detail.html' , { 'note': note, 'rating': rating.rating_out_of_five })
+    rating_model = ShowRating.objects.filter(show=note.show, user=request.user).first()
+    if rating_model:
+        rating = rating_model.rating_out_of_five
+    else:
+        rating = None
+    
+    return render(request, 'lmn/notes/note_detail.html' , { 'note': note, 'rating': rating })
 
 
 @login_required    
