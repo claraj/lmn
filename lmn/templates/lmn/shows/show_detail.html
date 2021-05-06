@@ -1,8 +1,8 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
 
-<h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
-<h2>Rating: {{ show.rating }}/5</h2>
+<h2 id="show-title">Show: {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
+<h3>Rating: {{ show.rating }}/5</h3>
 
 {% if user.is_authenticated %}
 
@@ -30,6 +30,35 @@
   <p>Please login or sign up to rate this show and add your own notes.</p> 
 
 {% endif %}
+
+<h3>User Notes:</h3>
+
+{% for note in notes %}
+
+  <div id="note_{{ note.pk }}">
+    <h3 class="note_title">
+      <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
+    </h3>
+
+    <p class="show-info">
+      <a href="{% url 'show_detail' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
+    </p>
+
+    <p class="note-info">Posted on {{ note.posted_date }} by 
+      <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
+    </p>
+
+    <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+
+  </div>  
+
+  <hr>
+
+{% empty %}
+
+  <p>No notes.</p>
+
+{% endfor %}
 
   
 
