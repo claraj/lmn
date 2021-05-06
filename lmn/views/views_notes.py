@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseForbidden
 from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger, EmptyPage
 from django.db.utils import IntegrityError
+from django.db import transaction
 
 
 
@@ -22,11 +23,12 @@ def new_note(request, show_pk):
         rating_form = NewShowRatingForm(request.POST)
 
         if rating_form.is_valid():
-            rating = rating_form.save(commit=False)
-            rating.user = request.user
-            rating.show = show
             try:
-                rating.save()
+                with transaction.atomic():
+                    rating = rating_form.save(commit=False)
+                    rating.user = request.user
+                    rating.show = show
+                    rating.save()
             except IntegrityError:
                 print('This user has already rated this show.')
 
@@ -77,9 +79,15 @@ def latest_notes(request):
 
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
-    rating_model = ShowRating.objects.filter(show=note.show, user=request.user).first()
-    if rating_model:
-        rating = rating_model.rating_out_of_five
+
+    if request.user.is_authenticated:
+        rating_model = ShowRating.objects.filter(show=note.show, user=request.user).first()
+
+        if rating_model:
+            rating = rating_model.rating_out_of_five
+        else:
+            rating = None
+
     else:
         rating = None
     

@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.contrib import auth
 from django.contrib.auth import authenticate
 
-from lmn.models import Venue, Artist, Note, Show
+from lmn.models import Venue, Artist, Note, Show, ShowRating
 from django.contrib.auth.models import User
 
 import re, datetime
@@ -374,11 +374,6 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
         # And one more note in DB than before
         self.assertEqual(Note.objects.count(), initial_note_count + 1)
 
-        # Date correct?
-        now = datetime.datetime.today()
-        posted_date = new_note_query.first().posted_date
-        self.assertEqual(now.date(), posted_date.date())  # TODO check time too
-
 
     def test_redirect_to_note_detail_after_save(self):
 
@@ -430,12 +425,13 @@ class TestUserProfile(TestCase):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a class="nav-item nav-link" href="/user/profile/2/">bob</a>')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>')
+        
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in, <a class="nav-item nav-link" href="/user/profile/2/">bob</a>')
+        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">bob</a>')
         
 
 class TestNotes(TestCase):
@@ -455,7 +451,7 @@ class TestNotes(TestCase):
     def test_notes_for_show_view(self):
         # Verify correct list of notes shown for a Show, most recent first
         # Show 1 has 2 notes with PK = 2 (most recent) and PK = 1
-        response = self.client.get(reverse('notes_for_show', kwargs={'show_pk':1}))
+        response = self.client.get(reverse('show_detail', kwargs={'show_pk':1}))
         context = response.context['notes']
         first, second = context[0], context[1]
         self.assertEqual(first.pk, 2)
@@ -469,8 +465,8 @@ class TestNotes(TestCase):
         response = self.client.get(reverse('note_detail', kwargs={'note_pk':1}))
         self.assertTemplateUsed(response, 'lmn/notes/note_detail.html')
 
-        response = self.client.get(reverse('notes_for_show', kwargs={'show_pk':1}))
-        self.assertTemplateUsed(response, 'lmn/notes/note_list.html')
+        response = self.client.get(reverse('show_detail', kwargs={'show_pk':1}))
+        self.assertTemplateUsed(response, 'lmn/shows/show_detail.html')
 
         # Log someone in
         self.client.force_login(User.objects.first())
@@ -645,3 +641,28 @@ class TestImageUpload(TestCase):
                 note_1.delete()
 
                 self.assertFalse(os.path.exists(uploaded_file_path))
+
+
+class TestShowRatings(TestCase):
+
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows']
+
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+
+
+    def test_add_rating_rating_exists(self):
+
+        initial_rating_count = ShowRating.objects.count()
+
+        new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
+
+        response = self.client.post(new_rating_url, {'rating_out_of_five': 3}, follow=True)
+
+        new_rating_query = ShowRating.objects.filter(rating_out_of_five=3)
+        self.assertEqual(new_rating_query.count(), 1)
+
+        self.assertEqual(ShowRating.objects.count(), initial_rating_count + 1)
+
+
