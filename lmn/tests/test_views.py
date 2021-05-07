@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.contrib import auth
 from django.contrib.auth import authenticate
 from django.db.utils import IntegrityError
+from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from lmn.models import Venue, Artist, Note, Show, ShowRating
@@ -670,26 +671,24 @@ class TestShowRatings(TestCase):
 
         initial_rating_count = ShowRating.objects.count()
         new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
-        response = self.client.post(new_rating_url, {'rating_out_of_five': ''}, follow=True)
 
         with self.assertRaises(ValueError):
-            new_rating_query = ShowRating.objects.filter(rating_out_of_five='')   
+            with transaction.atomic():
+                response = self.client.post(new_rating_url, {'rating_out_of_five': ''}, follow=True)
 
         self.assertEqual(ShowRating.objects.count(), initial_rating_count)
-        self.assertEqual(response.status_code, 200)
 
 
     def test_add_string_rating_rating_not_saved(self):
 
         initial_rating_count = ShowRating.objects.count()
         new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
-        response = self.client.post(new_rating_url, {'rating_out_of_five': 'five out of five'}, follow=True)
+        
 
-        with self.assertRaises(ValueError):
-            new_rating_query = ShowRating.objects.filter(rating_out_of_five='five out of five')   
+        with self.assertRaises(ValidationError) as ve:
+            response = self.client.post(new_rating_url, {'rating_out_of_five': 'five out of five'}, follow=True)   
 
         self.assertEqual(ShowRating.objects.count(), initial_rating_count)
-        self.assertEqual(response.status_code, 200)
 
 
     def test_add_rating_below_1_rating_not_saved(self):
@@ -698,13 +697,14 @@ class TestShowRatings(TestCase):
         new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
 
         # test invalid rating
-        response = self.client.post(new_rating_url, {'rating_out_of_five': 0}, follow=True)
+        with self.assertRaises(ValidationError) as ve:
+            response = self.client.post(new_rating_url, {'rating_out_of_five': 0}, follow=True)
+
         new_invalid_rating_query = ShowRating.objects.filter(rating_out_of_five=0)
 
         self.assertEqual(new_invalid_rating_query.count(), 0)
         self.assertEqual(ShowRating.objects.count(), initial_rating_count)
-        self.assertEqual(response.status_code, 200)
-
+        
         # test valid rating
         response = self.client.post(new_rating_url, {'rating_out_of_five': 1}, follow=True)
         new_valid_rating_query = ShowRating.objects.filter(rating_out_of_five=1)
@@ -721,12 +721,13 @@ class TestShowRatings(TestCase):
         new_rating_url = reverse('save_show_rating', kwargs={'show_pk':1})
 
         # test invalid rating
-        response = self.client.post(new_rating_url, {'rating_out_of_five': 6}, follow=True)
+        with self.assertRaises(ValidationError) as ve:
+            response = self.client.post(new_rating_url, {'rating_out_of_five': 6}, follow=True)
+
         new_invalid_rating_query = ShowRating.objects.filter(rating_out_of_five=6)
 
         self.assertEqual(new_invalid_rating_query.count(), 0)   
         self.assertEqual(ShowRating.objects.count(), initial_rating_count)
-        self.assertEqual(response.status_code, 200)
 
         # test valid rating
         # test valid rating
