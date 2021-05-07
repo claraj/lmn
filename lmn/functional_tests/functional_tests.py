@@ -288,9 +288,9 @@ class BrowseVenuesTests(LiveServerTestCase):
         fa.click()
 
         # Venue information shown on page
-        self.assertIn('First Avenue', self.browser.find_element_by_id('venue_name').text)
-        self.assertIn('Minneapolis', self.browser.find_element_by_id('venue_city').text)
-        self.assertIn('MN', self.browser.find_element_by_id('venue_state').text)
+        self.assertIn('First Avenue', self.browser.find_element_by_id('venue-name').text)
+        self.assertIn('Minneapolis', self.browser.find_element_by_id('venue-city').text)
+        self.assertIn('MN', self.browser.find_element_by_id('venue-state').text)
 
         self.assertIn('/venues/detail/1', self.browser.current_url)
 
@@ -303,7 +303,7 @@ class BrowseVenuesTests(LiveServerTestCase):
         # Click on shows/notes link
         fa_notes.click()
 
-        title = self.browser.find_element_by_id('artists_at_venue_title')
+        title = self.browser.find_element_by_id('artists-at-venue-title')
         # On correct page? Verify title, and URL
         self.assertIn('Artists that have played at First Avenue', title.text)
         self.assertIn('venues/artists_at/1', self.browser.current_url)
@@ -326,11 +326,13 @@ class BrowseVenuesTests(LiveServerTestCase):
 
         # click on one of the shows - get the first match (ACDC, Jan 21)
         see_notes_add_own = self.browser.find_element_by_partial_link_text('See notes for this')
+        
+        time.sleep(1)  # FIXME
         see_notes_add_own.click()
 
         # verify list of notes for that show are shown
         # verify on correct page
-        title = self.browser.find_element_by_id('show_title')
+        title = self.browser.find_element_by_id('show-title')
         self.assertIn('Notes for ACDC at First Avenue on Jan. 21, 2017', title.text)
         self.assertIn('notes/for_show/4', self.browser.current_url)
 
@@ -338,18 +340,18 @@ class BrowseVenuesTests(LiveServerTestCase):
 
         first_note_div = self.browser.find_element_by_id('note_4')
         # Is the title (in a H3 element) 'mythical' ?
-        self.assertIn('mythical', first_note_div.find_element_by_class_name('note_title').text)
+        self.assertIn('mythical', first_note_div.find_element_by_class_name('note-title').text)
         # Check note text
-        self.assertIn('boo', first_note_div.find_element_by_class_name('note_text').text)
+        self.assertIn('boo', first_note_div.find_element_by_class_name('note-text').text)
         # By correct user?
         self.assertIn('cat', first_note_div.find_element_by_class_name('user').text)
         # Posted on the expected day?
-        self.assertIn('Posted on Feb. 15, 2017', first_note_div.find_element_by_class_name('note_info').text)
+        self.assertIn('Posted on Feb. 15, 2017', first_note_div.find_element_by_class_name('note-info').text)
 
-        # verify input button to add user's own notes for that show is displayed
-        add_notes = self.browser.find_element_by_tag_name('input')
-        self.assertEqual(add_notes.get_attribute('value'), 'Add your own notes')
-
+        # verify link button to add user's own notes for that show is displayed
+        # if it's not there, this line will error
+        self.browser.find_element_by_link_text('Add your own notes for this show')
+        
         # Adding a note requires authentication - will do this in another test.
 
         # Test artist with no shows
@@ -360,7 +362,7 @@ class BrowseVenuesTests(LiveServerTestCase):
         no_shows_venue.click()
 
         # This page should say 'we have no records of shows at this venue'
-        no_show_para = self.browser.find_element_by_id('no_results')
+        no_show_para = self.browser.find_element_by_id('no-results')
         self.assertIn('no records of shows', no_show_para.text)
 
 
@@ -368,7 +370,7 @@ class BrowseVenuesTests(LiveServerTestCase):
         self.browser.get(self.live_server_url + '/venues/list')
 
         # Verify title
-        title = self.browser.find_element_by_id('venue_list_title')
+        title = self.browser.find_element_by_id('venue-list-title')
         self.assertIn('All venues', title.text)
 
         # Find search form. Django gives each form input an id.
@@ -381,12 +383,12 @@ class BrowseVenuesTests(LiveServerTestCase):
         search_input.submit()   # Convenience method to submit the form that the input belongs to.
 
         # Wait for page to load. (yuck). 
-        # TODO better way to check for search page load? 
+        # FIXME better way to check for search page load? 
         # Can't search for an element to force Selenium to wait because it's the same page.
         time.sleep(1)  
 
         # Verify correct title
-        title = self.browser.find_element_by_id('venue_list_title')
+        title = self.browser.find_element_by_id('venue-list-title')
         self.assertIn('Venues matching \'First Avenue\'', title.text)
 
         # Exactly one result for First Avenue
@@ -408,7 +410,7 @@ class BrowseVenuesTests(LiveServerTestCase):
         time.sleep(1)  # Wait for page to load. (ugh).
 
         # Verify correct title
-        title = self.browser.find_element_by_id('venue_list_title')
+        title = self.browser.find_element_by_id('venue-list-title')
         self.assertIn('Venues matching \'a\'', title.text)
 
         self.assertIn('First Avenue', self.browser.page_source)
@@ -427,7 +429,7 @@ class BrowseVenuesTests(LiveServerTestCase):
         time.sleep(1)  # Wait for page to load. (meh).
 
         # Verify correct title
-        title = self.browser.find_element_by_id('venue_list_title')  # id with spaces, ??
+        title = self.browser.find_element_by_id('venue-list-title')  # id with spaces, ??
         self.assertIn('Venues matching \'ZZZ ZZZ\'', title.text)
 
         self.assertNotIn('First Avenue', self.browser.page_source)
@@ -507,13 +509,13 @@ class NotesTests(LiveServerTestCase):
 
         # Should now be on note detail page. Title will be 'band at venue by user'
 
-        title = self.browser.find_element_by_id('note_page_title')
+        title = self.browser.find_element_by_id('note-page-title')
         self.assertIn('REM at The Turf Club by bob', title.text)
 
-        note_title = self.browser.find_element_by_id('note_title')
+        note_title = self.browser.find_element_by_id('note-title')
         self.assertIn('Fab', note_title.text)
 
-        note_text = self.browser.find_element_by_id('note_text')
+        note_text = self.browser.find_element_by_id('note-text')
         self.assertIn('Best ever', note_text.text)
 
         # Correct URL?
@@ -555,10 +557,10 @@ class NotesTests(LiveServerTestCase):
         title = self.browser.find_element_by_id('note_page_title')
         self.assertIn('REM at The Turf Club by alice', title.text)
 
-        note_title = self.browser.find_element_by_id('note_title')
+        note_title = self.browser.find_element_by_id('note-title')
         self.assertIn('Fab', note_title.text)
 
-        note_text = self.browser.find_element_by_id('note_text')
+        note_text = self.browser.find_element_by_id('note-text')
         self.assertIn('Best ever', note_text.text)
 
         self.assertIn('/notes/detail/5', self.browser.current_url)
@@ -678,8 +680,8 @@ class ProfilePageTests(LiveServerTestCase):
         self.assertEqual(len(note_divs), 1)
 
         first_note = note_divs[0]
-        self.assertIn('ok', first_note.find_element_by_class_name('note_title').text)
-        self.assertIn('alright', first_note.find_element_by_class_name('note_text').text)
+        self.assertIn('ok', first_note.find_element_by_class_name('note-title').text)
+        self.assertIn('alright', first_note.find_element_by_class_name('note-text').text)
 
         self.assertIn('REM at The Turf Club on Jan. 2, 2017', first_note.find_element_by_class_name('note_info').text)
         self.assertIn('Feb. 12, 2017', first_note.find_element_by_class_name('note_posted_at').text)
