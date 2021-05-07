@@ -608,7 +608,6 @@ class RegistrationTests(LiveServerTestCase):
         self.browser.quit()
     
 
-
     def test_login_valid_password(self):
 
         # Log in
@@ -682,7 +681,8 @@ class ProfilePageTests(LiveServerTestCase):
 
         # Get alice's (user 1) profile - one note
         self.browser.get(self.live_server_url + '/user/profile/1')
-        title = self.browser.find_element_by_id('username_notes')
+
+        title = self.browser.find_element_by_id('username-notes')
         self.assertIn('alice\'s notes', title.text)
 
         note_divs = self.browser.find_elements_by_class_name('note')
@@ -692,15 +692,15 @@ class ProfilePageTests(LiveServerTestCase):
         self.assertIn('ok', first_note.find_element_by_class_name('note-title').text)
         self.assertIn('alright', first_note.find_element_by_class_name('note-text').text)
 
-        self.assertIn('REM at The Turf Club on Jan. 2, 2017', first_note.find_element_by_class_name('note_info').text)
-        self.assertIn('Feb. 12, 2017', first_note.find_element_by_class_name('note_posted_at').text)
+        self.assertIn('REM at The Turf Club on Jan. 2, 2017', first_note.find_element_by_class_name('note-info').text)
+        self.assertIn('Feb. 12, 2017', first_note.find_element_by_class_name('note-posted-at').text)
 
         # Get dani's profile - no notes
         self.browser.get(self.live_server_url + '/user/profile/4')
 
-        title = self.browser.find_element_by_id('username_notes')
+        title = self.browser.find_element_by_id('username-notes')
         self.assertIn('dani\'s notes', title.text)
 
         note_divs = self.browser.find_elements_by_class_name('note')
         self.assertEqual(len(note_divs), 0)
-        self.assertIn('No notes', self.browser.find_element_by_id('no_records').text)
+        self.assertIn('No notes', self.browser.find_element_by_id('no-records').text)
