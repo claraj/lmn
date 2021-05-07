@@ -28,13 +28,16 @@ def show_detail(request, show_pk):
 @login_required
 def save_show_rating(request, show_pk):
 
-    rating_response = request.GET.get('result')
     show = get_object_or_404(Show, pk=show_pk)
 
-    rating = ShowRating()
-    rating.rating_out_of_five = int(rating_response)
-    rating.user = request.user
-    rating.show = show
-    rating.save()
+    if request.method == 'POST':
+
+        rating_response = request.POST.get('rating_out_of_five')   
+        rating = ShowRating()
+        rating.rating_out_of_five = rating_response
+        rating.user = request.user
+        rating.show = show
+        rating.clean_fields()
+        rating.save()
 
     return render(request, 'lmn/shows/show_detail.html', {'show': show})
