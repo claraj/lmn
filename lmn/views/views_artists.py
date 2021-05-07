@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from ..models import Venue, Artist, Note, Show
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, ArtistForm
+from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, ArtistForm, CreateArtistForm
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
@@ -55,28 +55,32 @@ def artist_detail(request, artist_pk):
 
 
 def add_artist(request):
+    """ this begins the process of adding an artist by calling the API """
     if request.method == 'POST':
         new_artist_form = ArtistForm(request.POST)
         if new_artist_form.is_valid():
             search_artist = new_artist_form.cleaned_data['name']  # grabs the entered name to use as a search term
             search_results = search_mb_artist_by_name(search_artist)  # returns a list of artist objects from api
             if search_results:
-                return render(request, 'lmn/artists/save_artist.html', {'search_results': search_results})
+                create_artist_form = CreateArtistForm()
+                return render(request, 'lmn/artists/save_artist.html', {'search_results': search_results,
+                                                                        'create_artist_form': create_artist_form})
             # else:
     new_artist_form = ArtistForm()
     return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
 
 
 def save_artist(request):
+    """ once an artist result from api or newly entered artist is selected
+     this method will check to see if it should/can be saved and if so, saves it """
     if request.method == 'POST':
         new_artist = request.POST  # takes in info from the template and creates a new artist object
         new_name = new_artist.get('name')
         new_hometown = new_artist.get('hometown')
         new_desc = new_artist.get('description')
         artist = Artist(name=new_name, hometown=new_hometown, description=new_desc)
-        already_added = artist_in_db(new_name, new_desc)
+        already_added = artist_in_db(new_name, new_hometown, new_desc)
         if not already_added:
-            print('safe to add!')
             try:
                 artist.save()  # try except block to determine if artist can be saved
                 messages.info(request, 'Artist Saved')
@@ -89,19 +93,43 @@ def save_artist(request):
 
         else:
             messages.warning(request, 'Artist already in database')
-            return render(request, 'lmn/artists/save_artist.html')  # redirects back to add page so user can correct
-
+            return redirect('add_artist')
     else:
-        return render(request, 'lmn/artists/save_artist.html')
+        return redirect('add_artist')  # a GET request will send the user to the add artist page
 
 
-def artist_in_db(name, description):
-    artist_name, artist_desc = [], []
+def create_artist(request):
+    """ if api results are not what the user needs, they can enter a new artist """
+    if request.method == 'POST':
+        form = CreateArtistForm(request.POST)
+        print(form)
+        artist = form.save(commit=False)
+        print(artist.name)
+        already_added = artist_in_db(artist.name, artist.hometown, artist.description)
+        if not already_added and form.is_valid():
+            artist.save()
+            messages.info(request, 'Artist Saved')
+            return redirect('artist_list')
+        else:
+            messages.warning(request, 'Artist already in database')
+            return redirect('add_artist')
+    else:
+        return redirect('add_artist')  # a GET request will send the user to the add artist page
+
+
+def artist_in_db(name, hometown, description):
+    """ checks if the artist is already in db based on name and description """
+    artist_name, artist_home, artist_desc = [], [], []
     artists_in_db = Artist.objects.all()
     for artist in artists_in_db:
         artist_name.append(artist.name.upper())
+        artist_home.append(artist.hometown.upper())
         artist_desc.append(artist.description.upper())
-    if name.upper() in artist_name and description.upper() in artist_desc:
+    if name.upper() in artist_name and hometown.upper() in artist_home and description.upper() in artist_desc:
         return True
     else:
         return False
+
+
+# def matching_search_results(search_term, results):
+#

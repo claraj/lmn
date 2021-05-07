@@ -21,6 +21,13 @@
   <h2 id='artist-list-title'>All artists</h2>
 {% endif %}
 
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <p class="{{message.tags}}">{{ message }}</p>
+        {% endfor %}
+        </div>
+    {% endif %}
 
 {% for artist in artists %}
 

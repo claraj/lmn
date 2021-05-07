@@ -2,14 +2,6 @@
 
 {% block content %}
 
-    {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-            <p class="{{message.tags}}">{{ message }}</p>
-        {% endfor %}
-        </div>
-    {% endif %}
-
     {% for result in search_results %}
   <div>
     <p>
@@ -25,11 +17,17 @@
 </form>
     </p>
     </div>
-        {% empty %}
+{% empty %}
 <a href="{% url 'add_artist' %}">Back to Add Artist</a>
-        <h2>No Results</h2>
-
-
 {% endfor %}
+        <h2>Dont See Your Artist?</h2>
+
+    <p>
+<form method="POST" action="{% url 'create_artist' %}">
+    {% csrf_token %}
+      {{ create_artist_form }}
+    <button type=submit>Save</button>
+</form>
+    </p>
 
 {% endblock %}

@@ -29,6 +29,7 @@ urlpatterns = [
     path('artists/venues_played/<int:artist_pk>/', views_artists.venues_for_artist, name='venues_for_artist'),
     path('artists/list/add_artist', views_artists.add_artist, name='add_artist'),
     path('artists/list/save_artist', views_artists.save_artist, name='save_artist'),
+    path('artists/list/create_artist', views_artists.create_artist, name='create_artist'),
 
     # User related
     path('user/profile/<int:user_pk>/', views_users.user_profile, name='user_profile'),
