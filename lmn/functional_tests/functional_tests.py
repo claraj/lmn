@@ -182,7 +182,6 @@ class BrowseArtistsTests(LiveServerTestCase):
         self.assertNotIn('ACDC', self.browser.page_source)
 
         # ** partial text search **
-        print(self.browser.page_source)
         search_input = self.browser.find_element_by_id('id_search_name')
 
         # Enter text and submit form
@@ -471,7 +470,6 @@ class NotesTests(LiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
-    
 
 
     def test_add_note_for_show_when_logged_in(self):
@@ -483,17 +481,19 @@ class NotesTests(LiveServerTestCase):
         password.send_keys('qwertyuiop')
         username.submit()
 
-        time.sleep(2)
+        time.sleep(1)
 
         # Get show page, the list of notes for an example show
         self.browser.get(self.live_server_url + '/notes/for_show/2')
 
-        time.sleep(2)  
+        time.sleep(1)  
 
         # Find and click on 'add note' button
-        add_note = self.browser.find_element_by_id('add_note')
-        add_note.submit()
+        add_note_link = self.browser.find_element_by_id('add-new-show-link')
+        add_note_link.click()
 
+        time.sleep(1)    # FIXME
+       
         # Should be on the Add Note page
 
         # Find form elements
@@ -508,7 +508,8 @@ class NotesTests(LiveServerTestCase):
         title_area.submit()  # Convenience method for submitting form with this element in
 
         # Should now be on note detail page. Title will be 'band at venue by user'
-
+        time.sleep(1)    # FIXME
+        
         title = self.browser.find_element_by_id('note-page-title')
         self.assertIn('REM at The Turf Club by bob', title.text)
 
@@ -525,13 +526,17 @@ class NotesTests(LiveServerTestCase):
 
     def test_add_note_redirect_to_login_and_back_to_add_note(self):
 
+        # At the beginning, the user is not logged in 
+
         # Get show page, the list of notes for an example show
         self.browser.get(self.live_server_url + '/notes/for_show/2')
 
         # Find and click on 'add note' button
-        add_note = self.browser.find_element_by_id('add_note')
-        add_note.submit()
+        add_note_link = self.browser.find_element_by_id('add-new-show-link')
+        add_note_link.click()
 
+        time.sleep(1)  # FIXME
+        
         # Verify at login page
         username = self.browser.find_element_by_id('id_username')
         password = self.browser.find_element_by_id('id_password')
@@ -541,6 +546,8 @@ class NotesTests(LiveServerTestCase):
         # Click login button
         self.browser.find_element_by_tag_name('button').submit()
 
+        time.sleep(1)  # FIXME
+
         # Should be logged, and at add note form
         # Find form elements
         title_area = self.browser.find_element_by_id('id_title')
@@ -549,12 +556,14 @@ class NotesTests(LiveServerTestCase):
         # Check URL (after finding elements, so will know page has loaded)
         self.assertIn('notes/add/2', self.browser.current_url)
 
+        time.sleep(1)  # FIXME
+        
         title_area.send_keys('Fab')
         text_area.send_keys('Best ever')
         title_area.submit()  # Convenience method for submitting form with this element in
 
         # Should now be on note detail page. Title will be 'band at venue by user'
-        title = self.browser.find_element_by_id('note_page_title')
+        title = self.browser.find_element_by_id('note-page-title')
         self.assertIn('REM at The Turf Club by alice', title.text)
 
         note_title = self.browser.find_element_by_id('note-title')
