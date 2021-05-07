@@ -1,6 +1,7 @@
 [flake8]
 # Ignore trailing whitespace, some docstring checks
-ignore = W291, D202, D210, D400
+# D105 docstrings in magic methods
+ignore = W291, D202, D210, D400, D105
 per-file-ignores =
     # ignore missing docstrings in test files 
     lmn/tests/*:D
