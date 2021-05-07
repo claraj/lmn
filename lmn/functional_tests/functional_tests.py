@@ -1,14 +1,11 @@
 
 from django.test import LiveServerTestCase
-from django.contrib.auth.models import User
 
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-import re
 import time
 
 
@@ -58,7 +55,7 @@ class BrowseArtistsTests(LiveServerTestCase):
         artist_list_link = self.browser.find_element_by_link_text('Artists')
         artist_list_link.click()
 
-        artists = [ 'ACDC' , 'REM', 'Yes' ]
+        artists = ['ACDC', 'REM', 'Yes']
 
         artist_divs = self.browser.find_elements_by_class_name('artist')
 
@@ -68,13 +65,15 @@ class BrowseArtistsTests(LiveServerTestCase):
 
             # find a link is present with artist name - exception raised if not found
             div.find_element_by_link_text(artist)
-            # Find the link to view that artist's shows (which will lead to notes). Again, exception raised
+            # Find the link to view that artist's shows (which will lead to notes).
+            #  Again, exception raised if not present onn page
             div.find_element_by_link_text(f'{artist} notes')
 
 
         # Are we on the right page? Do this after finding elements so know page has loaded
         self.assertIn('/artists/list/', self.browser.current_url)
-        self.assertIn('Artist List', self.browser.page_source)  # Could also put the title in a div or header element, and find that, and verify correct text.
+        self.assertIn('Artist List', self.browser.page_source)  
+        # Could also put the title in a div or header element, and find that, and verify correct text.
 
         # Get a link to one of the artists
         rem_link = self.browser.find_element_by_link_text('REM')
@@ -109,14 +108,14 @@ class BrowseArtistsTests(LiveServerTestCase):
         # assert list of venues that artist has played at is shown, most recent first
         # Should be show pk = 2 venue 1 first ave on 2017-01-02 , show pk = 1 venue 2, turf club on 2016-11-02
         # Assert a link to add notes is shown for each show
-        expected_shows =  [ 
-            { 'pk': 2 , 'show_date': 'Jan. 2, 2017', 'venue': 'The Turf Club'},
-            { 'pk': 1 , 'show_date': 'Nov. 4, 2016', 'venue': 'First Avenue'} 
+        expected_shows = [ 
+            {'pk': 2, 'show_date': 'Jan. 2, 2017', 'venue': 'The Turf Club'},
+            {'pk': 1, 'show_date': 'Nov. 4, 2016', 'venue': 'First Avenue'} 
         ]
 
         show_divs = self.browser.find_elements_by_class_name('show')
 
-        for show, div in zip (expected_shows, show_divs):
+        for show, div in zip(expected_shows, show_divs):
             self.assertIn(show['venue'], div.text)
             self.assertIn(show['show_date'], div.text)
 
@@ -152,7 +151,7 @@ class BrowseArtistsTests(LiveServerTestCase):
         # Posted on the expected day?
         self.assertIn('Posted on Feb. 12, 2017', second_note_div.text)
 
-        
+
 
     def test_searching_artists(self):
         self.browser.get(self.live_server_url + '/artists/list')
@@ -252,9 +251,7 @@ class BrowseVenuesTests(LiveServerTestCase):
         self.browser.quit()
     
 
-
     def test_browsing_venues(self):
-
         # Start on home page
         self.browser.get(self.live_server_url)
 
@@ -460,7 +457,7 @@ class NotesTests(LiveServerTestCase):
         'fn_testing_venues', 
         'fn_testing_shows', 
         'fn_testing_notes'
-        ]
+    ]
 
 
     def setUp(self):
@@ -493,7 +490,7 @@ class NotesTests(LiveServerTestCase):
         add_note_link.click()
 
         time.sleep(1)    # FIXME
-       
+
         # Should be on the Add Note page
 
         # Find form elements

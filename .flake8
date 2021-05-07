@@ -1,7 +1,8 @@
 [flake8]
 # Ignore trailing whitespace, some docstring checks
 # D105 docstrings in magic methods
-ignore = W291, D202, D210, D400, D105
+# W293 blank line contains whitespace
+ignore = W291, D202, D210, D400, D105, W293
 per-file-ignores =
     # ignore missing docstrings in test files 
     lmn/tests/*:D
@@ -13,4 +14,8 @@ exclude =
     .git,
     # There's no value in checking cache directories
     __pycache__,
+    # ignore generated migration files 
+    lmn/migrations/
+    manage.py
+
    
