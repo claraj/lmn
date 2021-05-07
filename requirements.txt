@@ -1,8 +1,15 @@
 asgiref==3.2.10
 Django==3.1.2
 flake8==3.9.1
+flake8-docstrings==1.6.0
+flake8-polyfill==1.0.2
 mccabe==0.6.1
+pep8-naming==0.11.1
 pycodestyle==2.7.0
+pydocstyle==6.0.0
 pyflakes==2.3.1
 pytz==2020.1
+selenium==3.141.0
+snowballstemmer==2.1.0
 sqlparse==0.4.1
+urllib3==1.26.4

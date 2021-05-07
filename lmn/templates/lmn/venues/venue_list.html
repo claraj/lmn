@@ -14,11 +14,11 @@
 
   <div>
     {% if search_term %}
-      <h3 id="venue_list_title">Venues matching '{{ search_term }}'  
+      <h3 id="venue-list-title">Venues matching '{{ search_term }}'  
         <a href="{% url 'venue_list' %}" id='clear_search'>clear</a>
       </h3>
     {% else %}
-      <h3 id="venue_list_title">All venues</h3>
+      <h3 id="venue-list-title">All venues</h3>
     {% endif %}
   </div>
 
