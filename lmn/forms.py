@@ -26,11 +26,12 @@ class ArtistForm(forms.ModelForm):
         fields = ['name']
 
 
-class SaveArtistForm(forms.ModelForm):
-    class Meta:
-        model = Artist
-        fields = ['name', 'hometown', 'description']
-
+# class SaveArtistForm(forms.ModelForm):
+#
+#     class Meta:
+#         model = Artist
+#         fields = ['name', 'hometown', 'description']
+#         widgets = {'name': forms.HiddenInput(), 'hometown': forms.HiddenInput(), 'description': forms.HiddenInput()}
 
 
 class VenueForm(forms.ModelForm):

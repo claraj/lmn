@@ -40,7 +40,6 @@ def search_mb_artist_by_name(name):
     try:
         data = requests.get(url, headers=headers, params=params).json()
         artists = data['artists']
-        print(len(data))
         result_list = []
         for artist in artists:
             new_name = artist['name']
@@ -48,12 +47,12 @@ def search_mb_artist_by_name(name):
                 new_hometown = artist['begin-area']['name']
             except KeyError as e:
                 new_hometown = 'Unknown Origins'  # if no city of origin provided
-                print(f'Error, no hometown {e}')
+                # print(f'Error, no hometown {e}')
             try:
                 new_desc = artist['disambiguation']  # API description of artist
             except KeyError as e:
                 new_desc = None
-                print(f'Error, no description available {e}')
+                # print(f'Error, no description available {e}')
             new_artist = Artist(name=new_name, hometown=new_hometown, description=new_desc)
             result_list.append(new_artist)
             for a in result_list:

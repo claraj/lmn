@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from ..models import Venue, Artist, Note, Show
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, ArtistForm, SaveArtistForm
+from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, ArtistForm
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
@@ -60,36 +60,48 @@ def add_artist(request):
         if new_artist_form.is_valid():
             search_artist = new_artist_form.cleaned_data['name']  # grabs the entered name to use as a search term
             search_results = search_mb_artist_by_name(search_artist)  # returns a list of artist objects from api
-            save_artist_form = SaveArtistForm()
-            return render(request, 'lmn/artists/add_artist.html', {'search_results': search_results,
-                                                                   'save_artist_form': save_artist_form})
-
-
-            # for a in search_results:
-            #     print(a)  # for testing, prints every returned artist to terminal TODO delete when not needed
-            # try:
-            #     new_artist_form.save()  # still currently saving whatever is entered (user data, not api)
-            #     messages.info(request, 'Artist Saved')
-            #     return redirect('artist_list')
-            # except ValidationError:
-            #     messages.warning(request, 'Not a valid Artist')
-            #     return redirect(request, 'add_artist')  # redirects back to add page so user can correct
-
-        #     except IntegrityError:
-        #         messages.warning(request, 'Artist already in database')
-        # else:
-        #     return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
+            if search_results:
+                return render(request, 'lmn/artists/save_artist.html', {'search_results': search_results})
+            # else:
     new_artist_form = ArtistForm()
     return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
 
 
-
 def save_artist(request):
-    # new_artist = SaveArtistForm(request.POST)
     if request.method == 'POST':
-        print(request)
+        new_artist = request.POST  # takes in info from the template and creates a new artist object
+        new_name = new_artist.get('name')
+        new_hometown = new_artist.get('hometown')
+        new_desc = new_artist.get('description')
+        artist = Artist(name=new_name, hometown=new_hometown, description=new_desc)
+        already_added = artist_in_db(new_name, new_desc)
+        if not already_added:
+            print('safe to add!')
+            try:
+                artist.save()  # try except block to determine if artist can be saved
+                messages.info(request, 'Artist Saved')
+                return redirect('artist_list')
+            except ValidationError:
+                messages.warning(request, 'Not a valid Artist')
+                return redirect(request, 'add_artist')  # redirects back to add page so user can correct
+            except IntegrityError:
+                messages.warning(request, 'Artist already in database')
 
+        else:
+            messages.warning(request, 'Artist already in database')
+            return render(request, 'lmn/artists/save_artist.html')  # redirects back to add page so user can correct
 
-        # print(new_artist.name)
     else:
-        return redirect(request, 'add_artist')
+        return render(request, 'lmn/artists/save_artist.html')
+
+
+def artist_in_db(name, description):
+    artist_name, artist_desc = [], []
+    artists_in_db = Artist.objects.all()
+    for artist in artists_in_db:
+        artist_name.append(artist.name.upper())
+        artist_desc.append(artist.description.upper())
+    if name.upper() in artist_name and description.upper() in artist_desc:
+        return True
+    else:
+        return False

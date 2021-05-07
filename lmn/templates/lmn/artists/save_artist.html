@@ -1,0 +1,35 @@
+{% extends 'lmn/base.html' %}
+
+{% block content %}
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <p class="{{message.tags}}">{{ message }}</p>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    {% for result in search_results %}
+  <div>
+    <p>
+
+<form method="POST" action="{% url 'save_artist' %}">
+            <a>{{ result }}</a>
+      <input type="hidden" name="name" value="{{ result.name }}">
+      <input type="hidden" name="hometown" value="{{ result.hometown }}">
+      <input type="hidden" name="description" value="{{ result.description }}">
+    {% csrf_token %}
+      {{ save_artist_form }}
+    <button type=submit>Save</button>
+</form>
+    </p>
+    </div>
+        {% empty %}
+<a href="{% url 'add_artist' %}">Back to Add Artist</a>
+        <h2>No Results</h2>
+
+
+{% endfor %}
+
+{% endblock %}
