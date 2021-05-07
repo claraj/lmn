@@ -622,7 +622,7 @@ class RegistrationTests(LiveServerTestCase):
         self.browser.find_element_by_tag_name('button').submit()
 
         # Verify page contains 'you are logged in, alice'
-        welcome = self.browser.find_element_by_id('welcome_user_msg')
+        welcome = self.browser.find_element_by_id('welcome-user-msg')
         self.assertIn('You are logged in, alice.', welcome.text)
 
 
@@ -640,11 +640,11 @@ class RegistrationTests(LiveServerTestCase):
 
         # Once page loads, check no welcome message
         # find_elements_by_id, returns a list with size 0 if not found, instead of raising an exception
-        welcome = self.browser.find_elements_by_id('welcome_user_msg')
+        welcome = self.browser.find_elements_by_id('welcome-user-msg')
         self.assertEqual(len(welcome), 0)
 
         # Verify page still says 'login or sign up'
-        login_invite = self.browser.find_element_by_id('login_or_sign_up')
+        login_invite = self.browser.find_element_by_id('login-or-sign-up')
         self.assertIn('Login or sign up', login_invite.text)
         
         # Verify page does NOT display 'you are logged in, none'
