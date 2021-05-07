@@ -27,13 +27,18 @@ class ArtistForm(forms.ModelForm):
 
 
 class CreateArtistForm(forms.ModelForm):
-
     class Meta:
         model = Artist
         fields = ['name', 'hometown', 'description']
 
 
 class VenueForm(forms.ModelForm):
+    class Meta:
+        model = Venue
+        fields = ['name']
+
+
+class CreateVenueForm(forms.ModelForm):
     class Meta:
         model = Venue
         fields = ['name', 'address']

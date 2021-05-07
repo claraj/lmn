@@ -22,7 +22,13 @@
     {% endif %}
   </div>
     <div>
-
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <p class="{{message.tags}}">{{ message }}</p>
+        {% endfor %}
+        </div>
+    {% endif %}
     {% for venue in venues %}
 
     <div id="venue-{{ venue.pk }}">

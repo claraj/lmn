@@ -102,9 +102,7 @@ def create_artist(request):
     """ if api results are not what the user needs, they can enter a new artist """
     if request.method == 'POST':
         form = CreateArtistForm(request.POST)
-        print(form)
         artist = form.save(commit=False)
-        print(artist.name)
         already_added = artist_in_db(artist.name, artist.hometown, artist.description)
         if not already_added and form.is_valid():
             artist.save()
