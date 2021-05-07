@@ -71,7 +71,7 @@ class ShowRating(models.Model):
         ]
 
     def __str__(self):
-        return f'Show: {self.show} Rating: {self.rating_out_of_five}/5'
+        return f'Show: {self.show} User: {self.user.first_name} {self.user.last_name} Rating: {self.rating_out_of_five}/5'
 
 
 """ One user's opinion of one show. """
