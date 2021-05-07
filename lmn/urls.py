@@ -31,6 +31,7 @@ urlpatterns = [
     # Show related
     path('shows/rate/<int:show_pk>/', views_shows.save_show_rating, name='save_show_rating'),
     path('shows/detail/<int:show_pk>/', views_shows.show_detail, name='show_detail'),
+    # path('get_rating/', views_shows.get_rating, name='get_rating'),
 
     # User related
     path('user/profile/<int:user_pk>/', views_users.user_profile, name='user_profile'),

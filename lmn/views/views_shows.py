@@ -4,40 +4,37 @@ from django.contrib.auth.decorators import login_required
 from ..models import Show, Note, ShowRating
 from ..forms import NewShowRatingForm
 
+import time
+
 
 def show_detail(request, show_pk): 
     # Notes for show, most recent first
+    time.sleep(0.01)
     notes = Note.objects.filter(show=show_pk).order_by('-posted_date')
     show = Show.objects.get(pk=show_pk) 
     
     if request.user.is_authenticated: # if the user is logged in, check to see if they've already rated the show
         user_rating = ShowRating.objects.filter(show=show, user=request.user).first()
         if user_rating:
-            rating_form = None # don't desplay rating form if the user has already rated the show
+            user_can_rate = False # don't desplay rating form if the user has already rated the show
         else:
-            rating_form = NewShowRatingForm()
+            user_can_rate = True
     else:
-        rating_form = None # don't show form if user isn't authenticated
+        user_can_rate = False # don't show form if user isn't authenticated
 
-    return render(request, 'lmn/shows/show_detail.html', { 'show': show, 'notes': notes, 'rating_form': rating_form })
+    return render(request, 'lmn/shows/show_detail.html', { 'show': show, 'notes': notes, 'user_can_rate': user_can_rate})
 
 
 @login_required
 def save_show_rating(request, show_pk):
 
+    rating_response = request.GET.get('result')
     show = get_object_or_404(Show, pk=show_pk)
 
-    if request.method == 'POST':
+    rating = ShowRating()
+    rating.rating_out_of_five = int(rating_response)
+    rating.user = request.user
+    rating.show = show
+    rating.save()
 
-        rating_form = NewShowRatingForm(request.POST)
-
-        if rating_form.is_valid() and rating_form.data['rating_out_of_five']: 
-            rating = rating_form.save(commit=False)
-            rating.user = request.user
-            rating.show = show
-            rating.save()
-            return redirect('show_detail', show_pk=show.pk)
-    else:
-        form = NewShowRatingForm()
-
-    return render(request, 'lmn/shows/show_detail.html' , { 'rating_form': rating_form , 'show': show })
+    return render(request, 'lmn/shows/show_detail.html', {'show': show})
