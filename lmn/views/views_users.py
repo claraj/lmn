@@ -16,9 +16,14 @@ def goodbye(request):
 
 def user_profile(request, user_pk):
     # Get user profile for any user on the site
-    user = User.objects.get(pk=user_pk)
-    usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
-    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
+    if user_pk == request.user.pk:
+        user = User.objects.get(pk=request.user.pk)
+        profile_form = ProfileForm(instance=user.profile)
+        return render(request, 'lmn/users/my_user_profile.html', { 'my_user_profile': user.profile, 'profile_form': profile_form })
+    else:
+        user = User.objects.get(pk=user_pk)
+        usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
+        return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
 
 
 @login_required
