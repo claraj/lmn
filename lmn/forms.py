@@ -1,5 +1,5 @@
 from django import forms
-from .models import Note
+from .models import Note, ShowRating
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -25,6 +25,12 @@ class NewNoteForm(forms.ModelForm):
         model = Note
         fields = ('title', 'text', 'image')
 
+
+class NewShowRatingForm(forms.ModelForm):
+    class Meta:
+        model = ShowRating
+        fields = ('rating_out_of_five',)
+        
 
 class UserRegistrationForm(UserCreationForm):
 

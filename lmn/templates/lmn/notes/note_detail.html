@@ -2,21 +2,30 @@
 {% load static %}
 {% block content %}
 
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <h2 id="note-page-title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by 
     <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
 </h2>
 
+{% if rating %}
+
+<h3>You rated this show: {{ rating }}/5</h3>
+
+{% endif %}
+
 <p id="note-title"><b>{{ note.title}}</b></p>
 <p id="note-text">{{ note.text }}</b>
 
 
-    <h3>Image</h3>
-    {% if note.image %}
-    <img class='note-image' src="{{ note.image.url }}">
-    {% else %}
-    <P>No image uploaded</p>
-    {% endif %}
+<h3>Image</h3>
+{% if note.image %}
+<img class='note-image' src="{{ note.image.url }}">
+{% else %}
+<P>No image uploaded</p>
+ {% endif %}
 
 
 {% if note.user.pk == user.pk %}
@@ -31,6 +40,10 @@
     </form>
 
     <script src="{% static 'js/confirm_delete.js' %}"></script>
+
+
+
+    <script src="{% static 'js/rating.js' %}"></script>
 
 {% endif %}
     
