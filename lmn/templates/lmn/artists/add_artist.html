@@ -12,21 +12,21 @@
 <form method="POST" action="{% url 'add_artist' %}">
     {% csrf_token %}
     {{ new_artist_form }}
-    <button type=submit>Add artist</button>
+    <button type=submit>New Artist</button>
 </form>
 
-    <div>
+
 {% for result in search_results %}
 <div>
 <p>
   <a>{{ result }}</a>
     <form method="POST" action="{% url 'save_artist' artist=result %}">
     {% csrf_token %}
-    <button type=submit>Add Venue</button>
+    <button type=submit>Add Artist</button>
 </form>
 </p>
 </div>
-    </div>
+
 {% endfor %}
 
 

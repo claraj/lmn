@@ -108,8 +108,11 @@ def create_venue(request):
         else:
             messages.warning(request, 'Address is already Registered, or Form Invalid. Please try again')
             return redirect('add_venue')
+
         already_added = venue_in_db(venue.name, venue.address)
+        print(already_added)
         if not already_added:
+            print(' got here')
             try:
                 venue.save()
                 messages.info(request, 'Venue Saved')
@@ -120,6 +123,9 @@ def create_venue(request):
             except IntegrityError:
                 messages.warning(request, 'Venue already in database')
                 return redirect('add_venue')
+        else:
+            messages.warning(request, 'Venue or Venue address already in database')
+            return redirect('add_venue')
     else:
         return redirect('add_venue')  # a GET request will send the user to the add venue page
 
