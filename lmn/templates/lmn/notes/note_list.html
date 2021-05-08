@@ -23,6 +23,18 @@
     </p>
 
     <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+
+    <p>Rating: {{ note.Rate }}</p>
+
+    <p>
+      {% if note.user.pk == request.user.pk %}
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{ note.text }} %23{{ note.show.artist.name|cut:' ' }} %23{{ note.show.venue.name|cut:' ' }} %23LMNOP">Tweet Note</a>
+      {% elif note.user.profile.twitter_username|length > 0 %}
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=@{{ note.user.profile.twitter_username }} said it best: {{ note.text }} %23{{ note.show.artist.name|cut:' ' }} %23{{ note.show.venue.name|cut:' ' }} %23LMNOP">Tweet Note</a>
+      {% else %}
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{ note.text }} %23{{ note.show.artist.name|cut:' ' }} %23{{ note.show.venue.name|cut:' ' }} %23LMNOP">Tweet Note</a>
+      {% endif %}
+    </p>
   </div>  
 
   <hr>
