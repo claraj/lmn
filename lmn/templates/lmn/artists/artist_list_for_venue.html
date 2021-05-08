@@ -9,7 +9,39 @@
 
 <div class="show" id="show_{{ show.pk }}">
   <p>{{ show.artist.name}} on {{ show.show_date }}.
-    <a href="{% url 'show_detail' show_pk=show.pk %}">See details about this show</a>
+    <span><a href="{% url 'show_detail' show_pk=show.pk %}">See details about this show</a>
+
+    {% if show.rating >= 1 %}
+
+      <span class="icon">★</span>
+
+    {% endif %}
+    
+    {% if show.rating >= 2 %}
+    
+      <span class="icon">★</span>
+
+    {% endif %}
+    
+    {% if show.rating >= 3 %}
+    
+      <span class="icon">★</span>
+
+    {% endif %}
+    
+    {% if show.rating >= 4 %}
+    
+      <span class="icon">★</span>
+
+    {% endif %}
+    
+    {% if show.rating == 5 %}
+    
+      <span class="icon">★</span>
+    
+    {% endif %}
+
+    </span>
   </p>
 </div>
 
@@ -18,7 +50,6 @@
   <p id="no-results">We have no records of shows at this venue</p>
 
 {% endfor %}
-
 
 
 {% endblock %}
