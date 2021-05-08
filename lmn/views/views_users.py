@@ -25,6 +25,16 @@ def user_profile(request, user_pk):
 def my_user_profile(request):
     # TODO - editable version for logged-in user to edit their own profile
     user = User.objects.get(pk=request.user.pk)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=user.profile)
+
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'User profile updated!')
+        else:
+            messages.error(request, form.errors)
+
     profile_form = ProfileForm(instance=user.profile)
     return render(request, 'lmn/users/my_user_profile.html', { 'my_user_profile': user.profile, 'profile_form': profile_form })
 
