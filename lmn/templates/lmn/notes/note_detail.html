@@ -16,6 +16,7 @@
     <p>No photo uploaded</p>
 {% endif %}
 
+{% if user.pk == note.user.pk %}
 <form action="{% url 'delete_note' note.pk %}" method="POST">
     {% csrf_token %}
     <button type=submit class="delete">Delete</button>
