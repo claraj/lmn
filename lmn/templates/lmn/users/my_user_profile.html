@@ -8,4 +8,15 @@ my_user_profile is the current user's profile
 
 -->
 
+<h2>Your profile.</h2>
+
+<h3>Twitter Username</h3>
+<P>{{ my_user_profile.twitter_username|default:"No username listed." }}</p>
+<h3>Personal Bio</h3>
+<P>{{ my_user_profile.bio|default:"No bio yet." }}</p>
+<h3>Favorite Artist</h3>
+<P>{{ my_user_profile.favorite_artist|default:"Favorite artist not selected." }}</p>
+<h3>Favorite Show</h3>
+<P>{{ my_user_profile.favorite_artist|default:"Favorite show not selected." }}</p>
+
 {% endblock %}
