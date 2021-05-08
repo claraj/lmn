@@ -110,9 +110,7 @@ def create_venue(request):
             return redirect('add_venue')
 
         already_added = venue_in_db(venue.name, venue.address)
-        print(already_added)
         if not already_added:
-            print(' got here')
             try:
                 venue.save()
                 messages.info(request, 'Venue Saved')
