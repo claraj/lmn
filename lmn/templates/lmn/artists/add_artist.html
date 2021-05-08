@@ -8,4 +8,22 @@
     <button type=submit>Add Artist</button>
 </form>
 
+    <div>
+    {% for result in search_results %}
+  <div>
+    <p>
+      <a>{{ result }}</a>
+<form method="POST" action="{% url 'save_artist' artist=result %}">
+      <input type="hidden" name="name" value="{{ result.name }}">
+      <input type="hidden" name="hometown" value="{{ result.hometown }}">
+      <input type="hidden" name="description" value="{{ result.description }}">
+    {% csrf_token %}
+    {{ save_artist_form }}
+    <button type=submit>Save</button>
+</form>
+    </p>
+    </div>
+        </div>
+{% endfor %}
+
 {% endblock %}

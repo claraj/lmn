@@ -1,0 +1,26 @@
+{% extends 'lmn/base.html' %}
+
+{% block content %}
+
+<form method="POST" action="{% url 'add_venue' %}">
+    {% csrf_token %}
+    {{ new_venue_form }}
+    <button type=submit>Add Venue</button>
+</form>
+
+    <div>
+{% for result in search_results %}
+<div>
+<p>
+  <a>{{ result }}</a>
+    <form method="POST" action="{% url 'add_venue' venue=result %}">
+    {% csrf_token %}
+    {{ new_venue_form }}
+    <button type=submit>Add Venue</button>
+</form>
+</p>
+</div>
+    </div>
+{% endfor %}
+
+{% endblock %}
