@@ -19,4 +19,10 @@ my_user_profile is the current user's profile
 <h3>Favorite Show</h3>
 <P>{{ my_user_profile.favorite_artist|default:"Favorite show not selected." }}</p>
 
+<form action="{% url 'my_user_profile' %}" method="POST">
+	{% csrf_token %}
+	{{ profile_form.as_p }}
+	<button type="submit">Save Profile</button>
+</form>
+
 {% endblock %}
