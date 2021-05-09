@@ -28,6 +28,11 @@ user is a variable provided to the template and is the current logged-in user
 	<li>Favorite Show: {{ user_profile.profile.favorite_show }}</li>
 </ul>
 
+<form action="{% url 'my_user_profile' %}">
+	{% csrf_token %}
+	<button type="submit">Edit Profile</button>
+</form>
+
 <h2 id='username_notes'>{{ user_profile.get_full_name }}'s notes</h2>
 
 {% for note in notes %}
