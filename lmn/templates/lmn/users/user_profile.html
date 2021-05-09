@@ -13,20 +13,18 @@ user is a variable provided to the template and is the current logged-in user
 -->
 
 <h2>{{ user_profile.get_full_name }} ({{user_profile.username}})</h2>
-<ul>
-	{% if user_profile.profile.twitter_username|length > 0 %}
-		<li>Twitter Username: {{ user_profile.profile.twitter_username }}</li>
-	{% else %}
-		<li>User is not on Twitter.</li>
-	{% endif %}
-	{% if user_profile.profile.twitter_username|length > 0 %}
-		<li>Bio: {{ user_profile.profile.bio }}</li>
-	{% else %}
-		<li>Bio: None</li>
-	{% endif %}
-	<li>Favorite Artist: {{ user_profile.profile.favorite_artist }}</li>
-	<li>Favorite Show: {{ user_profile.profile.favorite_show }}</li>
-</ul>
+{% if user_profile.profile.twitter_username|length > 0 %}
+	<P>Twitter Username: {{ user_profile.profile.twitter_username }}</p>
+{% else %}
+	<P>User is not on Twitter.</p>
+{% endif %}
+{% if user_profile.profile.bio|length > 0 %}
+	<P>Bio: {{ user_profile.profile.bio }}</p>
+{% else %}
+	<P>Bio: None</p>
+{% endif %}
+<P>Favorite Artist: {{ user_profile.profile.favorite_artist.name }}</p>
+<P>Favorite Show: {{ user_profile.profile.favorite_show.artist.name }} at {{ user_profile.profile.favorite_show.venue.name }} on {{ user_profile.profile.favorite_show.show_date }} </p>
 
 {% if user.username == user_profile.username %}
 	<form action="{% url 'my_user_profile' %}">
