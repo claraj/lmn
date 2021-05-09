@@ -29,6 +29,7 @@ my_user_profile is the current user's profile
 
 <form action="{% url 'my_user_profile' %}" method="POST">
 	{% csrf_token %}
+	{{ user_form.as_p}}
 	{{ profile_form.as_p }}
 	<button type="submit">Save Profile</button>
 </form>
