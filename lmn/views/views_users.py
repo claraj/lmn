@@ -35,6 +35,9 @@ def my_user_profile(request):
             messages.error(request, form.errors)
         usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
         return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
+    elif request.META.get('HTTP_REFERER').endswith('accounts/login/'):
+        usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
+        return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
     else:
         profile_form = ProfileForm(instance=user.profile)
         return render(request, 'lmn/users/my_user_profile.html', { 'my_user_profile': user.profile, 'profile_form': profile_form })
