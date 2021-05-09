@@ -11,6 +11,7 @@ from django.core.exceptions import PermissionDenied
 from django.forms.models import inlineformset_factory
 
 
+
 def user_profile(request, user_pk):
     # Get user profile for any user on the site
     user = User.objects.get(pk=user_pk)
@@ -83,3 +84,8 @@ def register(request):
 
     form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'form': form} )
+
+# create request and render of goodbye html
+def goodbye(request,):
+    logout(request)
+    return render(request, 'lmn/user/goodbye_message.htm')
