@@ -86,6 +86,6 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form} )
 
 # create request and render of goodbye html
-def goodbye(request,):
+def goodbye(request):
     logout(request)
-    return render(request, 'lmn/user/goodbye_message.htm')
+    return render(request, 'lmn/users/goodbye_message.html')
