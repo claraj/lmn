@@ -26,13 +26,18 @@ def my_user_profile(request):
     user = User.objects.get(pk=request.user.pk)
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=user.profile)
+        profile_form = ProfileForm(request.POST, instance=user.profile)
+        user_form = UserForm(request.POST, instance=user)
 
-        if form.is_valid():
-            form.save()
+        if profile_form.is_valid() and user_form.is_valid():
+            profile_form.save()
+            user_form.save()
             messages.info(request, 'User profile updated!')
+        elif not profile_form.is_valid():
+            messages.error(request, profile_form.errors)
         else:
-            messages.error(request, form.errors)
+            messages.error(request, user_form.errors)
+
         usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
         return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
     elif request.META.get('HTTP_REFERER').endswith('accounts/login/'):  # If last page was the login page
