@@ -35,7 +35,7 @@ def my_user_profile(request):
             messages.error(request, form.errors)
         usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
         return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
-    elif request.META.get('HTTP_REFERER').endswith('accounts/login/'):
+    elif request.META.get('HTTP_REFERER').endswith('accounts/login/'):  # If last page was the login page
         usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
         return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
     else:
