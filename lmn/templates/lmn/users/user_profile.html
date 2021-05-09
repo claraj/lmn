@@ -12,7 +12,11 @@ user is a variable provided to the template and is the current logged-in user
 
 -->
 
-<h2>{{ user_profile.get_full_name }} ({{user_profile.username}})</h2>
+{% if user_profile.get_full_name|length > 0 %}
+	<h2>{{ user_profile.get_full_name }} ({{user_profile.username}})</h2>
+{% else %}
+	<h2>Unnamed Reviewer ({{user_profile.username}})</h2>
+{% endif %}
 {% if user_profile.profile.twitter_username|length > 0 %}
 	<P>Twitter Username: {{ user_profile.profile.twitter_username }}</p>
 {% else %}
@@ -33,7 +37,11 @@ user is a variable provided to the template and is the current logged-in user
 	</form>
 {% endif %}
 
-<h2 id='username_notes'>{{ user_profile.get_full_name }}'s notes</h2>
+{% if user_profile.get_full_name|length > 0 %}
+	<h2 id='username_notes'>{{ user_profile.get_full_name }}'s notes</h2>
+{% else %}
+	<h2 id='username_notes'>Unnamed Reviewer's notes</h2>
+{% endif %}
 
 {% for note in notes %}
 
