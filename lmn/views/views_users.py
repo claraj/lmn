@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from ..models import Venue, Artist, Note, Show
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
+from ..models import Venue, Artist, Note, Show, Profile
+from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, ProfileForm, UserForm
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -23,8 +23,30 @@ def user_profile(request, user_pk):
 
 @login_required
 def my_user_profile(request):
-    # TODO - editable version for logged-in user to edit their own profile
-    return redirect('user_profile', user_pk=request.user.pk)
+    user = User.objects.get(pk=request.user.pk)
+
+    if request.method == 'POST':
+        profile_form = ProfileForm(request.POST, instance=user.profile)
+        user_form = UserForm(request.POST, instance=user)
+
+        if profile_form.is_valid() and user_form.is_valid():
+            profile_form.save()
+            user_form.save()
+            messages.info(request, 'User profile updated!')
+        elif not profile_form.is_valid():
+            messages.error(request, profile_form.errors)
+        else:
+            messages.error(request, user_form.errors)
+
+        usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
+        return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
+    elif request.META.get('HTTP_REFERER').endswith('accounts/login/'):  # If last page was the login page
+        usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
+        return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
+    else:
+        profile_form = ProfileForm(instance=user.profile)
+        user_form = UserForm(instance=user)
+        return render(request, 'lmn/users/my_user_profile.html', { 'my_user_profile': user.profile, 'profile_form': profile_form, 'user_form': user_form })
 
 
 def register(request):
