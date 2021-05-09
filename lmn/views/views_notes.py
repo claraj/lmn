@@ -9,14 +9,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
 
-
 @login_required
 def new_note(request, show_pk):
-
     show = get_object_or_404(Show, pk=show_pk)
 
     if request.method == 'POST':
-        form = NewNoteForm(request.POST, request.FILES) 
+        form = NewNoteForm(request.POST, request.FILES)
         if form.is_valid():
             note = form.save(commit=False)
             note.user = request.user
@@ -36,7 +34,7 @@ def new_note(request, show_pk):
 
 
 def latest_notes(request):
-    notes_list = Note.objects.all().order_by('-posted_date')[:20]   # the 20 most recent notes
+    notes_list = Note.objects.all().order_by('-posted_date')[:20]  # the 20 most recent notes
     paginator = Paginator(notes_list, 6)  # creates a paginator that will chop up the list into pages
     page = request.GET.get('page')  # page query
     try:
@@ -48,8 +46,8 @@ def latest_notes(request):
     return render(request, 'lmn/notes/note_list.html', {'notes': notes})
 
 
-def notes_for_show(request, show_pk): 
-    # Notes for show, most recent first
+def notes_for_show(request, show_pk):
+    """ Notes for show, most recent first """
     notes_list = Note.objects.filter(show=show_pk).order_by('-posted_date')
     paginator = Paginator(notes_list, 6)  # creates a paginator that will chop up the list into pages
     page = request.GET.get('page')  # page query
@@ -60,6 +58,7 @@ def notes_for_show(request, show_pk):
     except EmptyPage:
         notes = paginator.page(paginator.num_pages)
     show = Show.objects.get(pk=show_pk)
+
     return render(request, 'lmn/notes/note_list.html', {'show': show, 'notes': notes})
 
 
