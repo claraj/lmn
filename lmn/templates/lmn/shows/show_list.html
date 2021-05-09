@@ -1,0 +1,21 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+<h2>Show List</h2>
+{% for show in shows %}
+
+  <div class="show" id="show_{{ show.pk }}">
+    <p>
+      <a href="{% url 'show_detail' show_pk=show.pk %}">{{ show }}</a>
+    </p>
+  </div>
+
+{% empty %}
+
+<p>No Shows Found</p>
+
+{% endfor %}
+
+
+
+{% endblock %}
