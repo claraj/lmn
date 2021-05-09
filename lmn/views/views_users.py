@@ -45,7 +45,7 @@ def my_user_profile(request):
         return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
     else:
         profile_form = ProfileForm(instance=user.profile)
-        user_form = ProfileForm(instance=user)
+        user_form = UserForm(instance=user)
         return render(request, 'lmn/users/my_user_profile.html', { 'my_user_profile': user.profile, 'profile_form': profile_form, 'user_form': user_form })
 
 
