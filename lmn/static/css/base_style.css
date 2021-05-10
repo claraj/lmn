@@ -80,3 +80,11 @@ a {
 .success-message {
   color: rgb(36, 214, 36);
 }
+
+.row {
+  border-style: outset;
+  width: 100%;
+  padding: 1px;
+  border-color: darkturquoise;
+
+}
