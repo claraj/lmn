@@ -1,0 +1,4 @@
+cron:
+  - description: "get new shows"
+    url: /scraper
+    schedule: every 24 hours

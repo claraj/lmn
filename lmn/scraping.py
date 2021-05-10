@@ -60,7 +60,7 @@ def scrape_first():
                 except django.db.utils.IntegrityError as e:
                     print('Duplicate Artist entry, not added.')
                 except Exception as e:
-                    print(e)    
+                    print(e)
                 
                 try:
                     venue_name_bs4_result_set = html_item.select('.venue_name')
@@ -97,9 +97,9 @@ def scrape_first():
                         s.save()
                         print(f'created new show on {date_time}')
                 except django.db.utils.IntegrityError as e:
-                    print('Duplicate Venue entry, not added.')
+                    print('Duplicate Show entry, not added.')
                 except Exception as e:
-                    print(e)  
+                    print(e)
 
 
 if __name__ == "__main__":

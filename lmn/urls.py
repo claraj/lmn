@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from . import views
-from .views import views_main, views_artists, views_venues, views_notes, views_users
+from .views import views_main, views_artists, views_venues, views_notes, views_users, admin_views
 
 
 # app_name = 'lmn'
@@ -39,4 +39,6 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(template_name='registration/logout.html'), name='logout'),
     path('register/', views_users.register, name='register'),
 
+    # Scheduled task
+    path('scraper/', admin_views.get_new_show, name='admin_get_new_show')
 ]

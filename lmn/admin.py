@@ -10,4 +10,3 @@ admin.site.register(Note)
 admin.site.register(Show)
 admin.site.register(Badge)
 admin.site.register(Profile)
-

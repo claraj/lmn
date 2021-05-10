@@ -81,18 +81,19 @@ WSGI_APPLICATION = 'lmnop_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'venues',
-        'USER': 'music_fan',
-        'PASSWORD': os.environ['MUSIC_FAN_PW'],
-        'HOST': '/cloudsql/lmnop-311407:us-central1:lmnop-db',
-        'PORT': '5432',
+if os.getenv('GAE_INSTANCE'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'venues',
+            'USER': 'music_fan',
+            'PASSWORD': os.environ['MUSIC_FAN_PW'],
+            'HOST': '/cloudsql/lmnop-311407:us-central1:lmnop-db',
+            'PORT': '5432',
+        }
     }
-}
 
-if not os.getenv('GAE_INSTANCE'):
+else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',

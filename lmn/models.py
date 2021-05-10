@@ -44,6 +44,9 @@ class Show(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('show_date', 'artist', 'venue')
+
     def __str__(self):
         formatted_show_date = self.show_date.strftime("%b %d %Y")
         return f'Artist: {self.artist.name} At: {self.venue.name} On: {formatted_show_date}'
