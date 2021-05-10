@@ -45,6 +45,9 @@ class Show(models.Model):
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('show_date', 'artist', 'venue')
+
     @property
     def rating(self):
         rating_out_of_five_dict = self.ratings.all().aggregate(Avg('rating_out_of_five'))
@@ -53,7 +56,6 @@ class Show(models.Model):
             return round(rating_out_of_five, 1) # returns a rounded version of a shows average rating
         else:
             return '-'
-
 
     def __str__(self):
         formatted_show_date = self.show_date.strftime("%b %d %Y")

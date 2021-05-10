@@ -1,0 +1,91 @@
+body {
+  background-color:black;
+  font-family: "Lucida Console", "Courier New", monospace;
+  color: white;
+}
+a {
+  color: rgb(70, 193, 197);
+}
+
+#welcome-user-msg, #login-or-sign-up {
+  position: absolute;
+  right: 0px;
+  padding-right: 10px;
+}
+
+.error {
+  background-color: #b73f08;
+  border-radius: 5px;
+  padding: 2px;
+  margin: 2px;
+  /* font-weight: bold; */
+}
+/* Remove the navbar's default margin-bottom and rounded borders */ 
+.navbar-nav {
+  margin-bottom: 0;
+  border-radius: 0;
+  background-color: black;
+  font-family: "Lucida Console", "Courier New", monospace;
+  padding: 5px;
+  
+}
+
+.carousel-inner {
+  width: 100%; /* Set width to 100% */
+  margin: auto;
+  min-height: 100px;
+  height: 500px;
+  padding: 30px;
+  width: auto;
+}
+  /* Hide the carousel text when the screen is less than 600 pixels wide */
+@media (max-width: 600px) {
+.carousel-caption {
+  display: none; 
+  }
+}
+
+.image-container {
+  border-style:ridge;
+  border-color: black;
+  border-width: 2px;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;  
+  
+}
+.logo {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  width: 160px;
+  height: auto;
+  margin: 0 0 0 0;
+}
+.page-title{
+  width: auto;
+  height: 150px;
+  padding: 60px;
+  text-align: center;
+  background: black;
+  color: white;
+  font-size: 30px;
+  font-family: "Lucida Console", "Courier New", monospace;
+}
+
+.jumbotron {
+  background-color: black;
+}
+
+.topnav-right {
+  float: right;
+}
+
+.note-image {
+  width: 300px;
+  height: 300px;
+}
+
+.success-message {
+  color: rgb(36, 214, 36);
+}

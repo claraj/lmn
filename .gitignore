@@ -12,10 +12,15 @@ __pycache__
 venv
 env
 
+# ignore user images
+lmn/media/user_images/*
+lmn/media/user_profile_images/*
+
+# ignore GCP cred files
+app.yaml
+lmn_creds.json
+
 # ignore user uploaded images and their cache files
 lmn/media/user_images/
 lmn/media/user_profile_images/
 lmn/media/cache/
-
-# artifact from time tracker document
-.tmp
