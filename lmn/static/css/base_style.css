@@ -33,15 +33,9 @@ a {
 .carousel-inner {
   width: 100%; /* Set width to 100% */
   margin: auto;
-  height: 500px;
+  height: 100%;
   padding: 30px;
   width: auto;
-}
-  /* Hide the carousel text when the screen is less than 600 pixels wide */
-@media (max-width: 600px) {
-.carousel-caption {
-  display: none; 
-  }
 }
 
 .image-container {
