@@ -7,7 +7,18 @@
   
   <div>
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ note_form.as_p }}
+
+    {% if rating_form %}
+
+      {{ rating_form.as_p }}
+
+    {% else %}
+
+      <p>You've already rated this show.</p>
+
+    {% endif %}
+
   </div>
   <input type='submit' value='Add Note'>
 </form>
