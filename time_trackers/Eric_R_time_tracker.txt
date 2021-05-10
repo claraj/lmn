@@ -28,12 +28,11 @@ goodby message
 
 
 Week beginning Monday April 26th
-
+We all met on sunday as agreed on by the group. We discussed functionality of creating a User name and how we were going to implament it. We reviewed pull request from different users and discussed what whats we needed to merge. Fixed code with pagantor. Discussed what we all need to do for next meeting and what parts of the code we were all going to work on.
 
 
 Week beginning Monday May 3rd
-
-
+Had another great meeting with our group. We all discussed how the web scrapping worked and how we can fix some of the issues with it. Reviewed code as a group helped us all make the code better. I helped fix a some of the problems with the CSS and I review code that was pushed the github.
 
 Week beginning Monday May 10th (Final week – deadline morning May 12th)
 
