@@ -7,25 +7,35 @@ from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistra
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
 
 @login_required
 def new_note(request, show_pk):
     show = get_object_or_404(Show, pk=show_pk)
-
+ 
     if request.method == 'POST':
-        form = NewNoteForm(request.POST, request.FILES)
-        if form.is_valid():
-            note = form.save(commit=False)
-            note.user = request.user
-            note.show = show
-            note.save()
-            return redirect('note_detail', note_pk=note.pk)
-
+        user_note_count = 0
+        user_pk = request.user.pk
+        print(user_pk)
+        note_in_db = note_already_exist(show_pk,user_pk)
+        if not note_in_db:
+            form = NewNoteForm(request.POST, request.FILES)
+            if form.is_valid():
+                user_note_count += 1
+                note = form.save(commit=False)
+                note.user = request.user
+                note.show = show
+                note.save()
+                return redirect('note_detail', note_pk=note.pk), user_note_count
+        else:
+            messages.warning(request, 'You already created a note for this show')
+            form = NewNoteForm()
+            return render(request, 'lmn/notes/new_note.html', {'form': form, 'show': show})
     else:
         form = NewNoteForm()
 
-    return render(request, 'lmn/notes/new_note.html', {'form': form, 'show': show})
+        return render(request, 'lmn/notes/new_note.html', {'form': form, 'show': show})
 
 
 """ pagination made possible by a ridiculously deep rabbit hole of docs and tutorials pagination
@@ -73,3 +83,15 @@ def delete_note(request, note_pk):
         return redirect('latest_notes')
     else:
         return HttpResponseForbidden() 
+
+def note_already_exist(show_pk,user_pk):
+    notes_list = Note.objects.filter(show=show_pk).order_by('-posted_date')
+    notes_creater = []
+    for note in notes_list:
+        notes_creater.append(note.user.pk)
+    if user_pk in notes_creater:
+        return True
+    else:
+        return False        
+
+    

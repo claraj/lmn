@@ -11,6 +11,13 @@
     {% csrf_token %}
     {{ form.as_p }}
   </div>
+  {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-primary" role="alert">
+      {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
   <input type='submit' value='Add Note'>
 </form>
 
