@@ -1,5 +1,5 @@
 from django import forms
-from .models import Note, Artist, Profile
+from .models import Note, Artist, Profile, Venue
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -19,16 +19,35 @@ class NewNoteForm(forms.ModelForm):
         model = Note
         fields = ('title', 'text', 'photo','Rate' ) # issue 4 upload photographs with associated notes by chris
 
+
 class ArtistForm(forms.ModelForm):
     class Meta:
         model = Artist
         fields = ['name']
 
+
+class CreateArtistForm(forms.ModelForm):
+    class Meta:
+        model = Artist
+        fields = ['name', 'hometown', 'description']
+
+
+class VenueForm(forms.ModelForm):
+    class Meta:
+        model = Venue
+        fields = ['name']
+
+
+class CreateVenueForm(forms.ModelForm):
+    class Meta:
+        model = Venue
+        fields = ['name', 'address']
+
+
 class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
-
 
     def clean_username(self):
 
@@ -42,7 +61,6 @@ class UserRegistrationForm(UserCreationForm):
 
         return username
 
-
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']
         if not first_name:
@@ -50,14 +68,12 @@ class UserRegistrationForm(UserCreationForm):
 
         return first_name
 
-
     def clean_last_name(self):
         last_name = self.cleaned_data['last_name']
         if not last_name:
             raise ValidationError('Please enter your last name')
 
         return last_name
-
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -68,7 +84,6 @@ class UserRegistrationForm(UserCreationForm):
             raise ValidationError('A user with that email address already exists')
 
         return email
-
 
     def save(self, commit=True):
         user = super(UserRegistrationForm, self).save(commit=False)
@@ -81,3 +96,15 @@ class UserRegistrationForm(UserCreationForm):
             user.save()
 
         return user
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('twitter_username', 'bio', 'favorite_artist', 'favorite_show')
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name')

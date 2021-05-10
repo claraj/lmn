@@ -1,0 +1,37 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+
+
+<!-- Logged in user's profile page.
+
+my_user_profile is the current user's profile
+
+-->
+
+<h2>Your Profile</h2>
+
+<h3>Twitter Username</h3>
+<P>{{ my_user_profile.twitter_username|default:"No username listed." }}</p>
+<h3>Personal Bio</h3>
+<P>{{ my_user_profile.bio|default:"No bio yet." }}</p>
+<h3>Favorite Artist</h3>
+<P>{{ my_user_profile.favorite_artist|default:"Favorite artist not selected." }}</p>
+<h3>Favorite Show</h3>
+<P>{{ my_user_profile.favorite_artist|default:"Favorite show not selected." }}</p>
+
+{% if messages %}
+	<div class="messages">
+		{% for message in messages %}
+			{{ message }}
+		{% endfor %}
+	</div>
+{% endif %}
+
+<form action="{% url 'my_user_profile' %}" method="POST">
+	{% csrf_token %}
+	{{ user_form.as_p}}
+	{{ profile_form.as_p }}
+	<button type="submit">Save Profile</button>
+</form>
+
+{% endblock %}

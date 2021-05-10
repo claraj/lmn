@@ -23,6 +23,18 @@
     </p>
 
     <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+
+    <p>Rating: {{ note.Rate }}</p>
+
+    <p>
+      {% if note.user.pk == request.user.pk %}
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{ note.text }} %23{{ note.show.artist.name|cut:' ' }} %23{{ note.show.venue.name|cut:' ' }} %23LMNOP">Tweet Note</a>
+      {% elif note.user.profile.twitter_username|length > 0 %}
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=@{{ note.user.profile.twitter_username }} said it best: {{ note.text }} %23{{ note.show.artist.name|cut:' ' }} %23{{ note.show.venue.name|cut:' ' }} %23LMNOP">Tweet Note</a>
+      {% else %}
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{ note.text }} %23{{ note.show.artist.name|cut:' ' }} %23{{ note.show.venue.name|cut:' ' }} %23LMNOP">Tweet Note</a>
+      {% endif %}
+    </p>
   </div>  
 
   <hr>
@@ -32,7 +44,28 @@
   <p>No notes.</p>
 
 {% endfor %}
-
+        <!-- Adds pagination navigation -->
+    {% if notes.has_other_pages %}
+  <ul class="pagination">
+    {% if users.has_previous %}
+      <li><a href="?page={{ notes.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in notes.paginator.page_range %}
+      {% if users.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if artists.has_next %}
+      <li><a href="?page={{ notes.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
 <!-- If this is a list of notes for one show,
 display link to add new note for that show. -->
 

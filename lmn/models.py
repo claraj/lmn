@@ -6,6 +6,7 @@ import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.files.storage import default_storage
 
 RATE_CHOICES = (
     ("", ""),
@@ -77,11 +78,21 @@ class Note(models.Model):
     title = models.CharField(max_length=200, blank=True)
     text = models.TextField(max_length=1000, blank=True)
     posted_date = models.DateTimeField(auto_now_add=True, blank=True)
-    photo = models.ImageField(upload_to='user_images/', blank=True, null=True) # issue 4 upload photographs with associated notes by chris
+    photo = models.ImageField(upload_to='user_images/', blank=True, null=True) 
     Rate = models.CharField(max_length = 8, choices=RATE_CHOICES,default = '0')
 
+    def delete_photo(self, photo):
+        if default_storage.exists(photo.name):
+            default_storage.delete(photo.name)
+
+    def delete(self, *args, **kwargs):
+        if self.photo:
+            self.delete_photo(self.photo)
+
+        super().delete(*args, **kwargs)
+
     def __str__(self):
-        photo_str = self.photo.url if self.photo else 'no photo' # issue 4 upload photographs with associated notes by chris
+        photo_str = self.photo.url if self.photo else 'no photo' 
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Photo: {photo_str} Posted on: {self.posted_date} Rated at: {self.Rate}'
 
 
