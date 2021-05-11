@@ -59,9 +59,9 @@ user is a variable provided to the template and is the current logged-in user
 
 <h3>Badges: </h3>
 
-{% for badge in badges %}
+{% for badge in user.badges %}
 
-      <h3>{{ badge }}</h3>
+      <h3>{{ badge.name }}</h3>
 
 {% endfor %}
 

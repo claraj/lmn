@@ -1,6 +1,6 @@
 from django.db import models
 
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 import datetime
@@ -89,7 +89,13 @@ class Note(models.Model):
         if old_note and old_note.image:
             if old_note.image != self.image:
                 self.delete_image(old_note.image)
-       
+
+        num_notes = Note.objects.filter(user=self.user).count()
+        badge_being_awarded = Badge.objects.filter(number_notes=num_notes).first()
+        if badge_being_awarded:
+            awardee = Profile.objects.filter(user_id=self.user).first()
+            awardee.badges.set(badge_being_awarded.name)
+            awardee.save()
         super().save(*args, **kwargs)
 
 
@@ -112,6 +118,7 @@ class Note(models.Model):
 class Badge(models.Model):
     name = models.CharField(max_length=50, blank=False)
     description = models.CharField(max_length=200, blank=False)
+    number_notes = models.PositiveSmallIntegerField(blank=False)
 
     def __str__(self):
         return f'Name: {self.name}, Description: {self.description}'
