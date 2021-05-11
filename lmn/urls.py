@@ -2,8 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from . import views
-from .views import views_main, views_artists, views_venues, views_notes, views_users
-
+from .views import views_main, views_artists, views_venues, views_notes, views_users, views_shows
 
 # app_name = 'lmn'
 
@@ -44,6 +43,13 @@ urlpatterns = [
     path('goodbye/', views_users.goodbye, name='goodbye'),
     path('register/', views_users.register, name='register'),
 
+    # Show related
+    path('shows/list/', views_shows.show_list, name='show_list'),
+    path('shows/detail/<int:show_pk>/', views_shows.show_detail, name='show_detail'),
+    path('shows/list/add_show_to_venue/<int:venue_pk>', views_shows.add_show_to_venue, name='add_show_to_venue'),
+    path('shows/add_show_to_artist/<int:artist_pk>/', views_shows.add_show_to_artist, name='add_show_to_artist'),
+    path('shows/create_show/', views_shows.create_show, name='create_show'),
+    path('shows/save_show/', views_shows.save_show, name='save_show'),
 ]
 
 

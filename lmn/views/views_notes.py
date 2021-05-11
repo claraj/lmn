@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 
 from ..models import Venue, Artist, Note, Show
@@ -65,6 +66,7 @@ def notes_for_show(request, show_pk):
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html', {'note': note})
+
 
 def delete_note(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
