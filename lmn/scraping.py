@@ -59,6 +59,7 @@ def scrape_first():
                     print(f'created new artist named {a.name}')
                 except django.db.utils.IntegrityError as e:
                     print('Duplicate Artist entry, not added.')
+                    break
                 except Exception as e:
                     print(e)
                 
