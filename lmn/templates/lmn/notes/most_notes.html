@@ -7,11 +7,12 @@
 
 {% for show in shows %}
 {% if show.num_notes > 0 %}
-   <br><p>ARTIST: {{ show.artist.name }}<br>
-                       VENUE: {{ show.venue.name }}<br>
-                       DATE: {{ show.show_date }}<br>
-                       NUMBER OF NOTES: {{ show.num_notes }}<br>
-                       <a href="{% url 'show_detail' show_pk=show.pk %}">Show info</a>
+   <br><p>ARTIST: <a href="{% url 'venues_for_artist' artist_pk=show.artist.pk%}">{{ show.artist.name }}</a><br>
+          VENUE: <a href="{% url 'artists_at_venue' venue_pk=show.venue.pk%}">{{ show.venue.name }}</a><br>
+          DATE: {{ show.show_date }}<br>
+          NUMBER OF NOTES: {{ show.num_notes }}<br>
+          RATING: {{ show.rating }}/5<br>
+          <a href="{% url 'show_detail' show_pk=show.pk %}">Show detail</a>
    </p>
 
   <hr>
