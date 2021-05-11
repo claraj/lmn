@@ -11,10 +11,10 @@ import re, datetime
 from datetime import timezone
 
 
-# TODO verify correct templates are rendered.
+# TODO verify correct templates are rendered. DONE
 
 class TestEmptyViews(TestCase):
-    ''' main views - the ones in the navigation menu'''
+    """ main views - the ones in the navigation menu """
 
     def test_with_no_artists_returns_empty_list(self):
         response = self.client.get(reverse('artist_list'))
@@ -97,7 +97,7 @@ class TestArtistViews(TestCase):
         self.assertTemplateUsed(response, 'lmn/artists/artist_list_for_venue.html')
 
     def test_artist_detail(self):
-        ''' Artist 1 details displayed in correct template '''
+        """ Artist 1 details displayed in correct template """
         # kwargs to fill in parts of url. Not get or post params
 
         response = self.client.get(reverse('artist_detail', kwargs={'artist_pk': 1}))
@@ -110,7 +110,7 @@ class TestArtistViews(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_venues_played_at_most_recent_shows_first(self):
-        ''' For each artist, display a list of venues they have played shows at '''
+        """ For each artist, display a list of venues they have played shows at """
 
         # Artist 1 (REM) has played at venue 2 (Turf Club) on two dates
 
@@ -208,7 +208,7 @@ class TestVenues(TestCase):
         self.assertTemplateUsed(response, 'lmn/venues/venue_list.html')
 
     def test_venue_detail(self):
-        ''' venue 1 details displayed in correct template '''
+        """ venue 1 details displayed in correct template """
         # kwargs to fill in parts of url. Not get or post params
 
         response = self.client.get(reverse('venue_detail', kwargs={'venue_pk': 1}))
@@ -331,25 +331,28 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
 
         new_note_url = reverse('new_note', kwargs={'show_pk': 1})
 
-        response = self.client.post(new_note_url, {'text': 'ok', 'title': 'blah blah'}, follow=True)
+        response = self.client.post(new_note_url, {'text': 'ok', 'title': 'blah blah', 'rate': 'Great'}, follow=True)
 
         # Verify note is in database
         new_note_query = Note.objects.filter(text='ok', title='blah blah')
+
         self.assertEqual(new_note_query.count(), 1)
 
         # And one more note in DB than before
         self.assertEqual(Note.objects.count(), initial_note_count + 1)
 
         # Date correct?
-        now = datetime.datetime.today()
-        posted_date = new_note_query.first().posted_date
-        self.assertEqual(now.date(), posted_date.date())  # TODO check time too
+        now = datetime.datetime.today().replace(microsecond=0)
+        posted_date = new_note_query.first().posted_date.replace(microsecond=0)
+
+        self.assertEqual(now.date(), posted_date.date())  # TODO check time too DONE
+        self.assertEqual(now.time(), posted_date.time())
 
     def test_redirect_to_note_detail_after_save(self):
         initial_note_count = Note.objects.count()
 
         new_note_url = reverse('new_note', kwargs={'show_pk': 1})
-        response = self.client.post(new_note_url, {'text': 'ok', 'title': 'blah blah'}, follow=True)
+        response = self.client.post(new_note_url, {'text': 'ok', 'title': 'blah blah', 'rate': 'Great'}, follow=True)
         new_note = Note.objects.filter(text='ok', title='blah blah').first()
 
         self.assertRedirects(response, reverse('note_detail', kwargs={'note_pk': new_note.pk}))
@@ -380,7 +383,7 @@ class TestUserProfile(TestCase):
         response = self.client.get(reverse('user_profile', kwargs={'user_pk': 3}))
         self.assertFalse(response.context['notes'])
 
-    def test_username_shown_on_profile_page(self):
+    def test_username_shown_on_profile_page(self):  # TODO
         # A string "username's notes" is visible
         response = self.client.get(reverse('user_profile', kwargs={'user_pk': 1}))
         self.assertContains(response, 'alice\'s notes')
@@ -388,7 +391,7 @@ class TestUserProfile(TestCase):
         response = self.client.get(reverse('user_profile', kwargs={'user_pk': 2}))
         self.assertContains(response, 'bob\'s notes')
 
-    def test_correct_user_name_shown_different_profiles(self):
+    def test_correct_user_name_shown_different_profiles(self):  # TODO
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk': 2}))
@@ -440,8 +443,8 @@ class TestNotes(TestCase):
 
 
 class TestUserAuthentication(TestCase):
-    ''' Some aspects of registration (e.g. missing data, duplicate username) covered in test_forms '''
-    ''' Currently using much of Django's built-in login and registration system'''
+    """ Some aspects of registration (e.g. missing data, duplicate username) covered in test_forms
+     Currently using much of Django's built-in login and registration system """
 
     def test_user_registration_logs_user_in(self):
         response = self.client.post(reverse('register'),
