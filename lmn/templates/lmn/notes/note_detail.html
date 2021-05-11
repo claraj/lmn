@@ -14,13 +14,13 @@
     TEXT:<br>
 </h4>
 
+<p id="note-text">{{ note.text }}</b>
+
 {% if rating %}
 
-<h3>You rated this show: {{ rating }}/5</h3>
-
-{% endif %}
-
-<p id="note-text">{{ note.text }}</b>
+    <h4>You rated this show: {{ rating }}/5</h4>
+    
+ {% endif %}
 
 
 <h3>Image</h3>
