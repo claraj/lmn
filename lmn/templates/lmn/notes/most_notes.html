@@ -2,11 +2,17 @@
 {% block content %}
 {% load mathfilters %}
 
+
+<h2>SHOWS WITH THE MOST NOTES</h2>
+
 {% for show in shows %}
 {% if show.num_notes > 0 %}
-   <h2 id="show-title">{{ show.num_notes }} Notes for {{ show.artist }} at {{ show.venue }} on {{ show.show_date }} </h2>
-
-    <a href="{% url 'show_detail' show_pk=show.pk %}">Show info</a>
+   <br><p>ARTIST: {{ show.artist.name }}<br>
+                       VENUE: {{ show.venue.name }}<br>
+                       DATE: {{ show.show_date }}<br>
+                       NUMBER OF NOTES: {{ show.num_notes }}<br>
+                       <a href="{% url 'show_detail' show_pk=show.pk %}">Show info</a>
+   </p>
 
   <hr>
 
