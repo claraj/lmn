@@ -12,7 +12,7 @@ from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
-from lmn.models import Venue, Artist, Note, Show, ShowRating
+from lmn.models import Profile, Venue, Artist, Note, Show, ShowRating, Badge
 from django.contrib.auth.models import User
 
 import re, datetime
@@ -912,3 +912,56 @@ class TestRateShowsInNotes(TestCase):
         response = self.client.get(reverse('new_note', kwargs={'show_pk':1}))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'You\'ve already rated this show.')
+
+
+class TestBadges(TestCase):
+
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_badges']
+
+    def setUp(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+
+
+    def test_add_note_badge_awarded_appropriately(self):
+        new_note_url = reverse('new_note', kwargs={'show_pk':1})
+        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah' }, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        user = response.context['user']
+        user_profile = user.profile
+        user_badges = user_profile.badges.count()
+        
+        self.assertEqual(user_badges, 1)
+
+        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah' }, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        user = response.context['user']
+        user_profile = user.profile
+        user_badges = user_profile.badges.count()
+        
+        self.assertEqual(user_badges, 2)
+
+
+    def test_add_note_number_shouldnt_get_badge_badge_not_applied(self):
+        new_note_url = reverse('new_note', kwargs={'show_pk':1})
+        # Add 3 notes, should only have 2 badges
+        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah' }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah' }, follow=True)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah' }, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        user = response.context['user']
+        user_profile = user.profile
+        user_badges = user_profile.badges.count()
+        
+        self.assertEqual(user_badges, 2)
+
+
+
+
+
+
