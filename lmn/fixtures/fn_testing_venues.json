@@ -1,20 +1,17 @@
 [
   {"model" : "lmn.venue", "pk" : 1 , "fields" :
     { "name" : "First Avenue",
-      "city" : "Minneapolis",
-      "state" : "MN"
+      "address" : "Minneapolis, MN"
     }
   },
   {"model" : "lmn.venue", "pk" : 2 , "fields" :
     { "name" : "The Turf Club",
-      "city" : "St. Paul",
-      "state" : "MN"
+      "address" : "St. Paul, MN"
     }
   },
   {"model" : "lmn.venue", "pk" : 3 , "fields" :
     { "name" : "Target Center",
-      "city" : "Minneapolis",
-      "state" : "MN"
+      "address" : "Minneapolis, MN"
     }
   }
 ]
