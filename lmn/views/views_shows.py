@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from ..models import Show, Note, ShowRating
 from ..forms import NewShowRatingForm
+from ..paginator import paginate
 from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger, EmptyPage
 
 import time
@@ -11,21 +12,7 @@ import time
 def latest_shows(request):
     shows = Show.objects.all().order_by('-show_date')[:100]
 
-    paginator = Paginator(shows, 10) # 10 shows per page
-
-    if request.GET.get('page'):
-        page = int(request.GET.get('page'))
-    else:
-        page = None
-
-    try:
-        shows = paginator.page(page)
-    except PageNotAnInteger:
-        shows = paginator.page(1)
-        page = 1
-    except EmptyPage:
-        shows = paginator.page(paginator.num_pages)
-        page = paginator.num_pages
+    (shows, paginator, page) = paginate(request, shows, 10)
 
     return render(request, 'lmn/shows/latest_shows.html', { 'shows' : shows, 
                                                             'page_range': paginator.page_range, 

@@ -24,7 +24,7 @@
       <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
     </p>
 
-    <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+    <p class='note-text'>{{ note.text|truncatechars:100 }}</p><br>
 
   </div>  
 

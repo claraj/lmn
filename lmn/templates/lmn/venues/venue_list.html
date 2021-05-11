@@ -20,7 +20,7 @@
         <a href="{% url 'venue_list' %}" id='clear_search'>clear</a>
       </h3>
     {% else %}
-      <h3 id="venue_list_title">All venues</h3>
+      <br><h3 id="venue_list_title">All venues</h3><br>
     {% endif %}
   </div>
 
@@ -29,7 +29,7 @@
     {% for venue in venues %}
 
     <div id="venue-{{ venue.pk }}">
-      <p>See shows played at: <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} in {{ venue.city }}, {{ venue.state }}</a></p>
+      <p>See shows played at: <a href='{% url "artists_at_venue" venue_pk=venue.pk %}'>{{ venue.name }} in {{ venue.city }}, {{ venue.state }}</a></p><br>
     </div>
 
     {% empty %}
