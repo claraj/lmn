@@ -3,12 +3,12 @@
 {% block content %}
 
 
-<h2 id="artists-at-venue-title">Artists that have played at {{ venue.name }}</h2>
+<h2 id="artists-at-venue-title">Shows played at {{ venue.name }}</h2>
 
 {% for show in shows %}
 
 <div class="show" id="show_{{ show.pk }}">
-  <p>{{ show.artist.name}} on {{ show.show_date }}.
+  <p>ARTIST: {{ show.artist.name}} DATE: {{ show.show_date }}.
     <span><a href="{% url 'show_detail' show_pk=show.pk %}">See details about this show</a>
 
     {% if show.rating >= 1 %}

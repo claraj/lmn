@@ -21,13 +21,9 @@
 
 {% for artist in artists %}
 
-  <div class="artist" id="artist_{{ artist.pk }}">
-    <p>
-      <a href="{% url 'artist_detail' artist_pk=artist.pk %}">{{ artist.name }}</a>
-    </p>
-    
-    <p>See venues played, notes, and add your own 
-      <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }} notes</a>
+  <div class="artist" id="artist_{{ artist.pk }}"> 
+    <p>See shows played by: 
+      <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }}</a>
     </p>  
   </div>
 

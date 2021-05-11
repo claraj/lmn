@@ -6,7 +6,11 @@
 {% for show in shows %}
 
   <div class="show" id="show-{{ show.pk }}">
-    <p><span>{{ show.venue.name}} on {{ show.show_date }}
+    <p><span>VENUE: {{ show.venue.name}} DATE: {{ show.show_date }}
+    
+    <a href="{% url 'show_detail' show_pk=show.pk %}">See details and notes for this show</a>
+    
+    RATING:
 
       {% if show.rating >= 1 %}
 
@@ -39,9 +43,7 @@
     {% endif %}
 
     </span>
-    </p>
-    <p><a href="{% url 'show_detail' show_pk=show.pk %}">See details and notes for this show</a>
-    </p>
+  
   </div>
 
 {% empty %}
