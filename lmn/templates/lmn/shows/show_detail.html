@@ -6,7 +6,16 @@
 <p><a href="{% url 'artists_at_venue' venue_pk=show.venue.pk %}">List of shows for this venue</a></p>
 
 <h2 id="show-title">Show: {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
-<h3>Rating: {{ show.rating }}/5</h3>
+
+{% if show.rating != None  %}
+
+  <h3>Rating: {{ show.rating }}/5</h3>
+
+{% else %}
+
+<h3>Rating: -/5</h3>
+
+{% endif %}
 
 {% if user.is_authenticated %}
 

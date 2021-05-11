@@ -12,7 +12,11 @@
     
     RATING:
 
-      {% if show.rating >= 1 %}
+    {% if show.rating == None %}
+      --
+    {% endif %}
+
+    {% if show.rating >= 1 %}
 
       <span class="icon">★</span>
 
