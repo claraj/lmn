@@ -96,7 +96,7 @@ DATABASES = {
 # if not os.getenv('GAE_INSTANCE'):    
 #     DATABASES['default']['HOST'] = '127.0.0.1'
 
-# # OR if not GAE, use local SQLite 
+# OR if not GAE, use local SQLite 
 if not os.getenv('GAE_INSTANCE'):    
     DATABASES = {
         'default': {
