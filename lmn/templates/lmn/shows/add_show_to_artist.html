@@ -1,0 +1,22 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+<h2>Add Show for: {{ artist.name }}</h2>
+<h2>At Which Venue?</h2>
+        {% for venue in venues %}
+<form method="POST" action="{% url 'create_show' %}">
+    <div id="venue-{{ venue.pk }}">
+
+      <p><a>{{ venue.name }}</a></p>
+              <input type="hidden" name="artist_pk" value="{{ artist.pk }}">
+              <input type="hidden" name="venue_pk" value="{{ venue.pk }}">
+            {% csrf_token %}
+
+    <button type=submit>Create Show</button>
+    </div>
+</form>
+
+    {% empty %}
+      <p>No Venues Found</p>
+    {% endfor %}
+
+{% endblock %}

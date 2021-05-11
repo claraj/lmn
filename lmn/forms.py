@@ -1,5 +1,5 @@
 from django import forms
-from .models import Note, Artist, Profile, Venue
+from .models import Note, Artist, Profile, Venue, Show
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -17,7 +17,7 @@ class ArtistSearchForm(forms.Form):
 class NewNoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ('title', 'text', 'photo','Rate' ) # issue 4 upload photographs with associated notes by chris
+        fields = ('title', 'text', 'photo', 'Rate')  # issue 4 upload photographs with associated notes by chris
 
 
 class ArtistForm(forms.ModelForm):
@@ -108,3 +108,16 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name')
+
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
+class NewShowForm(forms.ModelForm):
+    class Meta:
+        model = Show
+        fields = ('show_date', 'artist', 'venue')
+        widgets = {
+            'show_date': DateInput()
+        }
