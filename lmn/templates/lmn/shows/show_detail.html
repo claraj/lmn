@@ -3,19 +3,23 @@
 {% load static %}
 
 
-<p><a href="{% url 'artists_at_venue' venue_pk=show.venue.pk %}">List of shows for this venue</a></p>
+<h2>SHOW DETAIL</h2>
 
-<h2 id="show-title">Show: {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
+<br><h5 id="show-title">
+  ARTIST: <a href="{% url 'venues_for_artist' artist_pk=show.artist.pk %}">{{ show.artist.name }}</a><br>
+  VENUE: <a href="{% url 'artists_at_venue' venue_pk=show.venue.pk %}">{{ show.venue.name }}</a><br>
+  DATE: {{ show.show_date }}<br>
+  {% if show.rating != None  %}
 
-{% if show.rating != None  %}
+    Rating: {{ show.rating }}/5
 
-  <h3>Rating: {{ show.rating }}/5</h3>
+  {% else %}
 
-{% else %}
+    Rating: -/5
 
-<h3>Rating: -/5</h3>
+  {% endif %} 
 
-{% endif %}
+</h5>
 
 {% if user.is_authenticated %}
 
@@ -80,7 +84,7 @@
 
 {% endif %}
 
-<h3>User Notes:</h3>
+<h4>User Notes:</h4>
 
 {% for note in notes %}
 
