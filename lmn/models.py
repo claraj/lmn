@@ -90,12 +90,6 @@ class Note(models.Model):
             if old_note.image != self.image:
                 self.delete_image(old_note.image)
 
-        num_notes = Note.objects.filter(user=self.user).count()
-        badge_being_awarded = Badge.objects.filter(number_notes=num_notes).first()
-        if badge_being_awarded:
-            awardee = Profile.objects.filter(user_id=self.user).first()
-            awardee.badges.set(badge_being_awarded.name)
-            awardee.save()
         super().save(*args, **kwargs)
 
 
@@ -165,3 +159,13 @@ def create_profile(sender, **kwargs):
         user_profile = Profile(user=user)
         user_profile.save()
 post_save.connect(create_profile, sender=User)
+
+
+def post_save_notes_model_receiver(sender, instance, *args, **kwargs):
+    num_notes = instance.user.note_set.count()
+    badge_to_awarded = Badge.objects.filter(number_notes=num_notes).first()
+    profile = instance.user.profile
+    if badge_to_awarded:
+        profile.badges.add(badge_to_awarded)
+
+post_save.connect(post_save_notes_model_receiver, sender= Note)
