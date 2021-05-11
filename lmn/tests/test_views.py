@@ -105,29 +105,9 @@ class TestArtistViews(TestCase):
         response = self.client.get(reverse('artist_list'), {'search_name' : 'Non Existant Band'})
         self.assertTemplateUsed(response, 'lmn/artists/artist_list.html')
 
-        # Artist detail
-        response = self.client.get(reverse('artist_detail', kwargs={'artist_pk':1}))
-        self.assertTemplateUsed(response, 'lmn/artists/artist_detail.html')
-
         # Artist list for venue
         response = self.client.get(reverse('artists_at_venue', kwargs={'venue_pk':1}))
         self.assertTemplateUsed(response, 'lmn/artists/artist_list_for_venue.html')
-
-
-    def test_artist_detail(self):
-
-        ''' Artist 1 details displayed in correct template '''
-        # kwargs to fill in parts of url. Not get or post params
-
-        response = self.client.get(reverse('artist_detail', kwargs={'artist_pk' : 1} ))
-        self.assertContains(response, 'REM')
-        self.assertEqual(response.context['artist'].name, 'REM')
-        self.assertEqual(response.context['artist'].pk, 1)
-
-
-    def test_get_artist_that_does_not_exist_returns_404(self):
-        response = self.client.get(reverse('artist_detail', kwargs={'artist_pk' : 10} ))
-        self.assertEqual(response.status_code, 404)
 
 
     def test_venues_played_at_most_recent_shows_first(self):
@@ -137,7 +117,7 @@ class TestArtistViews(TestCase):
 
         url = reverse('venues_for_artist', kwargs={'artist_pk':1})
         response = self.client.get(url)
-        shows = list(response.context['shows'].all())
+        shows = list(response.context['shows'])
         show1, show2 = shows[0], shows[1]
         self.assertEqual(2, len(shows))
 
@@ -158,7 +138,7 @@ class TestArtistViews(TestCase):
 
         url = reverse('venues_for_artist', kwargs={'artist_pk': 2})
         response = self.client.get(url)
-        shows = list(response.context['shows'].all())
+        shows = list(response.context['shows'])
         show1 = shows[0]
         self.assertEqual(1, len(shows))
 
@@ -172,7 +152,7 @@ class TestArtistViews(TestCase):
 
         url = reverse('venues_for_artist', kwargs={'artist_pk':3})
         response = self.client.get(url)
-        shows = list(response.context['shows'].all())
+        shows = list(response.context['shows'])
         self.assertEqual(0, len(shows))
 
 
@@ -235,30 +215,12 @@ class TestVenues(TestCase):
             self.assertTemplateUsed(response, 'lmn/venues/venue_list.html')
 
 
-        def test_venue_detail(self):
-
-            ''' venue 1 details displayed in correct template '''
-            # kwargs to fill in parts of url. Not get or post params
-
-            response = self.client.get(reverse('venue_detail', kwargs={'venue_pk' : 1} ))
-            self.assertContains(response, 'First Avenue')
-            self.assertEqual(response.context['venue'].name, 'First Avenue')
-            self.assertEqual(response.context['venue'].pk, 1)
-
-            self.assertTemplateUsed(response, 'lmn/venues/venue_detail.html')
-
-
-        def test_get_venue_that_does_not_exist_returns_404(self):
-            response = self.client.get(reverse('venue_detail', kwargs={'venue_pk' : 10} ))
-            self.assertEqual(response.status_code, 404)
-
-
         def test_artists_played_at_venue_most_recent_first(self):
             # Artist 1 (REM) has played at venue 2 (Turf Club) on two dates
 
             url = reverse('artists_at_venue', kwargs={'venue_pk':2})
             response = self.client.get(url)
-            shows = list(response.context['shows'].all())
+            shows = list(response.context['shows'])
             show1, show2 = shows[0], shows[1]
             self.assertEqual(2, len(shows))
 
@@ -277,7 +239,7 @@ class TestVenues(TestCase):
 
             url = reverse('artists_at_venue', kwargs={'venue_pk': 1})
             response = self.client.get(url)
-            shows = list(response.context['shows'].all())
+            shows = list(response.context['shows'])
             show1 = shows[0]
             self.assertEqual(1, len(shows))
 
@@ -290,7 +252,7 @@ class TestVenues(TestCase):
 
             url = reverse('artists_at_venue', kwargs={'venue_pk':3})
             response = self.client.get(url)
-            shows = list(response.context['shows'].all())
+            shows = list(response.context['shows'])
             self.assertEqual(0, len(shows))
 
 
@@ -305,10 +267,6 @@ class TestVenues(TestCase):
             # Search no matches
             response = self.client.get(reverse('venue_list'), {'search_name' : 'Non Existant Venue'})
             self.assertTemplateUsed(response, 'lmn/venues/venue_list.html')
-
-            # Venue detail
-            response = self.client.get(reverse('venue_detail', kwargs={'venue_pk':1}))
-            self.assertTemplateUsed(response, 'lmn/venues/venue_detail.html')
 
             response = self.client.get(reverse('artists_at_venue', kwargs={'venue_pk':1}))
             self.assertTemplateUsed(response, 'lmn/artists/artist_list_for_venue.html')
