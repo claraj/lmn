@@ -6,7 +6,7 @@
 {% if show.num_notes > 0 %}
    <h2 id="show-title">{{ show.num_notes }} Notes for {{ show.artist }} at {{ show.venue }} on {{ show.show_date }} </h2>
 
-    <a href="{% url 'notes_for_show' show_pk=show.pk %}">Show info</a>
+    <a href="{% url 'show_detail' show_pk=show.pk %}">Show info</a>
 
   <hr>
 
