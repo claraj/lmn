@@ -30,7 +30,7 @@ user is a variable provided to the template and is the current logged-in user
 
 <h2>{{ user_profile.first_name }}'s Information</h2>
 <div class="container-fluid">
-  <div class="row">
+  <div class="row" id='profile'>
     <div class="col-md-8">
       <h3>Profile Photo:</h3>
           {% if user_profile.profile.profile_image %}
@@ -43,55 +43,57 @@ user is a variable provided to the template and is the current logged-in user
       </div>
     </div>
 
-  <div class="row">
+  <div class="row" id='profile'>
     <div class="col-md-8">
       <h3>Username: {{user_profile.username }}</h3>
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" id='profile'>
     <div class="col-md-8">
       <h3>Name: {{ user_profile.first_name }} {{ user_profile.last_name }}</h3>
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" id='profile'>
     <div class="col-md-8">
       <h3>Email: {{ user_profile.email }}</h3>
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" id='profile'>
       <div class="col-md-8">
         <span><h3>Bio:</h3> {{ user_profile.profile.bio }}</span>
       </div>
     </div>
 
-  <div class="row">
+  <div class="row" id='profile'>
     <div class="col-md-8">  
       <h3>Social Media: TODO Implement social media.</h3>
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" id='profile'>
     <div class="col-md-8">
       <h3>Shows Seen: </h3>
+      <br>
       {% for show in shows_seen %}
       <p><a href="{% url 'show_detail' show_pk=show.pk %}">{{ show }}</a></p>
       {% endfor %}
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" id='profile'>
     <div class="col-md-8">
       <h3>Badges: </h3>
+      <br>
       {% for badge in badges %}
       <h3>{{ badge }}</h3>
       {% endfor %}
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" id='profile'>
     <div class="col-md-8">
       <h2 id='username_notes'>Notes:</h2>
       {% for note in notes %}

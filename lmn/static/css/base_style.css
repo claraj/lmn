@@ -81,10 +81,13 @@ a {
   color: rgb(36, 214, 36);
 }
 
-.row {
-  border-style: outset;
+#profile {
+  border-style: dotted outset;
   width: 100%;
-  padding: 1px;
-  border-color: darkturquoise;
+  padding: 5px;
+  border-color: rgb(3, 137, 139);
+}
 
+.hidden {
+  display: none;
 }
