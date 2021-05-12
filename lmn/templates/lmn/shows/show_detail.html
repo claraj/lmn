@@ -3,21 +3,21 @@
 
 <h2>{{ show.artist.name }} @ {{ show.venue.name }} {{ show.show_date }}</h2>
 <h2>Notes:</h2>
+
 {% for note in notes %}
 
-  <div class="show" id="show_{{ show.pk }}">
-    <p>
-      <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
-    </p>
-  </div>
+<div class="show" id="show_{{ show.pk }}">
+	<p>
+		<a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
+	</p>
+</div>
 
 {% empty %}
 
 <p>No Notes Yet</p>
 
 {% endfor %}
+
 <a href="{% url 'new_note' show_pk=show.pk %}">Add a Note:</a>
-
-
 
 {% endblock %}
