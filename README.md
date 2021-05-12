@@ -15,12 +15,12 @@ https://www.figma.com/file/XoJmT6KOsXz4tpTDKhtYed/LMN?node-id=0%3A1
  (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g)*
 - *Extending user modelmade possible by:
 https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone*
--*Some css styles exported from figma designs
+- *Some css styles exported from figma designs
 (https://www.figma.com/file/XoJmT6KOsXz4tpTDKhtYed/LMN?node-id=0%3A1)
--*link hover styles
+- *link hover styles
 (https://css-tricks.com/4-ways-to-animate-the-color-of-a-text-link-on-hover/)
--*Gradient style creator (https://cssgradient.io/)
--*Logo designs and other design images from Canva (https://www.canva.com/)
+- *Gradient style creator (https://cssgradient.io/)
+- *Logo designs and other design images from Canva (https://www.canva.com/)
 
 ### To install
 
