@@ -18,5 +18,13 @@
     {% empty %}
       <p>No Artists Found</p>
     {% endfor %}
+        <h2>Dont See Your Artist?</h2>
 
+    <p>
+<form method="POST" action="{% url 'create_artist' %}">
+    {% csrf_token %}
+      {{ create_artist_form }}
+    <button type=submit>Save</button>
+</form>
+    </p>
 {% endblock %}

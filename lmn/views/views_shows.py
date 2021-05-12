@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from ..models import Venue, Artist, Note, Show
-from ..forms import NewShowForm
+from ..forms import NewShowForm, NewNoteForm, CreateArtistForm, CreateVenueForm
 
 
 def show_list(request):
@@ -14,21 +14,25 @@ def show_list(request):
 def show_detail(request, show_pk):
     """ Page for Show details """  # TODO: adding notes feature goes here
     show = get_object_or_404(Show, pk=show_pk)
-    return render(request, 'lmn/shows/show_detail.html', {'show': show})
+    notes = Note.objects.filter(show=show_pk)
+    return render(request, 'lmn/shows/show_detail.html', {'show': show, 'notes': notes})
 
 
 def add_show_to_artist(request, artist_pk):
     """ From Artist details a Show can be added """
     artist = get_object_or_404(Artist, pk=artist_pk)
     venues = Venue.objects.all()
-    return render(request, 'lmn/shows/add_show_to_artist.html', {'artist': artist, 'venues': venues})
+    create_venue_form = CreateVenueForm()
+    return render(request, 'lmn/shows/add_show_to_artist.html', {'artist': artist, 'venues': venues, 'create_venue_form': create_venue_form})
 
 
 def add_show_to_venue(request, venue_pk):
     """ From Venue details a Show can be added """
     venue = get_object_or_404(Venue, pk=venue_pk)
     artists = Artist.objects.all()
-    return render(request, 'lmn/shows/add_show_to_venue.html', {'venue': venue, 'artists': artists})
+    create_artist_form = CreateArtistForm()
+    return render(request, 'lmn/shows/add_show_to_venue.html', {'venue': venue, 'artists': artists,
+                                                                'create_artist_form': create_artist_form})
 
 
 def create_show(request):
