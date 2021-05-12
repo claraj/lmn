@@ -1,31 +1,36 @@
 {% extends 'lmn/base.html' %}
 
 {% block content %}
-<h2>Your Results</h2>
-    {% for result in search_results %}
-  <div>
-    <p>
 
-<form method="POST" action="{% url 'save_venue' %}">
-            <a>{{ result }}</a>
+<h2>Your Results</h2>
+
+{% for result in search_results %}
+<div>
+  <p>
+    <form method="POST" action="{% url 'save_venue' %}">
+      <a>{{ result }}</a>
       <input type="hidden" name="name" value="{{ result.name }}">
       <input type="hidden" name="address" value="{{ result.address }}">
-    {% csrf_token %}
-    <button type=submit>Save</button>
-</form>
-    </p>
-    </div>
-{% empty %}
-<a href="{% url 'add_venue' %}">Back to Add Venue</a>
-{% endfor %}
-        <h2>Dont See Your Venue?</h2>
+      {% csrf_token %}
+      <button type=submit>Save</button>
+    </form>
+  </p>
+</div>
 
-    <p>
-<form method="POST" action="{% url 'create_venue' %}">
+{% empty %}
+
+<a href="{% url 'add_venue' %}">Back to Add Venue</a>
+
+{% endfor %}
+
+<h2>Dont See Your Venue?</h2>
+
+<p>
+  <form method="POST" action="{% url 'create_venue' %}">
     {% csrf_token %}
-      {{ create_venue_form }}
+    {{ create_venue_form }}
     <button type=submit>Save</button>
-</form>
-    </p>
+  </form>
+</p>
 
 {% endblock %}
