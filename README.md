@@ -9,7 +9,11 @@
 - *Match page style to Kelsey's UX design*
 
 ### Credits
-- *Yeah*
+- *Pagination made possible by a ridiculously deep rabbit hole of docs and tutorials pagination
+ made possible by a ridiculously deep rabbit hole of docs and tutorials 
+ (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g)*
+- *Extending user modelmade possible by:
+https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone*
 
 ### To install
 
