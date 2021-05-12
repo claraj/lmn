@@ -2,7 +2,6 @@
 {% load static %}
 {% block content %}
 
-
 <h2 id="note-page-title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by 
     <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
 </h2>
@@ -10,6 +9,7 @@
 <p id="note-title"><b>{{ note.title}}</b></p>
     <p id="note-text">{{ note.text }}</p>
 <p id="note-score">{{ note.Rate }}</p>
+
 {% if note.photo %}
     <img src="{{ note.photo.url }}" style="height: 500px">  
 {% else %}
@@ -17,13 +17,12 @@
 {% endif %}
 
 {% if user.pk == note.user.pk %}
-<form action="{% url 'delete_note' note.pk %}" method="POST">
-    {% csrf_token %}
-    <button type=submit class="delete">Delete</button>
-</form>
+	<form action="{% url 'delete_note' note.pk %}" method="POST">
+	    {% csrf_token %}
+	    <button type=submit class="delete">Delete</button>
+	</form>
 {% endif %}
 
-    
 <script src="{% static 'js/confirm_delete.js' %}"></script> 
 
 {% endblock %}
