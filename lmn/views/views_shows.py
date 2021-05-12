@@ -6,37 +6,42 @@ from ..forms import NewShowForm, NewNoteForm, CreateArtistForm, CreateVenueForm
 
 
 def show_list(request):
-    """ Displays all shows in db """
+    ''' Displays all shows in db '''
     shows = Show.objects.all().order_by('artist')
+    
     return render(request, 'lmn/shows/show_list.html', {'shows': shows})
 
 
 def show_detail(request, show_pk):
-    """ Page for Show details """  # TODO: adding notes feature goes here
+    ''' Page for Show details '''
+    # TODO: adding notes feature goes here
     show = get_object_or_404(Show, pk=show_pk)
     notes = Note.objects.filter(show=show_pk)
+    
     return render(request, 'lmn/shows/show_detail.html', {'show': show, 'notes': notes})
 
 
 def add_show_to_artist(request, artist_pk):
-    """ From Artist details a Show can be added """
+    ''' From Artist details a Show can be added '''
     artist = get_object_or_404(Artist, pk=artist_pk)
     venues = Venue.objects.all()
     create_venue_form = CreateVenueForm()
+
     return render(request, 'lmn/shows/add_show_to_artist.html', {'artist': artist, 'venues': venues, 'create_venue_form': create_venue_form})
 
 
 def add_show_to_venue(request, venue_pk):
-    """ From Venue details a Show can be added """
+    ''' From Venue details a Show can be added '''
     venue = get_object_or_404(Venue, pk=venue_pk)
     artists = Artist.objects.all()
     create_artist_form = CreateArtistForm()
+ 
     return render(request, 'lmn/shows/add_show_to_venue.html', {'venue': venue, 'artists': artists,
                                                                 'create_artist_form': create_artist_form})
 
 
 def create_show(request):
-    """ From whichever method used to creat show this method will pull all info together and get the Date """
+    ''' From whichever method used to creat show this method will pull all info together and get the Date '''
     if request.method == 'POST':
         show_info = request.POST
         artist_pk = show_info.get('artist_pk')
@@ -51,7 +56,7 @@ def create_show(request):
 
 
 def save_show(request):
-    """ This method will do the saving once a Show has all fields, after checking to make sure it does not exist """
+    ''' This method will do the saving once a Show has all fields, after checking to make sure it does not exist '''
     if request.method == 'POST':
         form = NewShowForm(request.POST)
         show = form.save(commit=False)
@@ -68,7 +73,7 @@ def save_show(request):
 
 
 def show_in_db(date, artist, venue):
-    """ checks if the show is already in db """
+    ''' checks if the show is already in db '''
     show_date, show_artist, show_venue = [], [], []
     shows_in_db = Show.objects.all()
     for show in shows_in_db:
