@@ -471,3 +471,16 @@ class TestUserAuthentication(TestCase):
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
         self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))
         self.assertContains(response, 'sam12345')  # page has user's name on it
+
+
+class TestMyUserProfile(TestCase):
+    def test_user_can_only_edit_their_profile(self):
+        pass
+
+
+    def test_refresh_renders_user_profile_view(self):
+        pass
+
+
+    def test_login_renders_user_profile_view(self):
+        pass
