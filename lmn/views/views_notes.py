@@ -22,15 +22,14 @@ def new_note(request, show_pk):
             note.show = show
             note.save()
             return redirect('note_detail', note_pk=note.pk)
-
     else:
         form = NewNoteForm()
         return render(request, 'lmn/notes/new_note.html', {'show': show, 'form': form})
 
 
-""" pagination made possible by a ridiculously deep rabbit hole of docs and tutorials pagination
+''' pagination made possible by a ridiculously deep rabbit hole of docs and tutorials pagination
  made possible by a ridiculously deep rabbit hole of docs and tutorials 
- (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g) """
+ (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g) '''
 
 
 def latest_notes(request):
