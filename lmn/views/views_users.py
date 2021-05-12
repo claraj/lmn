@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login, logout
 
 def goodbye(request):
     logout(request)
+
     #redirect to sucess page after log out
     return render(request, 'lmn/users/goodbye.html')
 
@@ -18,6 +19,7 @@ def user_profile(request, user_pk):
     # Get user profile for any user on the site
     user = User.objects.get(pk=user_pk)
     usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
+
     return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
 
 
@@ -28,7 +30,6 @@ def my_user_profile(request):
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST, instance=user.profile)
         user_form = UserForm(request.POST, instance=user)
-
         if profile_form.is_valid() and user_form.is_valid():
             profile_form.save()
             user_form.save()
@@ -37,7 +38,6 @@ def my_user_profile(request):
             messages.error(request, profile_form.errors)
         else:
             messages.error(request, user_form.errors)
-
         usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
         return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'notes': usernotes })
     elif request.META.get('HTTP_REFERER') == None or request.META.get('HTTP_REFERER').endswith('accounts/login/'):  # If last page was the login page
@@ -64,8 +64,6 @@ def register(request):
             messages.add_message(request, messages.INFO, 'Please check the data you entered')
             # include the invalid form, which will have error messages added to it. The error messages will be displayed by the template.
             return render(request, 'registration/register.html', {'form': form} )
-
     form = UserRegistrationForm()
+
     return render(request, 'registration/register.html', {'form': form} )
-
-
