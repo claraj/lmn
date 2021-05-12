@@ -3,6 +3,7 @@
 {% load static %}
 <html lang="en">
 <head>
+
   <title>LMNOP</title>
   
   <meta charset="utf-8">
@@ -14,11 +15,17 @@
 </head>
 <body>
   <div class="jumbotron">
-  <a class="logo-container" href="{% url 'homepage' %}">
-    <img class='logo' src="{% static 'img/LMN Logo.jpg' %}" alt="LMNLogo">
-  </a>
-  <h2 class="page-title">Live Music Notes, Opinions, and Photographs</h2>
-</div>
+    <div class='row'>
+      <div class='col-md-2'>
+        <a class="logo-container" href="{% url 'homepage' %}">
+          <img class='logo' src="{% static 'img/LMN Logo.jpg' %}" alt="LMNLogo">
+        </a>
+      </div>
+      <div class='col-md-8'>
+      <h2 class="page-title">Live Music Notes, Opinions, and Photographs</h2>
+      </div>
+    </div>
+  </div>
   <div class="container-fluid"></div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -27,12 +34,12 @@
           <a class="nav-item nav-link" href="{% url 'artist_list' %}">Artists</a>
           <a class="nav-item nav-link" href="{% url 'latest_shows' %}">Shows</a>
           <a class="nav-item nav-link" href="{% url 'latest_notes' %}">Notes</a>
-          <div class="topnav-right">
+          <div id="right-login" >
             {% if user.is_authenticated %}
             <span id='welcome-user-msg'>You are logged in, <a href="{% url 'user_profile' user_pk=user.pk %}">{{ user.username }}</a> 
                | <a href="{% url 'logout' %}">Logout</a></span>
             {% else %}
-            <span id='login-or-sign-up'><a href="{% url 'login' %}?next={{ request.path }}">Login or sign up</a></span>
+            <span id='login-or-sign-up' ><a href="{% url 'login' %}?next={{ request.path }}" >Login or sign up</a></span>
             {% endif %}
           </div>
         </div>

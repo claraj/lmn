@@ -33,16 +33,9 @@ a {
 .carousel-inner {
   width: 100%; /* Set width to 100% */
   margin: auto;
-  min-height: 100px;
-  height: 500px;
+  height: 100%;
   padding: 30px;
   width: auto;
-}
-  /* Hide the carousel text when the screen is less than 600 pixels wide */
-@media (max-width: 600px) {
-.carousel-caption {
-  display: none; 
-  }
 }
 
 .image-container {
@@ -50,7 +43,7 @@ a {
   border-color: black;
   border-width: 2px;
   width: 100px;
-  height: 100px;
+  height: 500px;
   overflow: hidden;  
   
 }
@@ -58,14 +51,15 @@ a {
   position: absolute;
   margin-left: auto;
   margin-right: auto;
-  width: 160px;
+  width: 150px;
   height: auto;
   margin: 0 0 0 0;
 }
 .page-title{
+  display: inline-flex;
   width: auto;
   height: 150px;
-  padding: 60px;
+  padding: 30px;
   text-align: center;
   background: black;
   color: white;
@@ -75,10 +69,7 @@ a {
 
 .jumbotron {
   background-color: black;
-}
-
-.topnav-right {
-  float: right;
+  padding:5px;
 }
 
 .note-image {
@@ -89,3 +80,12 @@ a {
 .success-message {
   color: rgb(36, 214, 36);
 }
+
+#profile {
+  border-style: dotted outset;
+  width: 100%;
+  padding: 5px;
+  border-color: rgb(3, 137, 139);
+}
+
+
