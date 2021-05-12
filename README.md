@@ -104,8 +104,8 @@ coverage report
 Recommend using PaaS Postgres such as Elephant, instead of installing local Postgres.
 
 ### Authors
-##### Chris Gisala - Visual Badass of All Things Notes
-##### Clara James - Base Code Master
+##### Chris Gisala - Grand Note Master
+##### Clara James - Base Code Extraordinaire
 ##### Kelsey Stiff - Supreme UX Chief
 ##### Mo Sargazi - Rating and Badge Captain
 ##### Shawn Jones - API Phreak
