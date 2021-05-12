@@ -55,7 +55,7 @@ class Show(models.Model):
         if rating_out_of_five != None:
             return round(rating_out_of_five, 1) # returns a rounded version of a shows average rating
         else:
-            return '-'
+            return None
 
     def __str__(self):
         formatted_show_date = self.show_date.strftime("%b %d %Y")

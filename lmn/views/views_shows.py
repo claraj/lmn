@@ -3,8 +3,22 @@ from django.contrib.auth.decorators import login_required
 
 from ..models import Show, Note, ShowRating
 from ..forms import NewShowRatingForm
+from ..paginator import paginate
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger, EmptyPage
 
 import time
+
+
+def latest_shows(request):
+    shows = Show.objects.all().order_by('-show_date')[:100]
+
+    (shows, paginator, page) = paginate(request, shows, 10)
+
+    return render(request, 'lmn/shows/latest_shows.html', { 'shows' : shows, 
+                                                            'page_range': paginator.page_range, 
+                                                            'num_pages' : paginator.num_pages, 
+                                                            'current_page': page
+                                                            })
 
 
 def show_detail(request, show_pk): 

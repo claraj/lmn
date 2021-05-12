@@ -15,20 +15,16 @@
     <a href="{% url 'artist_list' %}" id='clear_search'>(clear)</a>
   </h2>
 {% else %}
-  <h2 id='artist-list-title'>All artists</h2>
+  <br><h2 id='artist-list-title'>All artists</h2><br>
 {% endif %}
 
 
 {% for artist in artists %}
 
-  <div class="artist" id="artist_{{ artist.pk }}">
-    <p>
-      <a href="{% url 'artist_detail' artist_pk=artist.pk %}">{{ artist.name }}</a>
+  <div class="artist" id="artist_{{ artist.pk }}"> 
+    <br><p>See shows played by: 
+      <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }}</a><br>
     </p>
-    
-    <p>See venues played, notes, and add your own 
-      <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }} notes</a>
-    </p>  
   </div>
 
 {% empty %}

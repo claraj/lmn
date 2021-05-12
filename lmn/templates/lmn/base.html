@@ -24,7 +24,8 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-item nav-link" href="{% url 'venue_list' %}">Venues</a>
-          <a class="nav-item nav-link" href="{% url 'artist_list' %}">Artist</a>
+          <a class="nav-item nav-link" href="{% url 'artist_list' %}">Artists</a>
+          <a class="nav-item nav-link" href="{% url 'latest_shows' %}">Shows</a>
           <a class="nav-item nav-link" href="{% url 'latest_notes' %}">Notes</a>
           <div class="topnav-right">
             {% if user.is_authenticated %}

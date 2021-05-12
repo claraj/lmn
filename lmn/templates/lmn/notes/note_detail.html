@@ -6,18 +6,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<h2 id="note-page-title">{{ note.show.artist.name }} at {{ note.show.venue.name }} by 
-    <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
-</h2>
+<h2>NOTE DETAIL</h2>
+
+<h4 id="note-page-title">SHOW: <a href="{% url 'show_detail' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }}</a><br>
+    AUTHOR: <a href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a><br>
+    TITLE: {{ note.title }}<br>
+    TEXT:<br>
+</h4>
+
+<p id="note-text">{{ note.text }}</b>
 
 {% if rating %}
 
-<h3>You rated this show: {{ rating }}/5</h3>
-
-{% endif %}
-
-<p id="note-title"><b>{{ note.title}}</b></p>
-<p id="note-text">{{ note.text }}</b>
+    <h4>You rated this show: {{ rating }}/5</h4>
+    
+ {% endif %}
 
 
 <h3>Image</h3>

@@ -2,61 +2,24 @@
 {% block content %}
 {% load mathfilters %}
 
-
-<h2 id="venues_for_artist_title">Shows that {{ artist.name }} has played</h2>
+<h1>LATEST SHOWS</h1>
 
 <br><p>Page {{ current_page }} of {{ num_pages }}</p><br>
 
 {% for show in shows %}
 
-  <div class="show" id="show-{{ show.pk }}">
-    <p><span>VENUE: {{ show.venue.name}}<br>
-             DATE: {{ show.show_date }}<br>
-    
-    RATING:
-
-    {% if show.rating == None %}
-      --
-    {% endif %}
-
-    {% if show.rating >= 1 %}
-
-      <span class="icon">★</span>
-
-    {% endif %}
-    
-    {% if show.rating >= 2 %}
-    
-      <span class="icon">★</span>
-
-    {% endif %}
-    
-    {% if show.rating >= 3 %}
-    
-      <span class="icon">★</span>
-
-    {% endif %}
-    
-    {% if show.rating >= 4 %}
-    
-      <span class="icon">★</span>
-
-    {% endif %}
-    
-    {% if show.rating == 5 %}
-    
-      <span class="icon">★</span>
-    
-    {% endif %}
-
-    </span><br>
-
-    <a href="{% url 'show_detail' show_pk=show.pk %}">See show details, and tell us what you think</a><br>
-  
+<div id="show-{{ show.pk }}">
+    <p>ARTIST: {{ show.artist.name }} <br> 
+        VENUE: {{ show.venue.name }} <br> 
+        DATE: {{ show.show_date }} <br>
+        <a href='{% url "show_detail" show_pk=show.pk %}'>See show details, and tell us what you think</a><br>
+    </p>
   </div>
-  
+
 {% empty %}
-  <P id="no-results">We have no records of venues this artist has played at<p>
+
+<p>No shows.</p>
+
 {% endfor %}
 
 
