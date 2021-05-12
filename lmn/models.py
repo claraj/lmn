@@ -36,8 +36,8 @@ User._meta.get_field('first_name')._blank = False
 
 class Artist(models.Model):
     """ updated model to match API call results """
-    name = models.CharField(max_length=200, blank=False)
-    hometown = models.CharField(max_length=200, blank=True)
+    name = models.CharField(max_length=50, blank=False)
+    hometown = models.CharField(max_length=50, blank=True)
     description = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
@@ -50,8 +50,8 @@ class Artist(models.Model):
 
 class Venue(models.Model):
     """ updated model to match API call results """
-    name = models.CharField(max_length=200, blank=False)
-    address = models.CharField(max_length=400, unique=True, blank=False)
+    name = models.CharField(max_length=50, blank=False)
+    address = models.CharField(max_length=99, unique=True, blank=False)
 
     def __str__(self):
         return f'Name: {self.name} Location: {self.address}'
@@ -75,7 +75,7 @@ class Show(models.Model):
 class Note(models.Model):
     show = models.ForeignKey(Show, on_delete=models.CASCADE, blank=False)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=False)
-    title = models.CharField(max_length=200, blank=False)
+    title = models.CharField(max_length=50, blank=False)
     text = models.TextField(max_length=1000, blank=False)
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
     photo = models.ImageField(upload_to='user_images/', blank=True, null=True)  # issue 4 upload photographs with
@@ -112,7 +112,7 @@ class Profile(models.Model):
     # name = models.TextField(max_length=200, blank=False)
     twitter_username = models.CharField(max_length=15, blank=True)  # Twitter usernames cannot be longer than 15
     # characters
-    bio = models.TextField(max_length=2000, blank=True)
+    bio = models.TextField(max_length=1000, blank=True)
     favorite_artist = models.ForeignKey(Artist, blank=True, null=True, on_delete=models.SET_NULL)
     favorite_show = models.ForeignKey(Show, blank=True, null=True, on_delete=models.SET_NULL)
 

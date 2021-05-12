@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from lmn.models import Artist
 # Create your tests here.
 
 
@@ -26,3 +27,33 @@ class TestUser(TestCase):
             user2.save()
 
 
+class TestProfile(TestCase):
+    def test_create_user_creates_profile(self):
+        user = User(username='user', email='fake@email.address', first_name='fake', last_name='user')
+        user.save()
+
+        profile = user.profile
+
+        self.assertIsNotNone(profile)
+
+
+    def test_delete_artist_sets_favorite_to_null(self):
+        ''' Can't seem to get this to work '''
+        user = User(username='user', email='fake@email.address', first_name='fake', last_name='user')
+        user.save()
+        artist = Artist(name='Nym', hometown='Place', description='Bio')
+        artist.save()
+        artist_pk = artist.pk
+
+        user.profile.favorite_artist = artist
+        favorite = user.profile.favorite_artist
+
+        self.assertIsNotNone(favorite)
+
+        artist.delete()
+
+        self.assertFalse(Artist.objects.filter(pk=artist_pk).exists())
+
+        favorite = user.profile.favorite_artist
+
+        self.assertIsNone(favorite)
