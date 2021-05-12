@@ -1,31 +1,24 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
 
-
 {% if show %}
   <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
 {% else %}
   <h2>Latest Notes</h2>
 {% endif %}
 
-
 {% for note in notes %}
 
   <div id="note_{{ note.pk }}">
     <h3 class="note-title">{{ note.title }}</h3>
-
     <p class="show-info">
       <a href="{% url 'notes_for_show' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
     </p>
-
     <p class="note-info">Posted on {{ note.posted_date }} by 
       <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
     </p>
-
     <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
-
     <p>Rating: {{ note.Rate }}</p>
-
     <p>
       {% if note.user.pk == request.user.pk %}
         <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text={{ note.text }} %23{{ note.show.artist.name|cut:' ' }} %23{{ note.show.venue.name|cut:' ' }} %23LMNOP">Tweet Note</a>
@@ -44,31 +37,32 @@
   <p>No notes.</p>
 
 {% endfor %}
-        <!-- Adds pagination navigation -->
-    {% if notes.has_other_pages %}
-  <ul class="pagination">
-    {% if users.has_previous %}
-      <li><a href="?page={{ notes.previous_page_number }}">&laquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in notes.paginator.page_range %}
-      {% if users.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+
+  <!-- Adds pagination navigation -->
+  {% if notes.has_other_pages %}
+    <ul class="pagination">
+      {% if users.has_previous %}
+        <li><a href="?page={{ notes.previous_page_number }}">&laquo;</a></li>
       {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
+        <li class="disabled"><span>&laquo;</span></li>
       {% endif %}
-    {% endfor %}
-    {% if artists.has_next %}
-      <li><a href="?page={{ notes.next_page_number }}">&raquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-  </ul>
-{% endif %}
+      {% for i in notes.paginator.page_range %}
+        {% if users.number == i %}
+          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+          <li><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if artists.has_next %}
+        <li><a href="?page={{ notes.next_page_number }}">&raquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&raquo;</span></li>
+      {% endif %}
+    </ul>
+  {% endif %}
+
 <!-- If this is a list of notes for one show,
 display link to add new note for that show. -->
-
 {% if show %}
 
   <a href="{% url 'new_note' show_pk=show.pk %}">Add your own notes</a>
