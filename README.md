@@ -94,8 +94,11 @@ Recommend using PaaS Postgres such as Elephant, instead of installing local Post
 
 ### References 
 
-Pagination code adapted from: https://engineertodeveloper.com/how-to-create-pagination-using-django/
-Code to extend User model adapted from: https://blog.khophi.co/extending-django-user-model-userprofile-like-a-pro/
-Star rating feature references: https://codepen.io/neilpomerleau/pen/wzxzQr, 
+#### Pagination code adapted from: 
+https://engineertodeveloper.com/how-to-create-pagination-using-django/
+#### Code to extend User model adapted from: 
+https://blog.khophi.co/extending-django-user-model-userprofile-like-a-pro/
+#### Star rating feature references: 
+https://codepen.io/neilpomerleau/pen/wzxzQr, 
 https://www.semicolonworld.com/question/65313/how-to-send-data-from-javascript-function-to-django-view, 
 https://www.pluralsight.com/guides/work-with-ajax-django
