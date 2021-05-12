@@ -14,3 +14,7 @@ env
 
 # ignore Mac settings
 .DS_Store
+cloud_sql_proxy
+
+# ignore gcp deployment creds
+lmnop_creds.json
