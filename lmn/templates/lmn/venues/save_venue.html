@@ -5,6 +5,7 @@
 <h2>Your Results</h2>
 
 {% for result in search_results %}
+
 <div>
   <p>
     <form method="POST" action="{% url 'save_venue' %}">
