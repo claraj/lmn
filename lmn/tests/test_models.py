@@ -38,6 +38,7 @@ class TestProfile(TestCase):
 
 
     def test_delete_artist_sets_favorite_to_null(self):
+        ''' Can't seem to get this to work '''
         user = User(id=1, username='user', email='fake@email.address', first_name='fake', last_name='user')
         user.save()
 
