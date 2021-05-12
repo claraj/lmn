@@ -4,14 +4,11 @@
 <h2>Artist List</h2>
 
 <a href="{% url 'add_artist' %}">Add Artist</a>
-
-
 <P>Artist Search</p>
-  <form action="{% url 'artist_list' %}">
-    {{ form }}
-    <input type='submit' value='Search'>
-  </form>
-
+<form action="{% url 'artist_list' %}">
+  {{ form }}
+  <input type='submit' value='Search'>
+</form>
 
 {% if search_term %}
   <h2 id='artist-list-title'>Artists matching '{{ search_term }}' 
@@ -21,33 +18,34 @@
   <h2 id='artist-list-title'>All artists</h2>
 {% endif %}
 
-    {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-            <p class="{{message.tags}}">{{ message }}</p>
-        {% endfor %}
-        </div>
-    {% endif %}
+{% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <p class="{{message.tags}}">{{ message }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
 
 {% for artist in artists %}
 
-  <div class="artist" id="artist_{{ artist.pk }}">
-    <p>
-      <a href="{% url 'artist_detail' artist_pk=artist.pk %}">{{ artist.name }}</a>
-    </p>
-    
-    <p>See venues played, notes, and add your own 
-      <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }} notes</a>
-    </p>  
-  </div>
+<div class="artist" id="artist_{{ artist.pk }}">
+  <p>
+    <a href="{% url 'artist_detail' artist_pk=artist.pk %}">{{ artist.name }}</a>
+  </p>
+  
+  <p>See venues played, notes, and add your own 
+    <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }} notes</a>
+  </p>  
+</div>
 
 {% empty %}
   
 <p>No artists found</p>
 
 {% endfor %}
-        <!-- Adds pagination navigation -->
-    {% if artists.has_other_pages %}
+
+<!-- Adds pagination navigation -->
+{% if artists.has_other_pages %}
   <ul class="pagination">
     {% if users.has_previous %}
       <li><a href="?page={{ artists.previous_page_number }}">&laquo;</a></li>
