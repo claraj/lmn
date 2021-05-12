@@ -39,10 +39,11 @@ class TestProfile(TestCase):
 
     def test_delete_artist_sets_favorite_to_null(self):
         ''' Can't seem to get this to work '''
-        user = User(id=1, username='user', email='fake@email.address', first_name='fake', last_name='user')
+        user = User(username='user', email='fake@email.address', first_name='fake', last_name='user')
         user.save()
+        artist = Artist(name='Nym', hometown='Place', description='Bio')
+        artist.save()
 
-        artist = Artist(id=1, name='Nym', hometown='Place', description='Bio')
         user.profile.favorite_artist = artist
         favorite = user.profile.favorite_artist
 
