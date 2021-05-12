@@ -5,10 +5,11 @@
   <link rel="shortcut icon" href="{% static '/img/music.png' %}"/>
   <link rel="stylesheet" href="{% static 'css/base_style.css' %}" type="text/css"></link>
   <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">  
-  <meta name="viewport" content="initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />  
   {% block morestyle %}{% endblock %}
 </head>
+
 
 <body>
 
@@ -16,13 +17,12 @@
 
   <img id="logo" src="{% static '/img/logo.png' %}">
 
-  <ul id="nav-links">
+  <ul>
     <li><a href="{% url 'venue_list' %}">Venues</a></li>
     <li><a href="{% url 'artist_list' %}">Artists</a></li>
     <li><a href="{% url 'show_list' %}">Shows</a></li>
     <li><a href="{% url 'latest_notes' %}">Notes</a></li>
   </ul>
-
 
   {% if user.is_authenticated %}
     <span id='welcome-user-msg'><a href="{% url 'user_profile' user_pk=user.pk %}"><img id="profile" src="{% static '/img/profile.png' %}"></a><br> <a href="{% url 'logout' %}">Logout</a></span>
