@@ -32,9 +32,9 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 if on mac:
-  export LMNOP_USER_PW='lmnop2021!'
+  export LMNOP_USER_PW=[password]
 elif on windows:
-  set LMNOP_USER_PW='lmnop2021!'
+  set LMNOP_USER_PW=[password]
 ```
 
 Local site at
@@ -104,8 +104,9 @@ coverage report
 Recommend using PaaS Postgres such as Elephant, instead of installing local Postgres.
 
 ### Authors
-##### Clara James
-##### Kelsey Stiff
-##### Chris Gisala
-##### Topanga Gramlich
-##### Mo Sargazi
+##### Chris Gisala - Visual Badass of All Things Notes
+##### Clara James - Base Code Master
+##### Kelsey Stiff - Supreme UX Chief
+##### Mo Sargazi - Rating and Badge Captain
+##### Shawn Jones - API Phreak
+##### Topanga Gramlich - User Profile Guru
