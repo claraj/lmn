@@ -101,4 +101,11 @@ coverage report
 
 ### PostgreSQL
 
-Recommend using PaaS Postgres such as Elephant, instead of installing local Postgres. 
+Recommend using PaaS Postgres such as Elephant, instead of installing local Postgres.
+
+### Authors
+##### Clara James
+##### Kelsey Stiff
+##### Chris Gisala
+##### Topanga Gramlich
+##### Mo Sargazi
