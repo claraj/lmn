@@ -1,10 +1,11 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
+
 <h2>{{ artist.name }} @ {{ venue.name }}</h2>
-    <form method="POST" action="{% url 'save_show' %}">
+<form method="POST" action="{% url 'save_show' %}">
     {{ form }}
-        {% csrf_token %}
-    <button type="submit">Save Show</button>
-    </form>
+    {% csrf_token %}
+	<button type="submit">Save Show</button>
+</form>
 
 {% endblock %}
