@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from lmn.forms import NewNoteForm, UserRegistrationForm
 import string
+from datetime import datetime
 
 # Test that forms are validating correctly, and don't accept invalid data
 
@@ -144,3 +145,45 @@ class LoginFormTests(TestCase):
     # TODO username not case sensitive - bob and BOB and Bob are the same
    
     pass
+
+
+class ProfileFormTests(TestCase):
+    def test_user_can_add_empty_data(self):
+        user = User(username='fakeuser', email='fake@email.address')
+        user.save()
+
+        form_data = { 'twitter_username' : None, 'bio': None, 'favorite_artist' : None, 'favorite_show' : None }
+        form = ProfileForm(form_data)
+
+        self.assertTrue(form.is_valid())
+
+
+    def test_user_can_add_filled_data(self):
+        user = User(username='fakeuser', email='fake@email.address')
+        user.save()
+        artist = Artist(name='Nym', hometown='Place', description='A Band')
+        artist.save()
+        venue = Venue(name='Arena', address='123 Location')
+        venue.save()
+        show = Show(show_date=datetime.now(), artist=artist, venue=venue)
+        show.save()
+
+        form_data = { 'twitter_username' : 'fakeusername', 'bio': 'Fake biography.', 'favorite_artist' : artist, 'favorite_show' : show }
+        form = ProfileForm(form_data)
+
+        self.assertTrue(form.is_valid())
+
+
+    def test_twitter_username_must_be_under_15_characters(self):
+        user = User(username='fakeuser', email='fake@email.address')
+        user.save()
+
+        form_data = { 'thisis==15chars' : None, 'bio': None, 'favorite_artist' : None, 'favorite_show' : None }
+        form = ProfileForm(form_data)
+
+        self.assertTrue(form.is_valid())
+
+        form_data = { 'thisis==sixteen!' : None, 'bio': None, 'favorite_artist' : None, 'favorite_show' : None }
+        form = ProfileForm(form_data)
+
+        self.assertTrue(form.is_valid())
