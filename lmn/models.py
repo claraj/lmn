@@ -9,12 +9,12 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.files.storage import default_storage
 
 RATE_CHOICES = (
-    ("", ""),
+    ('', ''),
     ("Terrible", "Terrible"),
-    ("Bad", "Bad"),
-    ("Not bad", "Not bad"),
-    ("Good", "Good"),
-    ("Great", "Great"),
+    ('Bad', 'Bad'),
+    ('Not bad', 'Not bad'),
+    ('Good', 'Good'),
+    ('Great', 'Great'),
 
 )
 
@@ -80,7 +80,7 @@ class Note(models.Model):
     posted_date = models.DateTimeField(auto_now_add=True, blank=False)
     photo = models.ImageField(upload_to='user_images/', blank=True, null=True)  # issue 4 upload photographs with
     # associated notes by chris
-    Rate = models.CharField(max_length=8, choices=RATE_CHOICES, default='0')
+    rate = models.CharField(max_length=8, choices=RATE_CHOICES, default='0')
 
     def delete_photo(self, photo):
         if default_storage.exists(photo.name):
