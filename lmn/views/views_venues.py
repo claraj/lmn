@@ -40,8 +40,7 @@ def venue_list(request):  # pagination made possible by a ridiculously deep rabb
 
 
 def artists_at_venue(request, venue_pk):  # pk = venue_pk
-    """ Get all of the artists who have played a show at the venue with pk provided """
-
+    ''' Get all of the artists who have played a show at the venue with pk provided '''
     shows = Show.objects.filter(venue=venue_pk).order_by('-show_date')
     venue = Venue.objects.get(pk=venue_pk)
 
@@ -50,11 +49,12 @@ def artists_at_venue(request, venue_pk):  # pk = venue_pk
 
 def venue_detail(request, venue_pk):
     venue = get_object_or_404(Venue, pk=venue_pk)
+
     return render(request, 'lmn/venues/venue_detail.html', {'venue': venue})
 
 
 def add_venue(request):
-    """ this begins the process of adding a venue by calling the API """
+    ''' this begins the process of adding a venue by calling the API '''
     if request.method == 'POST':
         new_venue_form = VenueForm(request.POST)
         if new_venue_form.is_valid():
@@ -70,12 +70,13 @@ def add_venue(request):
                 return render(request, 'lmn/venues/save_venue.html', {'search_results': search_results,
                                                                       'create_venue_form': create_venue_form})
     new_venue_form = VenueForm()
+
     return render(request, 'lmn/venues/add_venue.html', {'new_venue_form': new_venue_form})
 
 
 def save_venue(request):
-    """ once an venue result from api or newly entered venue is selected
-     this method will check to see if it should/can be saved and if so, saves it """
+    ''' once an venue result from api or newly entered venue is selected
+     this method will check to see if it should/can be saved and if so, saves it '''
     if request.method == 'POST':
         new_venue = request.POST
         new_name = new_venue.get('name')
@@ -101,7 +102,7 @@ def save_venue(request):
 
 
 def create_venue(request):
-    """ if api results are not what the user needs, they can enter a new venue """
+    ''' if api results are not what the user needs, they can enter a new venue '''
     if request.method == 'POST':
         form = CreateVenueForm(request.POST)
         if form.is_valid():
@@ -130,7 +131,7 @@ def create_venue(request):
 
 
 def venue_in_db(name, address):
-    """ checks if the venue is already in db based on name and description """
+    ''' checks if the venue is already in db based on name and description '''
     venue_name, venue_address = [], []
     venues_in_db = Venue.objects.all()
     for venue in venues_in_db:
