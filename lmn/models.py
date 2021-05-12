@@ -31,11 +31,11 @@ User._meta.get_field('email')._blank = False
 User._meta.get_field('last_name')._blank = False
 User._meta.get_field('first_name')._blank = False
 
-""" A music artist """
 
 
 class Artist(models.Model):
-    """ updated model to match API call results """
+    ''' A music artist '''
+    ''' updated model to match API call results '''
     name = models.CharField(max_length=50, blank=False)
     hometown = models.CharField(max_length=50, blank=True)
     description = models.CharField(max_length=200, blank=True)
@@ -45,11 +45,9 @@ class Artist(models.Model):
         return artist_string
 
 
-""" A venue, that hosts shows. """
-
-
 class Venue(models.Model):
-    """ updated model to match API call results """
+    ''' A venue, that hosts shows. '''
+    ''' updated model to match API call results '''
     name = models.CharField(max_length=50, blank=False)
     address = models.CharField(max_length=99, unique=True, blank=False)
 
@@ -57,10 +55,8 @@ class Venue(models.Model):
         return f'Name: {self.name} Location: {self.address}'
 
 
-""" A show - one artist playing at one venue at a particular date. """
-
-
 class Show(models.Model):
+    ''' A show - one artist playing at one venue at a particular date. '''
     show_date = models.DateTimeField(blank=False)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE, blank=False)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=False)
@@ -69,10 +65,8 @@ class Show(models.Model):
         return f'Artist: {self.artist} At: {self.venue} On: {self.show_date}'
 
 
-""" One user's opinion of one show. """
-
-
 class Note(models.Model):
+    ''' One user's opinion of one show. '''
     show = models.ForeignKey(Show, on_delete=models.CASCADE, blank=False)
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=False)
     title = models.CharField(max_length=50, blank=False)
@@ -100,14 +94,11 @@ class Note(models.Model):
                f'Posted on: {self.posted_date} Rated at: {self.Rate}'
 
 
-"""
-A single user.
-Instructions for making this work is credited to:
-https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
-"""
-
-
 class Profile(models.Model):
+    '''
+    A single user. Instructions for making this work is credited to:
+    https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html#onetoone
+    '''
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # name = models.TextField(max_length=200, blank=False)
     twitter_username = models.CharField(max_length=15, blank=True)  # Twitter usernames cannot be longer than 15
