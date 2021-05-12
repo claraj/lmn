@@ -32,7 +32,6 @@ User._meta.get_field('last_name')._blank = False
 User._meta.get_field('first_name')._blank = False
 
 
-
 class Artist(models.Model):
     ''' A music artist '''
     ''' updated model to match API call results '''
@@ -80,14 +79,14 @@ class Note(models.Model):
         if default_storage.exists(photo.name):
             default_storage.delete(photo.name)
 
+
     def delete(self, *args, **kwargs):
         if self.photo:
             self.delete_photo(self.photo)
-
         super().delete(*args, **kwargs)
 
-    def __str__(self):
 
+    def __str__(self):
         photo_str = self.photo.url if self.photo else 'no photo'  # issue 4 upload photographs with associated notes
         # by chris
         return f'User: {self.user} Show: {self.show} Note title: {self.title} Text: {self.text} Photo: {photo_str} ' \
