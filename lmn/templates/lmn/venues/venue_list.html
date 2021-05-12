@@ -21,9 +21,9 @@
       <h3 id="venue_list_title">All venues</h3>
     {% endif %}
   </div>
-    <div>
+  <div>
     {% if messages %}
-    <div class="messages">
+      <div class="messages">
         {% for message in messages %}
             <p class="{{message.tags}}">{{ message }}</p>
         {% endfor %}
@@ -43,8 +43,8 @@
     </div>
 
 </div>
-    <!-- Adds pagination navigation -->
-        {% if venues.has_other_pages %}
+  <!-- Adds pagination navigation -->
+  {% if venues.has_other_pages %}
   <ul class="pagination">
     {% if users.has_previous %}
       <li><a href="?page={{ venues.previous_page_number }}">&laquo;</a></li>
