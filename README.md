@@ -2,6 +2,14 @@
 
 ## Live Music Notes, Opinions, Photographs
 
+### Unexpected Features
+- *Style is strange on add note page*
+
+### Future Development
+- *Match page style to Kelsey's UX design*
+
+### Credits
+- *Yeah*
 
 ### To install
 
@@ -12,12 +20,16 @@ pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
+if on mac:
+  export LMNOP_USER_PW='lmnop2021!'
+elif on windows:
+  set LMNOP_USER_PW='lmnop2021!'
 ```
 
-Site at
-
+Local site at
 http://127.0.0.1:8000
-
+Live site at
+https://lmnop-312618.uc.r.appspot.com/
 
 ### Create superuser
 
@@ -75,7 +87,6 @@ From directory with manage.py in it,
 coverage run --source='.' manage.py test lmn.tests
 coverage report
 ```
-
 
 ### PostgreSQL
 
