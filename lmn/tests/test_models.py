@@ -43,6 +43,7 @@ class TestProfile(TestCase):
         user.save()
         artist = Artist(name='Nym', hometown='Place', description='Bio')
         artist.save()
+        artist_pk = artist.pk
 
         user.profile.favorite_artist = artist
         favorite = user.profile.favorite_artist
@@ -50,6 +51,9 @@ class TestProfile(TestCase):
         self.assertIsNotNone(favorite)
 
         artist.delete()
+
+        self.assertFalse(Artist.objects.filter(pk=artist_pk).exists())
+
         favorite = user.profile.favorite_artist
 
         self.assertIsNone(favorite)
