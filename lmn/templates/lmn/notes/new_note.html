@@ -6,12 +6,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <form method="POST" action="{% url 'new_note' show_pk=show.pk %}" enctype="multipart/form-data">
-  
-  <div>
-    {% csrf_token %}
-    {{ form.as_p }}
-  </div>
-  <input type='submit' value='Add Note'>
+	<div>
+    	{% csrf_token %}
+    	{{ form.as_p }}
+	</div>
+  	<input type='submit' value='Add Note'>
 </form>
 
 {% endblock %}
