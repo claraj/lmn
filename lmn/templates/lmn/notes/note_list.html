@@ -5,28 +5,28 @@
 
 <h2>Latest Notes</h2>
 
-<a href="{% url 'most_notes' %}">Shows with most notes</a>
+<h4><a href="{% url 'most_notes' %}">See shows with the most notes</a></h4>
 
 <p> Page {{ current_page }} of {{ num_pages }}</p>
 
 {% for note in notes %}
 
-  <div id="note_{{ note.pk }}">
-    <h3 class="note_title">
-      <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
-    </h3>
-
-    <p class="show-info">
-      <a href="{% url 'show_detail' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
+  <br><div id="note_{{ note.pk }}">
+    <p class="note_title">
+      TITLE: <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
     </p>
 
-    <p class="note-info">Posted on {{ note.posted_date }} by 
+    <p class="show-info">
+      SHOW: <a href="{% url 'show_detail' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
+    </p>
+
+    <p class="note-info">POSTED: {{ note.posted_date }} by 
       <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
     </p>
 
-    <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+    <p class='note-text'>TEXT: {{ note.text|truncatechars:100 }}</p>
 
-  </div>  
+  </div>
 
   <hr>
 

@@ -11,4 +11,3 @@ admin.site.register(Show)
 admin.site.register(Badge)
 admin.site.register(Profile)
 admin.site.register(ShowRating)
-

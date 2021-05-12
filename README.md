@@ -2,6 +2,16 @@
 
 ## Live Music Notes, Opinions, Photographs
 
+### Features
+
+1. Web app that allows authenticated users to rate and create notes for recent live music shows in the Twin Cities 
+2. Anyone can visit the site and create a free account
+3. No account required to view artist, venue and show information
+4. Users can search Venues and Artists to find associated shows
+5. Users can view and search their own notes
+6. Users recieve badges for writing notes when they reach certain quantities
+7. Users can share artists, venues, shows and notes on social media
+
 
 ### To install
 
@@ -84,13 +94,11 @@ Recommend using PaaS Postgres such as Elephant, instead of installing local Post
 
 ### References 
 
-Pagination code adapted from: https://engineertodeveloper.com/how-to-create-pagination-using-django/
-Code to extend User model adapted from: https://blog.khophi.co/extending-django-user-model-userprofile-like-a-pro/
-
-Star rating feature references:
-
-    1. https://codepen.io/neilpomerleau/pen/wzxzQr
-    2. https://www.semicolonworld.com/question/65313/how-to-send-data-from-javascript-function-to-django-view
-    3. https://www.pluralsight.com/guides/work-with-ajax-django
-
-
+#### Pagination code adapted from: 
+https://engineertodeveloper.com/how-to-create-pagination-using-django/
+#### Code to extend User model adapted from: 
+https://blog.khophi.co/extending-django-user-model-userprofile-like-a-pro/
+#### Star rating feature references: 
+https://codepen.io/neilpomerleau/pen/wzxzQr, 
+https://www.semicolonworld.com/question/65313/how-to-send-data-from-javascript-function-to-django-view, 
+https://www.pluralsight.com/guides/work-with-ajax-django

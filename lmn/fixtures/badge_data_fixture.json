@@ -1,0 +1,7 @@
+[
+    {"model" : "lmn.badge", "pk" : 11, "fields" : {"name" : "First Note", "description" : "Made 1 note!", "number_notes" : 1}}, 
+    {"model" : "lmn.badge", "pk": 12, "fields" : {"name" : "Two notes", "description" : "Two notes!", "number_notes" : 2}}, 
+    {"model" : "lmn.badge", "pk" : 13, "fields" : {"name" : "Five notes", "description" : "You've written 5 notes!", "number_notes" : 5}}, 
+    {"model" : "lmn.badge", "pk" : 14, "fields" : {"name" : "10 Notes", "description" : "You've written 10 notes! Wow!", "number_notes" : 10}}, 
+    {"model" : "lmn.badge", "pk" : 15, "fields" : {"name" : "15 notes", "description" : "You've written 15 great notes! Rockstar!", "number_notes" : 15}}
+]

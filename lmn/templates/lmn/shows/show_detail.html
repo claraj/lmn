@@ -3,10 +3,23 @@
 {% load static %}
 
 
-<p><a href="{% url 'artists_at_venue' venue_pk=show.venue.pk %}">List of shows for this venue</a></p>
+<h2>SHOW DETAIL</h2>
 
-<h2 id="show-title">Show: {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
-<h3>Rating: {{ show.rating }}/5</h3>
+<br><h5 id="show-title">
+  ARTIST: <a href="{% url 'venues_for_artist' artist_pk=show.artist.pk %}">{{ show.artist.name }}</a><br>
+  VENUE: <a href="{% url 'artists_at_venue' venue_pk=show.venue.pk %}">{{ show.venue.name }}</a><br>
+  DATE: {{ show.show_date }}<br>
+  {% if show.rating != None  %}
+
+    Rating: {{ show.rating }}/5
+
+  {% else %}
+
+    Rating: -/5
+
+  {% endif %} 
+
+</h5>
 
 {% if user.is_authenticated %}
 
@@ -67,30 +80,30 @@
 
 {% else %}
 
-  <p>Please login or sign up to rate this show and add your own notes.</p> 
+  <p>**Please <a href="{% url 'login' %}?next={{ request.path }}">login or sign up </a>to rate this show and add your own notes.</p> 
 
 {% endif %}
 
-<h3>User Notes:</h3>
+<br><h4>User Notes:</h4>
 
 {% for note in notes %}
 
-  <div id="note_{{ note.pk }}">
-    <h3 class="note_title">
-      <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
-    </h3>
-
-    <p class="show-info">
-      <a href="{% url 'show_detail' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
+  <br><div id="note_{{ note.pk }}">
+    <p class="note_title">
+      TITLE: <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
     </p>
 
-    <p class="note-info">Posted on {{ note.posted_date }} by 
+    <p class="show-info">
+      SHOW: <a href="{% url 'show_detail' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
+    </p>
+
+    <p class="note-info">POSTED: {{ note.posted_date }} by 
       <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
     </p>
 
-    <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+    <p class='note-text'>TEXT: {{ note.text|truncatechars:100 }}</p>
 
-  </div>  
+  </div>
 
   <hr>
 

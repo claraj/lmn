@@ -1,14 +1,25 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
+{% load mathfilters %}
+
 
 <h2 id="venues_for_artist_title">Shows that {{ artist.name }} has played</h2>
+
+<br><p>Page {{ current_page }} of {{ num_pages }}</p><br>
 
 {% for show in shows %}
 
   <div class="show" id="show-{{ show.pk }}">
-    <p><span>{{ show.venue.name}} on {{ show.show_date }}
+    <p><span>VENUE: {{ show.venue.name}}<br>
+             DATE: {{ show.show_date }}<br>
+    
+    RATING:
 
-      {% if show.rating >= 1 %}
+    {% if show.rating == None %}
+      --
+    {% endif %}
+
+    {% if show.rating >= 1 %}
 
       <span class="icon">★</span>
 
@@ -38,14 +49,39 @@
     
     {% endif %}
 
-    </span>
-    </p>
-    <p><a href="{% url 'show_detail' show_pk=show.pk %}">See details and notes for this show</a>
-    </p>
-  </div>
+    </span><br>
 
+    <a href="{% url 'show_detail' show_pk=show.pk %}">See show details, and tell us what you think</a><br>
+  
+  </div>
+  
 {% empty %}
   <P id="no-results">We have no records of venues this artist has played at<p>
 {% endfor %}
+
+
+<div class="container mt-3 d-flex justify-content-center">
+  <nav aria-label="Pagination Navigation">
+    <ul class="pagination">
+     <li class="page-item {% if current_page == 1 %} disabled {% endif %}">
+      <a class="page-link" href="?page={{ current_page|sub:1 }}" aria-label="Previous">
+       <span aria-hidden="true">«</span>
+       <span class="sr-only">Previous</span>
+      </a>
+     </li>
+     {% for i in page_range %}
+     <li class="page-item"><a class="page-link {% if i == current_page %} active {% endif %}" href="?page={{ i }}">{{ i }}</a></li>
+     {% endfor %}
+     
+     <li class="page-item {% if current_page == num_pages %} disabled {% endif %}">
+      <a class="page-link" href="?page={{ current_page|add:1 }}" aria-label="Next">
+       <span aria-hidden="true">»</span>
+       <span class="sr-only">Next</span>
+      </a>
+     </li>
+    </ul>
+ </nav>
+</div>
+
 
 {% endblock %}
