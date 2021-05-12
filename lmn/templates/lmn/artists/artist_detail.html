@@ -6,21 +6,22 @@
 <p id='artist-name'>{{ artist.name }}</p>
 <p id='artist-hometown'>From: {{ artist.hometown }}</p>
 <p id='artist-description'>About: {{ artist.description }}</p>
-    {% for show in shows %}
 
-  <div class="show" id="show_{{ show.pk }}">
-    <p>
-      <a href="{% url 'show_detail' show_pk=show.pk %}">{{ show.artist.name }}@{{ show.venue.name }} {{ show.show_date }}</a>
-    </p>
-  </div>
+{% for show in shows %}
+
+<div class="show" id="show_{{ show.pk }}">
+	<p>
+		<a href="{% url 'show_detail' show_pk=show.pk %}">{{ show.artist.name }}@{{ show.venue.name }} {{ show.show_date }}</a>
+	</p>
+</div>
 
 {% empty %}
 
 <p>No Shows Yet</p>
 
 {% endfor %}
-    <h3>Add a new Show For</h3>
-  <a href="{% url 'add_show_to_artist' artist_pk=artist.pk %}"> {{ artist.name }}</a>
 
+<h3>Add a new Show For</h3>
+<a href="{% url 'add_show_to_artist' artist_pk=artist.pk %}"> {{ artist.name }}</a>
 
 {% endblock %}
