@@ -1,9 +1,10 @@
 from django.test import TestCase
 
 from django.contrib.auth.models import User
-from lmn.forms import NewNoteForm, UserRegistrationForm
+from lmn.forms import NewNoteForm, UserRegistrationForm, ProfileForm
 import string
 from datetime import datetime
+from lmn.models import Artist, Venue, Show
 
 # Test that forms are validating correctly, and don't accept invalid data
 
