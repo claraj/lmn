@@ -172,18 +172,3 @@ class ProfileFormTests(TestCase):
         form = ProfileForm(form_data)
 
         self.assertTrue(form.is_valid())
-
-
-    def test_twitter_username_must_be_under_15_characters(self):
-        user = User(username='fakeuser', email='fake@email.address')
-        user.save()
-
-        form_data = { 'thisis==15chars' : None, 'bio': None, 'favorite_artist' : None, 'favorite_show' : None }
-        form = ProfileForm(form_data)
-
-        self.assertTrue(form.is_valid())
-
-        form_data = { 'thisis==sixteen!' : None, 'bio': None, 'favorite_artist' : None, 'favorite_show' : None }
-        form = ProfileForm(form_data)
-
-        self.assertTrue(form.is_valid())
