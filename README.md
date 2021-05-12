@@ -23,8 +23,6 @@ https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-u
 - *Gradient style creator (https://cssgradient.io/)*
 - *Logo designs and other design images from Canva (https://www.canva.com/)*
 
-\page
-
 ### To install
 
 1. Create and activate a virtual environment. Use Python3 as the interpreter. Suggest locating the venv/ directory outside of the code directory.
