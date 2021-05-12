@@ -1,0 +1,23 @@
+{% extends 'lmn/base.html' %}
+{% block content %}
+{% load mathfilters %}
+
+
+<h2>SHOWS WITH THE MOST NOTES</h2>
+
+{% for show in shows %}
+{% if show.num_notes > 0 %}
+   <br><p>ARTIST: <a href="{% url 'venues_for_artist' artist_pk=show.artist.pk%}">{{ show.artist.name }}</a><br>
+          VENUE: <a href="{% url 'artists_at_venue' venue_pk=show.venue.pk%}">{{ show.venue.name }}</a><br>
+          DATE: {{ show.show_date }}<br>
+          NUMBER OF NOTES: {{ show.num_notes }}<br>
+          RATING: {{ show.rating }}/5<br>
+          <a href="{% url 'show_detail' show_pk=show.pk %}">See show details, and tell us what you think</a>
+   </p>
+
+  <hr>
+
+{% endif %}
+{% endfor %}
+
+{% endblock %}

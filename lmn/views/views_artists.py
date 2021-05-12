@@ -1,13 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render
 
-from ..models import Venue, Artist, Note, Show
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-
-from django.utils import timezone
+from ..models import Artist, Show
+from ..forms import ArtistSearchForm
+from ..paginator import paginate
 
 
 def venues_for_artist(request, artist_pk):   # pk = artist_pk
@@ -17,7 +12,14 @@ def venues_for_artist(request, artist_pk):   # pk = artist_pk
     shows = Show.objects.filter(artist=artist_pk).order_by('-show_date')  # most recent first
     artist = Artist.objects.get(pk=artist_pk)
 
-    return render(request, 'lmn/venues/venue_list_for_artist.html', { 'artist': artist, 'shows': shows })
+    (shows, paginator, page) = paginate(request, shows, 10)
+
+    return render(request, 'lmn/venues/venue_list_for_artist.html', { 'shows' : shows, 
+                                                            'artist': artist,
+                                                            'page_range': paginator.page_range, 
+                                                            'num_pages' : paginator.num_pages, 
+                                                            'current_page': page
+                                                            })
 
 
 def artist_list(request):
@@ -28,9 +30,12 @@ def artist_list(request):
     else:
         artists = Artist.objects.all().order_by('name')
 
-    return render(request, 'lmn/artists/artist_list.html', { 'artists': artists, 'form': form, 'search_term': search_name })
+    (artists, paginator, page) = paginate(request, artists, 10)
 
-
-def artist_detail(request, artist_pk):
-    artist = get_object_or_404(Artist, pk=artist_pk)
-    return render(request, 'lmn/artists/artist_detail.html' , { 'artist': artist })
+    return render(request, 'lmn/artists/artist_list.html', {'form': form, 
+                                                            'search_term': search_name, 
+                                                            'artists' : artists, 
+                                                            'page_range': paginator.page_range, 
+                                                            'num_pages' : paginator.num_pages, 
+                                                            'current_page': page
+                                                            })

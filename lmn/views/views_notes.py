@@ -1,12 +1,18 @@
+from django.core import paginator
 from django.shortcuts import render, redirect, get_object_or_404
 
-from ..models import Venue, Artist, Note, Show, Profile
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm
+from ..models import Note, Show, ShowRating
+from ..forms import NewNoteForm, NewShowRatingForm
+from ..paginator import paginate
 
+from django.db.models import Avg, Count, Min, Sum
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseForbidden
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger, EmptyPage
+from django.db.utils import IntegrityError
+from django.db import transaction
 
 
 
@@ -16,35 +22,72 @@ def new_note(request, show_pk):
     show = get_object_or_404(Show, pk=show_pk)
 
     if request.method == 'POST':
-        form = NewNoteForm(request.POST, request.FILES)
-        if form.is_valid():
-            note = form.save(commit=False)
+        note_form = NewNoteForm(request.POST, request.FILES)
+        rating_form = NewShowRatingForm(request.POST)
+
+        if rating_form.is_valid(): # Form can be empty and still valid, but the database doesn't allow nulls
+            try:
+                with transaction.atomic():
+                    rating = rating_form.save(commit=False)
+                    rating.user = request.user
+                    rating.show = show
+                    rating.save()
+            except IntegrityError as e: # If the user creates a note without a rating, the db NOT NULL constraint will fail
+                print(e)                # This is the intended behavior
+
+        if note_form.is_valid(): # Note form must not be blank to be valid
+            note = note_form.save(commit=False)
             note.user = request.user
             note.show = show
             note.save()
+
             return redirect('note_detail', note_pk=note.pk)
 
     else:
-        form = NewNoteForm()
+        note_form = NewNoteForm()
+        user_rating = ShowRating.objects.filter(show=show, user=request.user).first()
 
-    return render(request, 'lmn/notes/new_note.html' , { 'form': form , 'show': show })
+        if user_rating: # user can only have 1 rating per show, if they've already rated it, do not show rating form
+            rating_form = None
+        else:
+            rating_form = NewShowRatingForm()
+
+    return render(request, 'lmn/notes/new_note.html' , { 'note_form': note_form, 'rating_form': rating_form, 'show': show })
 
 
 def latest_notes(request):
-    notes = Note.objects.all().order_by('-posted_date')[:20]   # the 20 most recent notes
-    return render(request, 'lmn/notes/note_list.html', { 'notes': notes })
+    notes = Note.objects.all().order_by('-posted_date')[:100]   # the 100 most recent notes
+
+    (notes, paginator, page) = paginate(request, notes, 10)
+
+    return render(request, 'lmn/notes/note_list.html', {'notes' : notes, 
+                                                        'page_range': paginator.page_range, 
+                                                        'num_pages' : paginator.num_pages, 
+                                                        'current_page': page
+                                                        })
 
 
-def notes_for_show(request, show_pk): 
-    # Notes for show, most recent first
-    notes = Note.objects.filter(show=show_pk).order_by('-posted_date')
-    show = Show.objects.get(pk=show_pk)  
-    return render(request, 'lmn/notes/note_list.html', { 'show': show, 'notes': notes })
+def most_notes(request):
+    shows = Show.objects.annotate(num_notes=Count('note')).order_by('-num_notes')[:10]
+    # top 10 shows with most notes
+    return render(request, 'lmn/notes/most_notes.html', {'shows': shows })  
 
 
 def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
-    return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
+
+    if request.user.is_authenticated:
+        rating_model = ShowRating.objects.filter(show=note.show, user=request.user).first()
+
+        if rating_model:
+            rating = rating_model.rating_out_of_five
+        else:
+            rating = None
+
+    else:
+        rating = None
+    
+    return render(request, 'lmn/notes/note_detail.html' , { 'note': note, 'rating': rating })
 
 
 @login_required    

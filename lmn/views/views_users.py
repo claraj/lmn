@@ -1,12 +1,12 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.contrib import messages
 
-from ..models import Venue, Artist, Note, Show, Profile
-from ..forms import VenueSearchForm, NewNoteForm, ArtistSearchForm, UserRegistrationForm, UserForm
+from ..models import Note, Profile
+from ..forms import UserRegistrationForm, UserForm
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.core.exceptions import PermissionDenied
 from django.forms.models import inlineformset_factory
 
@@ -17,7 +17,11 @@ def user_profile(request, user_pk):
     user = User.objects.get(pk=user_pk)
     user_shows = user.profile.shows_seen.all()
     user_badges = user.profile.badges.all()
-    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 'shows_seen': user_shows, 'badges': user_badges })
+    usernotes = Note.objects.filter(user=user.pk).order_by('-posted_date')
+    return render(request, 'lmn/users/user_profile.html', { 'user_profile': user, 
+                                                            'shows_seen': user_shows, 
+                                                            'badges': user_badges, 
+                                                            'notes': usernotes})
 
 
 @login_required() # only logged in users should access this
@@ -46,11 +50,10 @@ def edit_user(request, user_pk):
                     formset.save()
                     return redirect('user_profile', user_pk=request.user.pk)
 
-        return render(request, "lmn/users/edit_user.html", {
-            "user_pk": user_pk,
-            "user_form": user_form,
-            "formset": formset,
-        })
+        return render(request, 'lmn/users/edit_user.html', { 'user_pk': user_pk,
+                                                             'user_form': user_form,
+                                                             'formset': formset,
+                                                           })
     else:
         raise PermissionDenied
 
@@ -74,7 +77,10 @@ def register(request):
             if user:
                 messages.info(request, 'Thank you, for signing up!')
                 login(request, user)
-                return redirect('login')
+
+                messages.info(request, 'Account created successfully!')
+                return redirect('my_user_profile')
+
             else:
                 messages.add_message(request, messages.ERROR, 'Unable to log in new user')
         else:

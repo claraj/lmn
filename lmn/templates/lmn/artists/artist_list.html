@@ -1,12 +1,12 @@
 {% extends 'lmn/base.html' %}
 {% block content %}
+{% load mathfilters %}
 
-<h2>Artist List</h2>
+<h1>ARTISTS</h1>
 
-<P>Artist Search</p>
   <form action="{% url 'artist_list' %}">
     {{ form }}
-    <input type='submit' value='Search'>
+    <span><input type='submit' value='Search'/> Page {{ current_page }} of {{ num_pages }}</span>
   </form>
 
 
@@ -15,20 +15,16 @@
     <a href="{% url 'artist_list' %}" id='clear_search'>(clear)</a>
   </h2>
 {% else %}
-  <h2 id='artist-list-title'>All artists</h2>
+  <br><h2 id='artist-list-title'>All artists</h2><br>
 {% endif %}
 
 
 {% for artist in artists %}
 
-  <div class="artist" id="artist_{{ artist.pk }}">
-    <p>
-      <a href="{% url 'artist_detail' artist_pk=artist.pk %}">{{ artist.name }}</a>
+  <div class="artist" id="artist_{{ artist.pk }}"> 
+    <br><p>See shows played by: 
+      <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }}</a><br>
     </p>
-    
-    <p>See venues played, notes, and add your own 
-      <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }} notes</a>
-    </p>  
   </div>
 
 {% empty %}
@@ -36,5 +32,30 @@
 <p>No artists found</p>
 
 {% endfor %}
+
+
+<div class="container mt-3 d-flex justify-content-center">
+  <nav aria-label="Pagination Navigation">
+    <ul class="pagination">
+     <li class="page-item {% if current_page == 1 %} disabled {% endif %}">
+      <a class="page-link" href="?page={{ current_page|sub:1 }}" aria-label="Previous">
+       <span aria-hidden="true">«</span>
+       <span class="sr-only">Previous</span>
+      </a>
+     </li>
+     {% for i in page_range %}
+     <li class="page-item"><a class="page-link {% if i == current_page %} active {% endif %}" href="?page={{ i }}">{{ i }}</a></li>
+     {% endfor %}
+     
+     <li class="page-item {% if current_page == num_pages %} disabled {% endif %}">
+      <a class="page-link" href="?page={{ current_page|add:1 }}" aria-label="Next">
+       <span aria-hidden="true">»</span>
+       <span class="sr-only">Next</span>
+      </a>
+     </li>
+    </ul>
+ </nav>
+</div>
+
 
 {% endblock %}

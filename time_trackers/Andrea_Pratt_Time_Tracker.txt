@@ -32,14 +32,23 @@ Week beginning Monday April 19th:
 
 Week beginning Monday April 26th:
 
+1. Review pull requests for other team members
+2. Research strategies for adding show ratings
+3. Look into issues other team member have been having
+
 
 
 Week beginning Monday May 3rd:
+
+1. Meet with team to discuss final project steps
+2. More star rating research
+3. Research unit tests for star show rating
 
 
 
 Week beginning Monday May 10th (Final week – deadline morning May 12th):
 
-
+2. Review PRs and assist team mates with implementing new features
+3. Research sequence diagrams
 
 
