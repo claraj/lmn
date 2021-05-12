@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
 <h2 id="artists-at-venue-title">Artists that have played at {{ venue.name }}</h2>
 
 {% for show in shows %}
@@ -15,10 +14,8 @@
 
 {% empty %}
 
-  <p id="no-results">We have no records of shows at this venue</p>
+ <p id="no-results">We have no records of shows at this venue</p>
 
 {% endfor %}
-
-
 
 {% endblock %}
