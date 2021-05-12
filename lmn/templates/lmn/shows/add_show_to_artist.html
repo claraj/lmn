@@ -18,5 +18,13 @@
     {% empty %}
       <p>No Venues Found</p>
     {% endfor %}
+        <h2>Dont See Your Venue?</h2>
 
+    <p>
+<form method="POST" action="{% url 'create_venue' %}">
+    {% csrf_token %}
+      {{ create_venue_form }}
+    <button type=submit>Save</button>
+</form>
+    </p>
 {% endblock %}

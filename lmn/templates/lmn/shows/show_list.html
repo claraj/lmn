@@ -6,7 +6,7 @@
 
   <div class="show" id="show_{{ show.pk }}">
     <p>
-      <a href="{% url 'show_detail' show_pk=show.pk %}">{{ show }}</a>
+      <a href="{% url 'show_detail' show_pk=show.pk %}">{{ show.artist.name }} @ {{ show.venue.name }}</a>
     </p>
   </div>
 

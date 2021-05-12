@@ -25,8 +25,7 @@ def new_note(request, show_pk):
 
     else:
         form = NewNoteForm()
-
-    return render(request, 'lmn/notes/new_note.html', {'form': form, 'show': show})
+        return render(request, 'lmn/notes/new_note.html', {'show': show, 'form': form})
 
 
 """ pagination made possible by a ridiculously deep rabbit hole of docs and tutorials pagination
