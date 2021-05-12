@@ -1,33 +1,38 @@
 {% extends 'lmn/base.html' %}
-
 {% block content %}
-<h2>Your Results</h2>
-    {% for result in search_results %}
-  <div>
-    <p>
 
-<form method="POST" action="{% url 'save_artist' %}">
-            <a>{{ result }}</a>
+<h2>Your Results</h2>
+
+{% for result in search_results %}
+
+<div>
+  <p>
+    <form method="POST" action="{% url 'save_artist' %}">
+      <a>{{ result }}</a>
       <input type="hidden" name="name" value="{{ result.name }}">
       <input type="hidden" name="hometown" value="{{ result.hometown }}">
       <input type="hidden" name="description" value="{{ result.description }}">
-    {% csrf_token %}
+      {% csrf_token %}
       {{ save_artist_form }}
-    <button type=submit>Save</button>
-</form>
-    </p>
-    </div>
-{% empty %}
-<a href="{% url 'add_artist' %}">Back to Add Artist</a>
-{% endfor %}
-        <h2>Dont See Your Artist?</h2>
+      <button type=submit>Save</button>
+    </form>
+  </p>
+</div>
 
-    <p>
-<form method="POST" action="{% url 'create_artist' %}">
+{% empty %}
+
+<a href="{% url 'add_artist' %}">Back to Add Artist</a>
+
+{% endfor %}
+
+<h2>Dont See Your Artist?</h2>
+
+<p>
+  <form method="POST" action="{% url 'create_artist' %}">
     {% csrf_token %}
-      {{ create_artist_form }}
+    {{ create_artist_form }}
     <button type=submit>Save</button>
-</form>
-    </p>
+  </form>
+</p>
 
 {% endblock %}
