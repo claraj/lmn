@@ -13,18 +13,16 @@ from django.utils import timezone
 
 
 def venues_for_artist(request, artist_pk):  # pk = artist_pk
-
-    """ Get all of the venues where this artist has played a show """
-
+    ''' Get all of the venues where this artist has played a show '''
     shows = Show.objects.filter(artist=artist_pk).order_by('-show_date')  # most recent first
     artist = Artist.objects.get(pk=artist_pk)
 
     return render(request, 'lmn/venues/venue_list_for_artist.html', {'artist': artist, 'shows': shows})
 
 
-""" pagination made possible by a ridiculously deep rabbit hole of docs and tutorials pagination
+''' pagination made possible by a ridiculously deep rabbit hole of docs and tutorials pagination
  made possible by a ridiculously deep rabbit hole of docs and tutorials 
- (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g) """
+ (https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g) '''
 
 
 def artist_list(request):
@@ -62,7 +60,7 @@ def artist_detail(request, artist_pk):
 
 
 def add_artist(request):
-    """ this begins the process of adding an artist by calling the API """
+    ''' this begins the process of adding an artist by calling the API '''
     if request.method == 'POST':
         new_artist_form = ArtistForm(request.POST)
         if new_artist_form.is_valid():
@@ -74,12 +72,13 @@ def add_artist(request):
                                                                         'create_artist_form': create_artist_form})
             # else:
     new_artist_form = ArtistForm()
+
     return render(request, 'lmn/artists/add_artist.html', {'new_artist_form': new_artist_form})
 
 
 def save_artist(request):
-    """ once an artist result from api or newly entered artist is selected
-     this method will check to see if it should/can be saved and if so, saves it """
+    ''' once an artist result from api or newly entered artist is selected
+     this method will check to see if it should/can be saved and if so, saves it '''
     if request.method == 'POST':
         new_artist = request.POST  # takes in info from the template and creates a new artist object
         new_name = new_artist.get('name')
@@ -106,7 +105,7 @@ def save_artist(request):
 
 
 def create_artist(request):
-    """ if api results are not what the user needs, they can enter a new artist """
+    ''' if api results are not what the user needs, they can enter a new artist '''
     if request.method == 'POST':
         form = CreateArtistForm(request.POST)
         artist = form.save(commit=False)
@@ -123,7 +122,7 @@ def create_artist(request):
 
 
 def artist_in_db(name, hometown, description):
-    """ checks if the artist is already in db based on name and description """
+    ''' checks if the artist is already in db based on name and description '''
     artist_name, artist_home, artist_desc = [], [], []
     artists_in_db = Artist.objects.all()
     for artist in artists_in_db:
