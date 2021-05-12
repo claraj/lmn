@@ -4,6 +4,7 @@
 
 ### Unexpected Features
 - *Style is strange on add note page*
+- *Certain browsers -- depending on user -- are not displaying styles*
 
 ### Future Development
 - *Match page style to Kelsey's UX design*
