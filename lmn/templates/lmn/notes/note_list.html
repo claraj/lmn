@@ -1,5 +1,9 @@
 {% extends 'lmn/base.html' %}
+
 {% block content %}
+
+<!-- Displays a list of notes. If a show object is present, display information about that
+show and include link to add a note for this show. -->
 
 
 {% if show %}
@@ -7,9 +11,6 @@
 {% else %}
   <h2>Latest Notes</h2>
 {% endif %}
-
-<!-- If this is a list of notes for one show,
-display link to add new note for that show. -->
 
 {% if show %}
 
@@ -31,10 +32,10 @@ display link to add new note for that show. -->
     <a href="{% url 'note_detail' note_pk=note.pk %}">The note info</a>
 
     <p class="note-info">Posted on {{ note.posted_date }} by 
-      <a class='user' href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
+      <a class="user" href="{% url 'user_profile' user_pk=note.user.pk %}">{{ note.user.username }}</a>
     </p>
 
-    <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
+    <p class="note-text">{{ note.text|truncatechars:100 }}</p>
   </div>  
 
   <hr>

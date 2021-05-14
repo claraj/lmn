@@ -1,22 +1,22 @@
 {% extends 'lmn/base.html' %}
-{% block content %}
 
+{% block content %}
 
 <!-- A user's profile page.
 
 Includes list of user's notes with title and preview of text.
-Text truncated to 200 characters. 
+Text truncated to 300 characters. 
 
 user_profile is the user that this profile is about 
 user is a variable provided to the template and is the current logged-in user 
 
 -->
 
-<h2 id='username-notes'>{{ user_profile.username }}'s notes</h2>
+<h2 id="username-notes">{{ user_profile.username }}'s notes</h2>
 
 {% for note in notes %}
 
-<div class='note' id="note-{{ note.pk }}">
+<div class="note" id="note-{{ note.pk }}">
   <h3 class="note-title">
     <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
   </h3>
@@ -28,7 +28,7 @@ user is a variable provided to the template and is the current logged-in user
 
 {% empty %}
 
-    <p id='no-records'>No notes.</p>
+    <p id="no-records">No notes.</p>
 
 {% endfor %}
 

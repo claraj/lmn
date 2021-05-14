@@ -19,7 +19,7 @@
 {% endif %}
 
 <form method="POST" action="">
-  <table id='login-form'>
+  <table id="login-form">
     {% csrf_token %}
     {{ form.as_table }}
   </table>
