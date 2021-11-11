@@ -21,13 +21,15 @@ http://127.0.0.1:8000
 
 ### Create superuser
 
-`python manage.py createsuperuser`
+```
+python manage.py createsuperuser
+```
 
 enter username and password
 
 Then you will be able to use these to log into admin console at
 
-127.0.0.1:8000/admin
+127.0.0.1:8000/admin/
 
 Create some example Artists, Venues, and Shows for the app to use. A user will create Notes using the app. 
 
