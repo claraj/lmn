@@ -2,35 +2,35 @@
 
 {% block content %}
 
-<!-- A user's profile page.
+  <!-- A user's profile page.
 
-Includes list of user's notes with title and preview of text.
-Text truncated to 300 characters. 
+  Includes list of user's notes with title and preview of text.
+  Text truncated to 300 characters. 
 
-user_profile is the user that this profile is about 
-user is a variable provided to the template and is the current logged-in user 
+  user_profile is the user that this profile is about 
+  user is a variable provided to the template and is the current logged-in user 
 
--->
+  -->
 
-<h2 id="username-notes">{{ user_profile.username }}'s notes</h2>
+  <h2 id="username-notes">{{ user_profile.username }}'s notes</h2>
 
-{% for note in notes %}
+  {% for note in notes %}
 
-<div class="note" id="note-{{ note.pk }}">
-  <h3 class="note-title">
-    <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
-  </h3>
+    <div class="note" id="note-{{ note.pk }}">
+      <h3 class="note-title">
+        <a href="{% url 'note_detail' note_pk=note.pk %}">{{ note.title }}</a>
+      </h3>
 
-  <p class="note-info">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</p>
-  <p class="note-text">{{ note.text|truncatechars:300 }}</p>
-  <p class="note-posted-at">{{ note.posted_date }}</p>
-</div>
+      <p class="note-info">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</p>
+      <p class="note-text">{{ note.text|truncatechars:300 }}</p>
+      <p class="note-posted-at">{{ note.posted_date }}</p>
+    </div>
 
-{% empty %}
+  {% empty %}
 
     <p id="no-records">No notes.</p>
 
-{% endfor %}
+  {% endfor %}
 
 
 {% endblock %}
