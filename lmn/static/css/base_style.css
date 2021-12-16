@@ -1,11 +1,16 @@
 body {
   font-family: monospace;
-  background: #444d4d;
+  background: #282e2e;
   color: antiquewhite;
 }
 
 a {
-  color: rgb(70, 193, 197);
+  color: #18eef5;
+}
+
+#add-new-show-link {
+  font-size: large;
+  color: violet;
 }
 
 #welcome-user-msg, #login-or-sign-up {
@@ -19,9 +24,4 @@ a {
   border-radius: 5px;
   padding: 2px;
   margin: 2px;
-}
-
-#add-new-show-link {
-  font-size: large;
-  color: violet;
 }
