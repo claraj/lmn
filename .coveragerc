@@ -1,0 +1,14 @@
+
+[run]
+
+# Run the tests using the Django test runner
+command_line = manage.py test
+
+# Check all branches of if statements
+branch = True 
+
+# Don't test the test files for coverage 
+omit = 
+    lmn/tests/*
+    lmn/functional_tests/*
+

@@ -40,3 +40,7 @@ jobs:
       if: ${{ always() }}  
       run: |
         python manage.py test
+    - name: Test Coverage 
+      if: ${{ always() }}  
+      run: |
+        coverage run && coverage report
