@@ -1,0 +1,9 @@
+The favicon, the small image displayed next to the site's name in a browser tab, was created at https://favicon.io/favicon-generator/
+
+This favicon was generated using the following font:
+
+- Font Title: Carrois Gothic SC
+- Font Author: Copyright (c) 2011 by Ralph du Carrois, with Reserved Font Name 'Carrois'
+- Font Source: http://fonts.gstatic.com/s/carroisgothicsc/v10/ZgNJjOVHM6jfUZCmyUqT2A2HVKjc-28nNHabY4dN.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))
+
