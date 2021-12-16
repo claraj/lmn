@@ -11,8 +11,13 @@ from datetime import timezone
 from lmn.models import Note
 from django.contrib.auth.models import User
 
+class TestHomePage(TestCase):
 
-# TODO verify correct templates are rendered.
+    def test_home_page_message(self):
+        home_page_url = reverse('homepage')
+        response = self.client.get(home_page_url)
+        self.assertContains(response, 'Welcome to Live Music Notes, LMN')
+
 
 class TestEmptyViews(TestCase):
 
@@ -443,7 +448,7 @@ class TestNotes(TestCase):
         self.assertTemplateUsed(response, 'lmn/notes/note_detail.html')
 
         response = self.client.get(reverse('notes_for_show', kwargs={'show_pk': 1}))
-        self.assertTemplateUsed(response, 'lmn/notes/note_list.html')
+        self.assertTemplateUsed(response, 'lmn/notes/notes_for_show.html')
 
         # Log someone in
         self.client.force_login(User.objects.first())

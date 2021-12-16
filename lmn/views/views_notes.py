@@ -9,7 +9,7 @@ from ..forms import NewNoteForm
 
 @login_required
 def new_note(request, show_pk):
-    """Create a new Note for a Show."""
+    """ Create a new Note for a Show. """
     show = get_object_or_404(Show, pk=show_pk)
 
     if request.method == 'POST':
@@ -27,19 +27,19 @@ def new_note(request, show_pk):
 
 
 def latest_notes(request):
-    """Get the 20 most recent Notes, ordered with most recent first."""
-    notes = Note.objects.all().order_by('-posted_date')[:20]   # the 20 most recent notes
-    return render(request, 'lmn/notes/note_list.html', {'notes': notes})
+    """ Get the 20 most recent Notes, ordered with most recent first. """
+    notes = Note.objects.all().order_by('-posted_date')[:20]   # slice of the 20 most recent notes
+    return render(request, 'lmn/notes/note_list.html', {'notes': notes, 'title': 'Latest Notes'})
 
 
 def notes_for_show(request, show_pk): 
-    """Get Notes for one show, most recent first."""
+    """ Get Notes for one show, most recent first. """
     show = get_object_or_404(Show, pk=show_pk)  
     notes = Note.objects.filter(show=show_pk).order_by('-posted_date')
-    return render(request, 'lmn/notes/note_list.html', {'show': show, 'notes': notes})
+    return render(request, 'lmn/notes/notes_for_show.html', {'show': show, 'notes': notes})
 
 
 def note_detail(request, note_pk):
-    """Display one Note."""
+    """ Display one Note. """
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html', {'note': note})

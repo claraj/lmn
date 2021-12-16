@@ -2,17 +2,13 @@
 
 {% block content %}
 
-  <h2>{{ title }}</h2>
+    <h2 id="show-title">Notes for {{ show.artist.name }} at {{ show.venue.name }} on {{ show.show_date }}</h2>
+
+    <a id="add-new-show-link" href="{% url 'new_note' show_pk=show.pk %}">Add your own notes for this show</a>
 
   {% for note in notes %}
 
     <div id="note_{{ note.pk }}">
-      <h3 class="note-title">{{ note.title }}</h3>
-
-      <p class="show-info">
-        The show: <a href="{% url 'notes_for_show' show_pk=note.show.pk %}">{{ note.show.artist.name }} at {{ note.show.venue.name }} on {{ note.show.show_date }}</a>
-      </p>
-
       <p class="note-info">Posted on: {{ note.posted_date }}</p>
 
       <p>Posted by: 
@@ -22,7 +18,6 @@
       <p class="note-text">{{ note.text|truncatechars:100 }}</p> 
 
       <a href="{% url 'note_detail' note_pk=note.pk %}">Note details</a>
-
     </div>
 
     <hr>
