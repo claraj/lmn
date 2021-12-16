@@ -12,3 +12,7 @@ omit =
     lmn/tests/*
     lmn/functional_tests/*
 
+[report]
+
+# display missing lines, lines which do not execute as part of any test
+show_missing = True
