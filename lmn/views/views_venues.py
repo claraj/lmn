@@ -5,6 +5,11 @@ from ..forms import VenueSearchForm
 
 
 def venue_list(request):
+    """ Get a list of all venues, ordered by name.
+
+    If request contains a GET parameter search_name then 
+    only include venues with names containing that text. """
+
     form = VenueSearchForm()
     search_name = request.GET.get('search_name')
 
@@ -17,9 +22,8 @@ def venue_list(request):
     return render(request, 'lmn/venues/venue_list.html', {'venues': venues, 'form': form, 'search_term': search_name})
 
 
-def artists_at_venue(request, venue_pk):   # pk = venue_pk
-    """ Get all of the artists who have played a show at the venue with pk provided """
-
+def artists_at_venue(request, venue_pk):  
+    """ Get all of the artists who have played a show at the venue with the pk provided """
     shows = Show.objects.filter(venue=venue_pk).order_by('-show_date') 
     venue = Venue.objects.get(pk=venue_pk)
 
@@ -27,5 +31,6 @@ def artists_at_venue(request, venue_pk):   # pk = venue_pk
 
 
 def venue_detail(request, venue_pk):
+    """ Get details about a venue """
     venue = get_object_or_404(Venue, pk=venue_pk)
     return render(request, 'lmn/venues/venue_detail.html', {'venue': venue})

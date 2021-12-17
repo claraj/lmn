@@ -11,6 +11,7 @@ from datetime import timezone
 from lmn.models import Note
 from django.contrib.auth.models import User
 
+
 class TestHomePage(TestCase):
 
     def test_home_page_message(self):

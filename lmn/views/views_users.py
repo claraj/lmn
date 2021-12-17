@@ -10,7 +10,6 @@ from ..models import Note
 
 def user_profile(request, user_pk):
     """ Get user profile for any user on the site. 
-    
     Any user may view any other user's profile. 
     """
     user = User.objects.get(pk=user_pk)
@@ -20,7 +19,7 @@ def user_profile(request, user_pk):
 
 @login_required
 def my_user_profile(request):
-    """ Responds with the logged-in user's profile """
+    """ Get the currently logged-in user's profile """
     # TODO - editable version for logged-in user to edit their own profile
     return redirect('user_profile', user_pk=request.user.pk)
 
@@ -28,7 +27,7 @@ def my_user_profile(request):
 def register(request):
     """ Handles user registration flow
 
-    GET request - present a user registration form.
+    GET request - show a user registration form.
     POST request - register a new user
     """
 
