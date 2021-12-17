@@ -1,15 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Every model gets a primary key field by default.
+# Remember that every model gets a primary key field by default.
 
-# Users, venues, shows, artists, notes
-
-# User is provided by Django. The email field is not unique by
+# The User model is provided by Django. The email field is not unique by
 # default, so add this to prevent more than one user with the same email.
 User._meta.get_field('email')._unique = True
 
-# Require email, first name and last name
+# And, require email, first name, and last name for each user
 User._meta.get_field('email')._blank = False
 User._meta.get_field('last_name')._blank = False
 User._meta.get_field('first_name')._blank = False
@@ -24,7 +22,7 @@ class Artist(models.Model):
 
 
 class Venue(models.Model):
-    """ Represents a venue, that hosts shows. """
+    """ Represents a place that Shows take place at. """
     name = models.CharField(max_length=200, blank=False, unique=True)
     city = models.CharField(max_length=200, blank=False)
     state = models.CharField(max_length=2, blank=False)
@@ -44,7 +42,7 @@ class Show(models.Model):
 
 
 class Note(models.Model):
-    """ One user's opinion of one Show. """
+    """ One User's opinion of one Show. """
     show = models.ForeignKey(Show, blank=False, on_delete=models.CASCADE)
     user = models.ForeignKey('auth.User', blank=False, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, blank=False)
