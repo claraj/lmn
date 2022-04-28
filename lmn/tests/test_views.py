@@ -17,7 +17,7 @@ class TestHomePage(TestCase):
     def test_home_page_message(self):
         home_page_url = reverse('homepage')
         response = self.client.get(home_page_url)
-        self.assertContains(response, 'Welcome to Live Music Notes, LMN')
+        self.assertContains(response, 'Hello! This is Live Music Notes, LMN')
 
 
 class TestEmptyViews(TestCase):
