@@ -81,7 +81,7 @@ class RegistrationFormTests(TestCase):
         # Remove one key-value pair from a copy of the dictionary, assert form not valid
         for field in form_data.keys():
             copy_of_form_data = dict(form_data)
-            del(copy_of_form_data[field])
+            del (copy_of_form_data[field])
             form = UserRegistrationForm(copy_of_form_data)
             self.assertFalse(form.is_valid())
 

@@ -15,6 +15,7 @@ User._meta.get_field('first_name')._blank = False
 
 class Artist(models.Model):
     """ Represents a musician or a band - a music artist """
+
     name = models.CharField(max_length=200, blank=False)
 
     def __str__(self):
@@ -23,6 +24,7 @@ class Artist(models.Model):
 
 class Venue(models.Model):
     """ Represents a place that Shows take place at. """
+
     name = models.CharField(max_length=200, blank=False, unique=True)
     city = models.CharField(max_length=200, blank=False)
     state = models.CharField(max_length=2, blank=False)
@@ -33,6 +35,7 @@ class Venue(models.Model):
 
 class Show(models.Model):
     """ One Artist playing at one Venue at a particular date and time. """
+
     show_date = models.DateTimeField(blank=False)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
@@ -43,6 +46,7 @@ class Show(models.Model):
 
 class Note(models.Model):
     """ One User's opinion of one Show. """
+    
     show = models.ForeignKey(Show, blank=False, on_delete=models.CASCADE)
     user = models.ForeignKey('auth.User', blank=False, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, blank=False)

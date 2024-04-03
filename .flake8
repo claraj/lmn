@@ -17,5 +17,6 @@ exclude =
     # ignore generated migration files 
     lmn/migrations/
     manage.py
+    venv
 
    

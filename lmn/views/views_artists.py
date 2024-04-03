@@ -15,7 +15,8 @@ def artist_list(request):
     """ Get a list of all artists, ordered by name.
 
     If request contains a GET parameter search_name then 
-    only include artists with names containing that text. """
+    only include artists with names containing that text. 
+    """
     form = ArtistSearchForm()
     search_name = request.GET.get('search_name')
     if search_name:

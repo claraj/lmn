@@ -320,16 +320,16 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
         new_note_url = reverse('new_note', kwargs={'show_pk': 1})
 
         # No post params
-        response = self.client.post(new_note_url, follow=True)
+        self.client.post(new_note_url, follow=True)
         # No note saved, should show same page
         self.assertTemplateUsed('lmn/notes/new_note.html')
 
         # no title
-        response = self.client.post(new_note_url, {'text': 'blah blah'}, follow=True)
+        self.client.post(new_note_url, {'text': 'blah blah'}, follow=True)
         self.assertTemplateUsed('lmn/notes/new_note.html')
 
         # no text
-        response = self.client.post(new_note_url, {'title': 'blah blah'}, follow=True)
+        self.client.post(new_note_url, {'title': 'blah blah'}, follow=True)
         self.assertTemplateUsed('lmn/notes/new_note.html')
 
         # nothing added to database
@@ -341,7 +341,7 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
 
         new_note_url = reverse('new_note', kwargs={'show_pk': 1})
 
-        response = self.client.post(
+        self.client.post(
             new_note_url, 
             {'text': 'ok', 'title': 'blah blah'}, 
             follow=True)
@@ -462,7 +462,7 @@ class TestUserAuthentication(TestCase):
     """ Currently using much of Django's built-in login and registration system """
 
     def test_user_registration_logs_user_in(self):
-        response = self.client.post(
+        self.client.post(
             reverse('register'), 
             {
                 'username': 'sam12345', 
