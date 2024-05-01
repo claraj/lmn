@@ -79,10 +79,10 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
         now_timestamp = datetime.datetime.today().timestamp()
         posted_timestamp = new_note_query.first().posted_date.timestamp()
 
-        # Timestamps are to the nearest milisecond and it may take longer than
-        # that to connect to and write to the database. So if the test records 
-        # the current time, that may be slightly different to the time stored 
-        # in the database. 
+        # Timestamps are to the nearest milisecond and it may take a few seconds
+        # to connect and write to the database. So if the test stores now_timestamp, 
+        # so the test's now_timestamp will probably be slightly different to the 
+        # time stored in the database. 
         # So, we can assert that they are within a few seconds of each other.
         ten_seconds = 10 * 1000
         self.assertAlmostEqual(now_timestamp, posted_timestamp, delta=ten_seconds) 
