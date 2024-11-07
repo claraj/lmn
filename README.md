@@ -54,7 +54,7 @@ The app allows new users to create accounts, and users can log in, and log out.
 python manage.py test
 ```
 
-Or just some of the tests, for example,
+Or just some of the tests, for example, the tests in one package, or the tests in one file, or one test in one file. 
 
 ```
 python manage.py test lmn.tests.test_views
