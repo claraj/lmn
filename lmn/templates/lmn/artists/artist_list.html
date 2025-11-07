@@ -4,21 +4,26 @@
 
   <h2>Artist List</h2>
 
-  <p>Artist Search</p>
+  <div>
+    <h3>Artist Search</h3>
 
-  <form action="{% url 'artist_list' %}">
-    {{ form }}
-    <input type="submit" value="Search">
-  </form>
+    <form action="{% url 'artist_list' %}">
+      {{ form }}
+      <input type="submit" value="Search">
+    </form>
+  </div>
 
-  {% if search_term %}
-    <h2 id="artist-list-title">Artists matching '{{ search_term }}' 
-      <a href="{% url 'artist_list' %}" id="clear_search">(clear)</a>
-    </h2>
-  {% else %}
-    <h2 id="artist-list-title">All artists</h2>
-  {% endif %}
+  <div>
+    {% if search_term %}
+      <h3 id="artist-list-title">Artists matching '{{ search_term }}' 
+        <a href="{% url 'artist_list' %}" id="clear_search">(clear)</a>
+      </h3>
+    {% else %}
+      <h3 id="artist-list-title">All artists</h3>
+    {% endif %}
+  </div>
 
+  <div>
   {% for artist in artists %}
   
     <div class="artist" id="artist_{{ artist.pk }}">
@@ -30,6 +35,7 @@
         <a href="{% url 'venues_for_artist' artist_pk=artist.pk %}">{{ artist.name }} notes</a>
       </p>
     </div>
+  </div>
 
   {% empty %}
     
