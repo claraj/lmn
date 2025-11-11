@@ -43,3 +43,16 @@ jobs:
       if: ${{ always() }}  
       run: |
         coverage run && coverage report
+    - name: Functional Tests Setup
+      if: ${{ always() }}  
+      run: |
+        pip install selenium
+        # Download and install chromedriver 
+        sudo apt-get update
+        sudo apt-get install google-chrome-stable
+    - name: Functional Tests
+    # Do not do this if the previous step fails 
+      run: |
+        python manage.py test lmn/functional_tests 
+      env: 
+        HEADLESS: true 
